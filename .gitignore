@@ -7,7 +7,7 @@
 .sass-cache/
 node_modules/
 public/lib/
-app/tests/coverage/
+dev/client/app/tests/coverage/
 .bower-*/
 .idea/
 coverage/
@@ -17,7 +17,7 @@ coverage/
 public/dist/
 uploads
 modules/users/client/img/profile/uploads
-config/env/local.js
+assets/config/env/local.js
 *.pem
 logs
 

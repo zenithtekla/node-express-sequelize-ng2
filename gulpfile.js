@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    browserSync = require('browser-sync').create(),
 
     /* CSS */
     postcss = require('gulp-postcss'),
@@ -14,15 +15,20 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin')
 ;
 
-var assetsDev = 'assets/app/',
-    assetsSass= 'assets/scss/',
-    assetsImg = 'assets/img/',
-    Dev       = 'assets/',
+var devApp    = 'dev/client/app/',
+    devSass   = 'dev/client/scss/',
+    devImg    = 'dev/client/img/',
+    devClient = 'dev/client/',
+    devServer = 'dev/server/',
+
+    routes    = 'routes/',
+    views     = 'views/',
 
     publicJs  = 'public/js/',
     publicCss = 'public/css/',
     publicImg = 'public/img/',
-    Prod      = 'public/';
+    Prod      = 'public/'
+;
 
 /* JS & TS */
 var jsuglify = require('gulp-uglify');
@@ -34,16 +40,17 @@ var concat = require('gulp-concat');
 var tsProject = typescript.createProject('tsconfig.json');
 
 gulp.task('build-css', function () {
-  return gulp.src(assetsSass+ '**/*.scss')
+  return gulp.src(devSass+ '**/*.scss')
     .pipe(sourcemaps.init())
     .pipe(postcss([precss, autoprefixer, cssnano]))
     .pipe(sourcemaps.write())
     .pipe(ext_replace('.css'))
-    .pipe(gulp.dest(publicCss));
+    .pipe(gulp.dest(publicCss))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('build-ts', function () {
-    return gulp.src(assetsDev + '**/*.ts')
+    return gulp.src(devApp + '**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(typescript(tsProject))
         .pipe(sourcemaps.write())
@@ -53,7 +60,7 @@ gulp.task('build-ts', function () {
 });
 
 gulp.task('build-img', function () {
-  return gulp.src(assetsImg + '**/*')
+  return gulp.src(devImg + '**/*')
     .pipe(imagemin({
       progressive: true
     }))
@@ -61,18 +68,39 @@ gulp.task('build-img', function () {
 });
 
 gulp.task('build-html', function () {
-  return gulp.src(Dev + '**/*.html')
+  return gulp.src(devClient + '**/*.html')
     .pipe(gulp.dest(Prod + 'html/'));
 });
 
 gulp.task('watch:styles', function () {
-  gulp.watch(assetsSass + '**/*.scss', ['build-css']);
+  gulp.watch(devSass + '**/*.scss', ['build-css']);
 });
 
 gulp.task('watch', function () {
-  gulp.watch(assetsDev + '**/*.ts', ['build-ts']);
-  gulp.watch(assetsSass + '**/*.scss', ['build-css']);
-  gulp.watch(assetsImg + '*', ['build-img']);
+  gulp.watch(devApp + '**/*.ts', ['build-ts']);
+  gulp.watch(devSass + '**/*.scss', ['build-css']);
+  gulp.watch(devImg + '*', ['build-img']);
 });
 
-gulp.task('default', ['watch', 'build-ts', 'build-css']);
+gulp.task('serve', function () {
+  browserSync.init({
+    /*port: 8080,
+     server: {
+     baseDir: "./"
+     }*/
+    proxy: 'http://192.168.101.8:3000',
+    ui: {
+      port: 3002
+    }
+  });
+
+  gulp.watch([
+    publicJs + '**/*.js',
+    publicCss + '**/*.css',
+    publicImg + '*',
+    routes + '**/*.js',
+    views + '**/*.hbs'
+  ]).on('change', browserSync.reload);
+});
+
+gulp.task('default', ['watch', 'build-ts', 'build-css', 'serve']);

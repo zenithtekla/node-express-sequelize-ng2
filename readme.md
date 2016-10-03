@@ -15,8 +15,13 @@ do the following for once to update to the latest build if necessary _$ gulp_
 
 then the server can start anytime with _$ npm start_
 
+Visit `localhost:3002` to see link to the application through BrowserSync
+or `localhost:3001` to directly view the application.
+
 Packages included:
 - node-angular2 seed for appDev
 - gulp
 - hbs
+- browserSync
+- ExpressJS server for back-end dev
 - pending migration of Sequelize and some good back-end stuffs, RESTful API and CRUD operations done previously from NodeMYSQL repo.
