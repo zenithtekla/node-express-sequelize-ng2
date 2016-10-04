@@ -1,15 +1,16 @@
 "use strict";
 
 module.exports = function(app){
-  var fs        = require("fs"),
+  var fs      = require("fs"),
     path      = require("path"),
     Sequelize = require("sequelize"),
-    epilogue = require('epilogue'),
+    epilogue  = require('epilogue'),
     env       = process.env.NODE_ENV || "development",
     config    = require(path.join(process.cwd(), 'dev/server/config/db_configuration/', 'sql_connection.json'))[env],
   /* sequelize for JS, similar to Hibernate (ORM) to Java, Entity to .NET */
     sequelize = new Sequelize(config.database, config.user, config.password, config),
-    db        = {};
+    db        = {},
+    dir       = app.get('dir');
 
   var rawQuery = function (query){
     sequelize.query(query).spread(function(results, metadata){
@@ -42,5 +43,6 @@ module.exports = function(app){
   db.Sequelize = Sequelize;
   db.rest      = epilogue;
   db.rawQuery  = rawQuery;
+  db.dir       = dir;
   return db;
 };

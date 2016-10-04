@@ -3,8 +3,8 @@
 /* CONFIGURATE preset Tasks */
 module.exports  = function(app){
   var db = app.get('models'),
-    _  = require('lodash'),
-    utils     = require('../assets/utils');
+      _  = require('lodash'),
+      utils     = require('../assets/utils');
   // Some DATA-PRESET (pre-insert), e.g. add to assembly table
   /*var buildTask = db.Assembly.create({
    customer_id: 6,

@@ -1,8 +1,9 @@
 "use strict";
-var Sequelize = require('sequelize');
+var Sequelize = require('sequelize'),
+  config = require('./config/config');
 
 module.exports = function(app){
-  console.log('Svenska Finnish ', process.cwd());
+  app.set('dir',config);
   // if (app.get('env') === 'development') require('./env/development')(app);
-  // require('./config/env/development')(app);
+  require('./config/env/development')(app);
 };

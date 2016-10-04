@@ -4,11 +4,11 @@
 
 /* SYNC */
 module.exports  = function(app) {
-  var db = app.get('models'),
-    rest = db.rest;
+  var db = app.get('models');
+   /* rest = db.rest;
 
   // create RESTful endpoints in rest.js
-  require('./rest')(db,rest);
+  require('./rest')(db,rest);*/
 
   db.sequelize.sync({ force: true, logging: console.log}).then(function (task) {
 
