@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var appRoutes = require('./routes/app');
 
-var app = express();
+var app = module.exports.app = exports.app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +26,8 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE');
     next();
 });
+
+require('./dev/server/server')(app);
 
 app.use('/', appRoutes);
 

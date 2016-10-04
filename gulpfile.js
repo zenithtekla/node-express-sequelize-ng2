@@ -12,22 +12,11 @@ var gulp = require('gulp'),
     ext_replace = require('gulp-ext-replace'),
 
     /* Images */
-    imagemin = require('gulp-imagemin')
-;
+    imagemin = require('gulp-imagemin'),
 
-var devApp    = 'dev/client/app/',
-    devSass   = 'dev/client/scss/',
-    devImg    = 'dev/client/img/',
-    devClient = 'dev/client/',
-    devServer = 'dev/server/',
-
-    routes    = 'routes/',
-    views     = 'views/',
-
-    publicJs  = 'public/js/',
-    publicCss = 'public/css/',
-    publicImg = 'public/img/',
-    Prod      = 'public/'
+    /* Server */
+    nodemon = require('gulp-nodemon'),
+    config = require('./gulpfile-config')()
 ;
 
 /* JS & TS */
@@ -40,67 +29,77 @@ var concat = require('gulp-concat');
 var tsProject = typescript.createProject('tsconfig.json');
 
 gulp.task('build-css', function () {
-  return gulp.src(devSass+ '**/*.scss')
+  return gulp.src(config.src.scss)
     .pipe(sourcemaps.init())
     .pipe(postcss([precss, autoprefixer, cssnano]))
     .pipe(sourcemaps.write())
     .pipe(ext_replace('.css'))
-    .pipe(gulp.dest(publicCss))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(config.public.css));
 });
 
 gulp.task('build-ts', function () {
-    return gulp.src(devApp + '**/*.ts')
+    return gulp.src(config.src.ts)
         .pipe(sourcemaps.init())
         .pipe(typescript(tsProject))
         .pipe(sourcemaps.write())
         // .pipe(jsuglify())
-        .pipe(concat('bundle.js'))
-        .pipe(gulp.dest(publicJs));
+        .pipe(concat(config.dist.js))
+        .pipe(gulp.dest(config.public.js));
 });
 
 gulp.task('build-img', function () {
-  return gulp.src(devImg + '**/*')
+  return gulp.src(config.src.img)
     .pipe(imagemin({
       progressive: true
     }))
-    .pipe(gulp.dest(publicImg));
+    .pipe(gulp.dest(config.public.img));
 });
 
 gulp.task('build-html', function () {
-  return gulp.src(devClient + '**/*.html')
-    .pipe(gulp.dest(Prod + 'html/'));
+  return gulp.src(config.src.html)
+    .pipe(gulp.dest(config.public.html));
 });
 
 gulp.task('watch:styles', function () {
-  gulp.watch(devSass + '**/*.scss', ['build-css']);
+  gulp.watch(config.src.scss, ['build-css']);
 });
 
 gulp.task('watch', function () {
-  gulp.watch(devApp + '**/*.ts', ['build-ts']);
-  gulp.watch(devSass + '**/*.scss', ['build-css']);
-  gulp.watch(devImg + '*', ['build-img']);
+  gulp.watch(config.src.ts, ['build-ts']);
+  gulp.watch(config.src.scss, ['build-css']);
+  gulp.watch(config.src.img, ['build-img']);
 });
 
-gulp.task('serve', function () {
-  browserSync.init({
-    /*port: 8080,
-     server: {
-     baseDir: "./"
-     }*/
-    proxy: 'http://192.168.101.8:3000',
-    ui: {
-      port: 3002
-    }
-  });
+gulp.task('browser-sync', ['nodemon'], function () {
+  browserSync.init(config.browser_sync.options);
 
-  gulp.watch([
-    publicJs + '**/*.js',
-    publicCss + '**/*.css',
-    publicImg + '*',
-    routes + '**/*.js',
-    views + '**/*.hbs'
-  ]).on('change', browserSync.reload);
+  gulp.watch(config.browser_sync.watch).on('change', browserSync.reload);
 });
 
-gulp.task('default', ['watch', 'build-ts', 'build-css', 'serve']);
+gulp.task('nodemon', function (cb) {
+  var started = false;
+  // Start the server at the beginning of the task
+  return nodemon(config.nodemonOptions)
+    .on('start', function () {
+      if (!started) {
+        cb();
+        started = true;
+      }
+      // console.log('Restarting server ...');
+    })
+    .on('restart', function () {
+      // reload connected browsers after a slight delay
+      setTimeout(function reload() {
+        browserSync.reload({
+          stream: false
+        });
+      }, config.browser_sync.reload_delay);
+    }).on('crash', function() {
+      console.error('Application has crashed!\n');
+      stream.emit('restart', 10);  // restart the server in 10 seconds
+    });
+});
+
+gulp.task('serve', ['browser-sync', 'watch']);
+
+gulp.task('default', ['serve']);
