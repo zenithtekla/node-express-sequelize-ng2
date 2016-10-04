@@ -3,21 +3,39 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var bodyParser    = require('body-parser'),
+    cors          = require('cors'),
+    config        = require('./app-config');
 
-var appRoutes = require('./routes/app');
+var appRoutes = require(path.resolve(config.serverDir,'routes/app'));
 
 var app = module.exports.app = exports.app = express();
 
+// load config
+app.set('config',config);
+
+// use cors
+app.use(cors());
+
+// use momentjs
+app.locals.moment = require('moment');
+
+app.set('json spaces', 4);
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.resolve(config.clientDir, 'views'));
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public/fav', 'favicon.ico')));
+
 app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/vnd.api+json as json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -27,7 +45,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-require('./dev/server/server')(app);
+require(path.resolve(config.serverDir, 'server'))(app);
 
 app.use('/', appRoutes);
 

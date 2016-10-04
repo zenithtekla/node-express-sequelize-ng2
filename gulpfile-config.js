@@ -6,8 +6,9 @@ module.exports = function(){
     routes: 'routes/' ,
     views: 'views/' ,
     serverJSfiles: [
-      'routes/**/*.js' ,
-      'dev/server/**/*.js'
+      'routes/**/*.js',
+      'dev/server/**/*.js',
+      'app*.js'
     ] ,
     browser_sync: {
       reload_delay: 500,

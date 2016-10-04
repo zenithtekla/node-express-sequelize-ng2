@@ -5,10 +5,10 @@ module.exports  = function(app) {
   var db = app.get('models') ,
     _ = require('lodash'),
     utils = require('../assets/utils'),
-    dir = db.dir,
+    config = db.config,
     path = require('path'),
     seeds = {
-      calibrates_seed: require(path.resolve(dir.serverDir, 'calibrates/db/calibrates.seed'))
+      calibrates_seed: require(path.resolve(config.serverAppDir, 'calibrates/db/calibrates.seed'))
     };
     _.forOwn(seeds, seed => seed(db));
 };

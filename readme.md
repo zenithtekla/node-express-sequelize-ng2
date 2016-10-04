@@ -20,9 +20,14 @@ or `localhost:4000` to directly view the application.
 
 Packages included:
 - node-angular2 seed for appDev
-- gulp
+- gulp-nodemon-browserSync
 - hbs
-- browserSync
 - ExpressJS server for back-end dev
-- pending migration of Sequelize and some good back-end stuffs, RESTful API and CRUD operations done previously from NodeMYSQL repo.
+- cors
+- Sequelize
+- epilogue
+- continuous migration of Sequelize and some good back-end stuffs, RESTful API and CRUD operations done previously from NodeMYSQL repo.
+- mocha, chai, supertest
+  - Mocha is a test framework while Chai is an expectation one
+  - These two, alongside with Jasmine and Karma facilitate TDD (Test-Driven Development) and BDD (Behavior-Driven Development)
 - Port in use: 3000, 3001, 3002 (BrowserSync UI), 4000

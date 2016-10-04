@@ -4,8 +4,8 @@
 module.exports  = function(db) {
   var _ = require('lodash'),
     path= require('path'),
-    dir = db.dir,
-    util_method = require(path.resolve(dir.serverDir, 'calibrates/controllers/calibrates.utils'))(db, 'seed');
+    config = db.config,
+    util_method = require(path.resolve(config.serverAppDir, 'calibrates/controllers/calibrates.utils'))(db, 'seed');
 
   var ECMS_Location   = db.ECMS_Location,
     ECMS_Attribute    = db.ECMS_Attribute,

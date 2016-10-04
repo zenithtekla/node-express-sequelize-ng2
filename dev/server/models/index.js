@@ -3,14 +3,18 @@
 module.exports = function(app){
   var fs      = require("fs"),
     path      = require("path"),
+    _         = require('lodash'),
     Sequelize = require("sequelize"),
     epilogue  = require('epilogue'),
     env       = process.env.NODE_ENV || "development",
-    config    = require(path.join(process.cwd(), 'dev/server/config/db_configuration/', 'sql_connection.json'))[env],
+    config    = app.get('config'),
+    utils     = require(config.utilsDir),
+    dbPaths   = config.models(),
+    db_config = require(path.resolve(config.serverDir, 'config/db_configuration/', 'sql_connection.json'))[env],
   /* sequelize for JS, similar to Hibernate (ORM) to Java, Entity to .NET */
-    sequelize = new Sequelize(config.database, config.user, config.password, config),
-    db        = {},
-    dir       = app.get('dir');
+    sequelize = new Sequelize(db_config.database, db_config.user, db_config.password, db_config),
+    db        = {};
+
 
   var rawQuery = function (query){
     sequelize.query(query).spread(function(results, metadata){
@@ -22,16 +26,18 @@ module.exports = function(app){
     sequelize: Sequelize
   });
 
-  fs
-    .readdirSync(__dirname)
-    .filter(function(file) {
-      return (file.indexOf(".") !== 0) && (file.indexOf("compiled") === -1) && (file !== "index.js");
-    })
-    .forEach(function(file) {
-      var model = sequelize.import(path.join(__dirname, file));
-      require(path.resolve('./dev/server/config/assets/crud'))(model);
-      db[model.name] = model;
-    });
+  _.forEach(dbPaths, function(dbPath) {
+    fs
+      .readdirSync(dbPath)
+      .filter(function(file) {
+        return (file.indexOf(".") !== 0) && (file.indexOf("compiled") === -1);
+      })
+      .forEach(function(file) {
+        var model = sequelize.import(path.resolve(dbPath, file));
+        require(path.resolve(config.serverConfigDir, 'assets/crud'))(model);
+        db[model.name] = model;
+      });
+  });
 
   Object.keys(db).forEach(function(modelName) {
     if ("associate" in db[modelName]) {
@@ -43,6 +49,10 @@ module.exports = function(app){
   db.Sequelize = Sequelize;
   db.rest      = epilogue;
   db.rawQuery  = rawQuery;
-  db.dir       = dir;
+  db.config    = config;
+
+  var obj = { key: 'value'};
+  utils.appendJSON(obj, path.resolve(config.projDir, 'appConfig.json'));
+
   return db;
 };
