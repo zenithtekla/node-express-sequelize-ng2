@@ -6,5 +6,5 @@ module.exports  = function(app){
   app.set('models', models);
 
   require('./../db/task')(app);
-  require('./sync')(app);
+  require('./../db/sync')(app);
 };

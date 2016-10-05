@@ -7,8 +7,6 @@ var bodyParser    = require('body-parser'),
     cors          = require('cors'),
     config        = require('./app-config');
 
-var appRoutes = require(path.resolve(config.serverDir,'routes/app'));
-
 var app = module.exports.app = exports.app = express();
 
 // load config
@@ -23,8 +21,9 @@ app.locals.moment = require('moment');
 app.set('json spaces', 4);
 
 // view engine setup
-app.set('views', path.resolve(config.clientDir, 'views'));
-app.set('view engine', 'hbs');
+// app.set('views', path.resolve(config.clientDir, 'views'));
+app.set('views', config.serverApps.views);
+app.set('view engine', config.view_engine.template);
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public/fav', 'favicon.ico')));
@@ -47,7 +46,8 @@ app.use(function(req, res, next) {
 
 require(path.resolve(config.serverDir, 'server'))(app);
 
-app.use('/', appRoutes);
+var appRoutes = require(path.resolve(config.serverDir,'routes'))(app);
+// app.use('/', appRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

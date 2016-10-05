@@ -145,3 +145,4 @@ modules/yzt/
 public/img/
 appConfig.json
 dev/server/app/dodo/
+routes.json

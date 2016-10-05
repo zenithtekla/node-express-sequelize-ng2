@@ -10,7 +10,7 @@ module.exports = function(app){
     config    = app.get('config'),
     utils     = require(config.utilsDir),
     dbPaths   = config.models(),
-    db_config = require(path.resolve(config.serverDir, 'config/db_configuration/', 'sql_connection.json'))[env],
+    db_config = require(path.resolve(config.serverConfigDir, 'db_configuration/', 'sql_connection.json'))[env],
   /* sequelize for JS, similar to Hibernate (ORM) to Java, Entity to .NET */
     sequelize = new Sequelize(db_config.database, db_config.user, db_config.password, db_config),
     db        = {};
@@ -51,8 +51,7 @@ module.exports = function(app){
   db.rawQuery  = rawQuery;
   db.config    = config;
 
-  var obj = { key: 'value'};
-  utils.appendJSON(obj, path.resolve(config.projDir, 'appConfig.json'));
-
+  /*var obj = { key: 'value'};
+  utils.appendJSON(obj, path.resolve(config.projDir, 'appConfig.json'));*/
   return db;
 };

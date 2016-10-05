@@ -15,7 +15,7 @@ do the following for once to update to the latest build if necessary _$ gulp_
 
 then the server can start anytime with _$ npm start_
 
-Visit `localhost:3002` to see link to the application through BrowserSync
+Visit `localhost:3000` to see link to the application through BrowserSync
 or `localhost:4000` to directly view the application.
 
 Packages included:
