@@ -40,7 +40,7 @@ var initGlobalConfig = function(){
   config.serverApps.src  = utils.getGlobbedPaths(path.resolve(config.serverAppDir, '*'));
 
   // config.serverApps.views
-  config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.clientDir, 'views'));
+  config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.serverDir, 'views'));
   // config.serverApps.tests
   config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
 

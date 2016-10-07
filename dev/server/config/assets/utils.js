@@ -85,7 +85,8 @@ var utils = {
   }
 };
 
-utils.appendJSON = function (data, jsonFile, raw = 'utf8') {
+utils.appendJSON = function (data, jsonFile, raw) {
+  raw = raw || 'utf8';
   fs.readFile(jsonFile, raw, function (err, fileContent) {
     if (err) throw err;
     else {
