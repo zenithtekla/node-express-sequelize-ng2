@@ -1,12 +1,12 @@
 'use strict';
+var appConfig = require('./app-config');
 
-module.exports = function(){
+var gulpConfig = function(){
   var config = {
     server: './bin/www' ,
     routes: 'routes/' ,
     views: 'views/' ,
     serverJSfiles: [
-      'routes/**/*.js',
       'dev/server/**/*.js',
       'app*.js'
     ] ,
@@ -18,7 +18,9 @@ module.exports = function(){
         'public/img/*' ,
         'routes/**/*.js' ,
         'views/**/*.hbs' ,
-        'dev/server/*'
+        'dev/server/*',
+        'dev/client/**/*.html',
+        'dev/_coffee/*.coffee'
       ],
       options: {
         /*port: 8080,
@@ -46,17 +48,27 @@ module.exports = function(){
       scss: 'dev/client/scss/**/*.scss' ,
       ts: 'dev/client/app/**/*.ts' ,
       img: 'dev/client/img/**/*' ,
-      html: 'dev/client/**/*.html'
+      html: 'dev/client/**/*.html',
+      coffee: 'dev/_coffee/'
     } ,
     public: {
       js: 'public/js/' ,
       css: 'public/css/' ,
       img: 'public/img/' ,
-      dir: 'public/' ,
+      dir: 'public/',
+      dist: 'public/dist/',
       html: 'public/html/'
     },
     dist: {
-      js: 'bundle.js'
+      coffee: 'bundle_cafe.js',
+      js: 'bundle.js',
+      min_js:'bundle.min.js'
+    },
+    tests: appConfig.serverApps.tests,
+    test_interface: 'dev/test_interface/runner.html',
+    test_site: 'http://localhost:3000/index.html',
+    lint: {
+      scripts: ['**/*.js', '!node_modules/**']
     }
   };
 
@@ -71,3 +83,5 @@ module.exports = function(){
 
   return config;
 };
+
+module.exports = gulpConfig();

@@ -1,11 +1,15 @@
-var request = require('supertest'),
-  path = require('path'),
+// use Chai's assert and not the assert built into NodeJS
+const assert = require('chai').assert;
+
+var path = require('path'),
   config = require(path.resolve('./app-config')),
-  assert = require('assert'),
-  should = require('chai').should(),
-  // express = require(path.resolve('./bin/www'))
-  express = require(config.site)
+// connect to your app
+  app = require(config.site)
 ;
+
+// create a session using supertest
+const request = require('supertest').agent(app.listen());
+
 console.log(process.cwd()+'app-config');
 describe('my feature', function () {
   it('works', function () {
@@ -23,6 +27,20 @@ describe('my other feature', function () {
     setTimeout(function () {
       done();
     }, 25);
+  });
+});
+
+describe('while logged out', function() {
+  it('returns a good homepage', function(done) {
+    request.get('/')  // the homepage
+      .expect(200)    // successful return
+      .end(function(err, res) {
+        // run your tests on the content here
+        assert.include(res.text, 'Hello World');
+
+        // call done() to confirm that any async tests are completed, and we can move on to the next test
+        done(err);
+      });
   });
 });
 /*

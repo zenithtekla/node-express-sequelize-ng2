@@ -13,6 +13,7 @@ var initGlobalConfig = function(){
     port: process.env.PORT || 3000,
     // modules: utils.getDirectories('modules'),
     projDir: base_path,
+    site: path.resolve(base_path,'bin/www'),
     devDir: devDir,
     clientDir:path.resolve(devDir, 'client/'),
     clientAppDir:path.resolve(devDir, 'client/app/'),
@@ -40,7 +41,7 @@ var initGlobalConfig = function(){
   config.serverApps.src  = utils.getGlobbedPaths(path.resolve(config.serverAppDir, '*'));
 
   // config.serverApps.views
-  config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.serverDir, 'views'));
+  config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.serverDir, '{,*/}views'));
   // config.serverApps.tests
   config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
 

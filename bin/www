@@ -87,4 +87,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  // console.log('Listening on ' + bind); // PORT=3005 node bin/www
 }
+
+// exports ? server or app
+module.exports = app;
