@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(app){
+module.exports = function(app, endpoints){
   // root definition is optional
   // var root = app.get('root');
 
@@ -8,13 +8,26 @@ module.exports = function(app){
   var module_name = 'calibrates';
   var controller  = require('../controllers/' + module_name + '.controllers')(app);
 
+  var points = {
+    module_name: module_name,
+    equipment: '/equipment',
+    equipment_model: '/equipment/:model',
+    asset_number: '/asset_number/:asset_number',
+    table_equipment: '/table_equipment',
+    table_main: '/table_main',
+    table_location: '/table_location',
+    equipment_model_asset_number: '/equipment/:model/:asset_number',
+    location: '/location/:location_id'
+  };
+  endpoints.push(points);
 
-  app.route('/equipment')
+
+  app.route(points.equipment)
     .get( controller.getEquipment)
     // create the entire new model of equipments.
     .post( controller.createModel);
 
-  app.route('/equipment/:model')
+  app.route(points.equipment_model)
     .get(controller.getEquipmentBy)
 
     // CREATE an Equipment based on model, literally adds another asset_number to that existing model
@@ -28,7 +41,7 @@ module.exports = function(app){
     // DELETE the entire model
     .delete(controller.deleteModel)
   ;
-  app.route('/asset_number/:asset_number')
+  app.route(points.asset_number)
     .get(controller.getEquipmentBy)
 
     // UPDATE: update an Equipment by its specific asset_number
@@ -43,14 +56,14 @@ module.exports = function(app){
    Additional RESTful end-points
 
    */
-  app.get('/table_equipment', controller.equipment)
-    .get('/table_main', controller.main)
-    .get('/table_location', controller.location);
+  app.get(points.table_equipment, controller.equipment)
+    .get(points.table_main, controller.main)
+    .get(points.table_location, controller.location);
 
-  app.route('/equipment/:model/:asset_number')
+  app.route(points.equipment_model_asset_number)
     .get(controller.getEquipmentBy);
 
-  app.route('/location/:location_id')
+  app.route(points.location)
     .get(controller.getEquipmentBy);
 
   /*app.route('/tasks').all(/!* taskPolicy.isAllowed *!/)

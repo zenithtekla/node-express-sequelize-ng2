@@ -41,6 +41,8 @@ var initGlobalConfig = function(){
 
   // config.serverApps.views
   config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.clientDir, 'views'));
+  // config.serverApps.tests
+  config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
 
   var apps = {};
   // get server.app info
@@ -62,12 +64,16 @@ var initGlobalConfig = function(){
         src: srcFiles
       };
 
-      if (item == 'routes') {
+      if (item === 'routes') {
         config.serverApps.routes = _.union(config.serverApps.routes,srcFiles);
       }
 
-      if (item == 'views') {
+      if (item === 'views') {
         config.serverApps.views = _.union(config.serverApps.views,path.resolve(config.serverAppDir,app,item));
+      }
+
+      if (item === 'tests') {
+        config.serverApps.tests = _.union(config.serverApps.tests,srcFiles);
       }
     });
   });

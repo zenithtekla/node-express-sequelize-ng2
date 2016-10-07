@@ -7,14 +7,21 @@ module.exports = function (app) {
     res.render('index');
   });
 
-  var config = app.get('config'),
-    routes = config.serverApps.routes;
-    // utils       = require(path.resolve(config.serverConfigDir,'assets/utils'));
+  var config    = app.get('config'),
+    utils       = require(path.resolve(config.serverConfigDir,'assets/utils')),
+    routes      = config.serverApps.routes,
+    routeConfig = {
+      routes: routes,
+      content: []
+    };
 
-  // utils.exportJSON(routes, config.projDir + '/routes.json');
   // app.use('/', routes);
 
   _.forEach(routes, function (route) {
-    require(route)(app);
+    var o = { route: route, endpoints: [] };
+    require(route)(app, o.endpoints);
+    routeConfig.content.push(o);
   });
+
+  utils.exportJSON(routeConfig, config.projDir + '/routeConfig.json');
 };

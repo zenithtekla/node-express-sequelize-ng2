@@ -1,7 +1,7 @@
 "use strict";
 
-var env             = process.env.NODE_ENV || "development",
-  moment          = require('moment');
+var env         = process.env.NODE_ENV || "development",
+    moment      = require('moment');
 
 module.exports = function(app){
   var route = {},

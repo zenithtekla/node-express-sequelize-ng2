@@ -11,6 +11,7 @@ dev/client/app/tests/coverage/
 .bower-*/
 .idea/
 coverage/
+cache/
 
 # MEAN.js app and assets
 # ======================
@@ -146,3 +147,4 @@ public/img/
 appConfig.json
 dev/server/app/dodo/
 routes.json
+routeConfig.json

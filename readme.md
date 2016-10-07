@@ -31,3 +31,7 @@ Packages included:
   - Mocha is a test framework while Chai is an expectation one
   - These two, alongside with Jasmine and Karma facilitate TDD (Test-Driven Development) and BDD (Behavior-Driven Development)
 - Port in use: 3000, 3001, 3002 (BrowserSync UI), 4000
+
+Desired packages:
+- gulp-apidoc could be a good tool for documentation of API and RESTful endpoints.
+- clusters from node-express-sequelize-es2015, pending evaluation

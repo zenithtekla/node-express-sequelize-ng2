@@ -10,7 +10,7 @@ module.exports  = function(app) {
   // create RESTful endpoints in rest.js
   require('./rest')(db,rest);*/
 
-  db.sequelize.sync({ force: true, logging: console.log}).then(function (task) {
+  db.sequelize.sync({ force: true /*, logging: console.log */}).then(function (task) {
 
     // buildTask.save();
     // console.log(arguments);
