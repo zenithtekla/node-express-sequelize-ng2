@@ -1,7 +1,7 @@
 var request = require('supertest'),
   path = require('path'),
   config = require(path.resolve('./app-config')),
-  assert = require('assert'),
+  assert = rrequire('chai').assert,
   should = require('chai').should(),
   // express = require(path.resolve('./bin/www'))
   express = require(config.site)
