@@ -30,6 +30,16 @@ module.exports  = function(app) {
     // seed for the Database
     require('./seed')(app);
     console.log('database sync successful.');
+
+/*    if (app.get('env') ==='test'){
+       var path    = require('path'),
+         config  = require(path.resolve('./app-config'))
+       ;
+
+      console.log(path.resolve(config.serverAppDir, 'tests/'));
+
+      require(path.resolve(config.serverAppDir, 'tests/'))(app);
+    }*/
   });
 
   /* mongoose.Promise = global.Promise;

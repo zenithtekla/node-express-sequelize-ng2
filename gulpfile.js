@@ -198,6 +198,7 @@ gulp.task('test-interface', function () {
 gulp.task('test:server', ['env:test'], function () {
   return gulp
     // .src('./dev/server/app/tests/')
+    // .src(config.server)
     .src(config.src.serverAppDir + '/tests/')
     .pipe(mocha({reporter: 'spec'}));
 });

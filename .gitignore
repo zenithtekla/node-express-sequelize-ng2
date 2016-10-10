@@ -144,7 +144,7 @@ docs/*.html
 docs/*.json
 modules/yzt/
 public/img/
-appConfig.json
 dev/server/app/dodo/
-routes.json
+appConfig.json
 routeConfig.json
+testConfig.json
