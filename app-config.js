@@ -24,7 +24,8 @@ var initGlobalConfig = function(){
     serverApps: {
       name: 'app',
       list: utils.getAppsDir(path.resolve(serverDir,'app')),
-      routes: []
+      routes: [],
+      tests: []
     },
     models: function() {
       return utils.getGlobbedPaths(path.resolve(this.serverAppDir, '*/models'));
@@ -43,7 +44,7 @@ var initGlobalConfig = function(){
   // config.serverApps.views
   config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.serverDir, '{,*/}views'));
   // config.serverApps.tests
-  config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
+  // config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
 
   var apps = {};
   // get server.app info

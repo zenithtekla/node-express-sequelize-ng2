@@ -45,6 +45,7 @@ var gulpConfig = function(){
     src: {
       client: 'dev/client/' ,
       server: 'dev/server/' ,
+      serverAppDir: appConfig.serverAppDir,
       scss: 'dev/client/scss/**/*.scss' ,
       ts: 'dev/client/app/**/*.ts' ,
       img: 'dev/client/img/**/*' ,
@@ -66,7 +67,7 @@ var gulpConfig = function(){
     },
     tests: appConfig.serverApps.tests,
     test_interface: 'dev/test_interface/runner.html',
-    test_site: 'http://localhost:3000/index.html',
+    test_site: 'http://localhost:3000/',
     lint: {
       scripts: ['**/*.js', '!node_modules/**']
     }

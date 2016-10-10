@@ -1,21 +1,9 @@
 'use strict';
-var _ = require('lodash'),
-  path = require('path');
 
 /* CONFIGURATE TEST ENV */
 module.exports  = function(app){
-  var config    = app.get('config'),
-    utils       = require(path.resolve(config.serverConfigDir,'assets/utils')),
-    tests       = config.serverApps.tests,
-    testConfig  =  {
-      tests: tests,
-      content: []
-    };
+  var models = require('../../models')(app);
+  app.set('models', models);
 
-  _.forEach(tests, function (test) {
-    require(test)(app);
-    testConfig.content.push({test: test});
-  });
-
-  utils.exportJSON(testConfig, config.projDir + '/testConfig.json');
+  require('./../db/sync')(app);
 };

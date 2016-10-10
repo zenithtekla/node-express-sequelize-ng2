@@ -20,6 +20,7 @@ var gulp = require('gulp'),
     config = require('./gulpfile-config'),
 
     /* Test tool */
+    mocha = require('gulp-mocha'),
     mochaPhantomJS = require('gulp-mocha-phantomjs'),
     /* QA tool */
     jshint = require('gulp-jshint')
@@ -38,6 +39,21 @@ var concat = require('gulp-concat'),
 var coffee = require('gulp-coffee');
 
 var tsProject = typescript.createProject('tsconfig.json');
+
+// Set NODE_ENV to 'test'
+gulp.task('env:test', function () {
+  process.env.NODE_ENV = 'test';
+});
+
+// Set NODE_ENV to 'development'
+gulp.task('env:dev', function () {
+  process.env.NODE_ENV = 'development';
+});
+
+// Set NODE_ENV to 'production'
+gulp.task('env:prod', function () {
+  process.env.NODE_ENV = 'production';
+});
 
 gulp.task('build-css', function () {
   return gulp.src(config.src.scss)
@@ -173,10 +189,17 @@ gulp.task('jshint', function () {
 
 // works fine: $ PORT=3008 gulp test
 // gulp.task('test', ['jshint'], function () {
-gulp.task('test', function () {
+gulp.task('test-interface', function () {
   return gulp
     .src(config.test_interface)
     .pipe(mochaPhantomJS({reporter: 'spec'}));
+});
+
+gulp.task('test:server', ['env:test'], function () {
+  return gulp
+    // .src('./dev/server/app/tests/')
+    .src(config.src.serverAppDir + '/tests/')
+    .pipe(mocha({reporter: 'spec'}));
 });
 
 gulp.task('test-site', function () {
@@ -187,6 +210,9 @@ gulp.task('test-site', function () {
 });
 
 gulp.task('build', ['merge-ts-coffee', 'uglify-all']);
+gulp.task('build:watch', ['watch', 'uglify-all']);
+
+gulp.task('test', ['test:server']);
 
 gulp.task('serve', ['browser-sync', 'merge-ts-coffee', 'watch']);
 

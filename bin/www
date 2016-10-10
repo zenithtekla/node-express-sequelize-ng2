@@ -13,6 +13,7 @@ var http = require('http');
  */
 
 var port = normalizePort(process.env.PORT || '3000');
+if (app.get('env')==='test') port = '3007';
 app.set('port', port);
 
 /**
@@ -87,7 +88,7 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  // console.log('Listening on ' + bind); // PORT=3005 node bin/www
+  console.log('Listening on ' + bind); // PORT=3005 node bin/www
 }
 
 // exports ? server or app
