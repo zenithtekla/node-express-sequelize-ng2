@@ -18,10 +18,12 @@ module.exports = function (app) {
   // app.use('/', routes);
 
   _.forEach(routes, function (route) {
-    var o = { route: route, endpoints: [] };
+    var o = { route: route.split('server')[1], endpoints: [] };
+
     require(route)(app, o.endpoints);
     routeConfig.content.push(o);
   });
 
   utils.exportJSON(routeConfig, config.projDir + '/routeConfig.json');
+  utils.exportJSON(routeConfig.content, config.publicDir + '/json/routeConfig.json');
 };

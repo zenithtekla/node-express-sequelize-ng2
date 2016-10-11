@@ -14,6 +14,7 @@ var initGlobalConfig = function(){
     // modules: utils.getDirectories('modules'),
     projDir: base_path,
     site: path.resolve(base_path,'bin/www'),
+    publicDir: path.resolve('./public/json/'),
     devDir: devDir,
     clientDir:path.resolve(devDir, 'client/'),
     clientAppDir:path.resolve(devDir, 'client/app/'),
