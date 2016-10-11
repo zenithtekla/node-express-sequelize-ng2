@@ -19,12 +19,12 @@ module.exports = function(app){
   };
   route.main = function (req, res, next) {
     ECMS_Attribute.findAll().then(function(mains){
-      res.render('main', { mains: mains});
+      res.json(mains);
     });
   };
   route.location = function (req, res, next) {
     ECMS_Location.findAll().then(function(locations){
-      res.render('location', { locations: locations});
+      res.json(locations);
     });
   };
 
@@ -34,7 +34,7 @@ module.exports = function(app){
 
   route.getEquipment = function(req,res, next) {
     utils.findAllMethod(req, res, next, function(records){
-      res.render('calibrate', {env: env, moment: moment, calibrates: records});
+      res.json({env: env, moment: moment, calibrates: records});
     });
   };
 
@@ -47,6 +47,7 @@ module.exports = function(app){
   route.createModel = (req,res, next) => utils.createLocation(req, res, next);
 
   route.createEquipment = function(req,res,next){
+    console.log('Display the params: ', req.body);
     req.body.model = req.params.model;
     // SHOULD the location remain unchanged and unchangeable, add route /:model/?desc to set req.body.desc = req.params.desc;
     utils.createLocation(req, res, next);

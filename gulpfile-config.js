@@ -47,7 +47,7 @@ var gulpConfig = function(){
       server: 'dev/server/' ,
       serverAppDir: appConfig.serverAppDir,
       scss: 'dev/client/scss/**/*.scss' ,
-      ts: 'dev/client/app/**/*.ts' ,
+      ts: 'dev/client/app/**/**/*.ts' ,
       img: 'dev/client/img/**/*' ,
       html: 'dev/client/**/*.html',
       coffee: 'dev/_coffee/'

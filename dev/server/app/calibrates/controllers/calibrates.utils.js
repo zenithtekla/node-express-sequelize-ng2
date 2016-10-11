@@ -93,7 +93,6 @@ module.exports  = function(db, env) {
         break;
     }
 
-    console.log(equip, env);
     create_equipment(req, res, equip);
   }
 
@@ -102,7 +101,6 @@ module.exports  = function(db, env) {
         newRecord: record,
         onError: (err)=>console.log(err),
       onSuccess:(record)=>{
-        console.log(record.dataValues);
         create_ECMS_attrs_entry(req, res, record.dataValues);
       }
     });
@@ -153,9 +151,9 @@ module.exports  = function(db, env) {
       // SHOULD the location remain unchanged and unchangeable, give it req.body.desc = result.desc;
       if (req.body.desc)
         ECMS_Location.updateRecord({
-            newRecord: req.body,
-            cond: { where: {id: result.dataValues.location_id}},
-            onError: (err) => res.json({error: err}),
+          newRecord: req.body,
+          cond: { where: {id: result.dataValues.location_id}},
+          onError: (err) => res.json({error: err}),
           onSuccess: handler
     });
 
