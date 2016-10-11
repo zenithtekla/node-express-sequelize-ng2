@@ -12,3 +12,6 @@ $ gulp test
 
 Failed.
 $ gulp test-site
+
+Perhaps, layer the app with Strongloop for UI of all restful API endpoints
+https://www.youtube.com/watch?v=0RIrdFfy9t4

@@ -14,20 +14,19 @@ export class EquipmentRestfulService {
   }
 
   postEquipment(){
-    let uri1 = 'http://esp21:4000/equipment/brts31/',
-        uri2= 'http://validate.jsontest.com/',
-        raw = JSON.stringify({ asset_number: 99999, desc: "3119"}),
-        body = 'asset_number=99999&desc=3119';
+    let uri1 = 'http://localhost:3000/equipment/brts31/',
+        data = { asset_number: 99999, desc: "3119"};
 
-    let json = '?json=' + JSON.stringify({ var1: 'test', var2: 3});
+    return this.PostRequest(uri1,data);
+  }
+
+  private PostRequest(url, data){
     let headers = new Headers({'Content-Type': 'application/json'});
-    // let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-
     let requestoptions = new RequestOptions({
       method: RequestMethod.Post,
-      url: uri1,
+      url: url,
       headers: headers,
-      body: raw
+      body: JSON.stringify(data)
     });
 
     return this._http.request(new Request(requestoptions))
@@ -35,11 +34,8 @@ export class EquipmentRestfulService {
         if (res) {
           return [{ status: res.status, json: res.json() }]
         }
-      });
-
-    /*return this._http.post(uri1, raw)
-      .map(res => res.json())
-      .catch(this.handleError);*/
+      })
+      .catch(this.handleError);
   }
 
   private handleError (error : Response){
