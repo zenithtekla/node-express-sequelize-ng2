@@ -8,13 +8,13 @@ export class EquipmentRestfulService {
   constructor(private _http: Http) {}
 
   getEquipmentList() {
-    return this._http.get('http://localhost:3000/equipment')
+    return this._http.get('/equipment')
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   postEquipment(){
-    let uri1 = 'http://localhost:3000/equipment/brts31/',
+    let uri1 = '/equipment/brts31/',
         data = { asset_number: 99999, desc: "3119"};
 
     return this.PostRequest(uri1,data);

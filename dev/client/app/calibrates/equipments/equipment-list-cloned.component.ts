@@ -58,7 +58,7 @@ export class EquipmentListClonedComponent {
           this.calibrates = data.calibrates;
         },
         error => alert(error),
-        ()  => console.log('Finished')
+        ()  => console.log('Finished getEquipmentList')
       );
   }
 
@@ -67,7 +67,7 @@ export class EquipmentListClonedComponent {
       .subscribe(
         data => this.postData = JSON.stringify(data),
         error => alert(error),
-        ()  => console.log('Finished')
+        ()  => console.log('Finished onPostEquipment')
       );
   }
 }

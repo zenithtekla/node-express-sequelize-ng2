@@ -4,9 +4,7 @@ import {EquipmentRestfulService} from "../services/restful.service";
 @Component({
   selector: 'calibrate-list',
   template:`
-    <h3>my calibrate list</h3>
-    <button (click) = "onGetEquipment()">GET Equipments</button>
-    <p> Output: {{calibrate_json}}</p>
+    <h3>The calibrate list</h3>
     <hr>
     <table class="table table-striped">
       <thead class="thead-inverse">
@@ -38,19 +36,14 @@ import {EquipmentRestfulService} from "../services/restful.service";
   providers: [EquipmentRestfulService]
 })
 
-export class EquipmentListComponent {
+export class EquipmentListComponent implements OnInit{
   calibrate_json: string;
   postData: string;
   calibrates: any;
-/*  calibrates: any;
-  constructor(public http: Http) { }
 
-  ngOnInit(){
-    this.http.get('http://localhost:3000/table_calibrate').map(response => this.calibrates = response.json().data);
-  }*/
   constructor (private _httpService: EquipmentRestfulService) {}
 
-  onGetEquipment(){
+  ngOnInit(){
     this._httpService.getEquipmentList()
       .subscribe(
         data => {
@@ -58,7 +51,7 @@ export class EquipmentListComponent {
           this.calibrates = data.calibrates;
         },
         error => alert(error),
-        ()  => console.log('Finished')
+        ()  => console.log('Finished getEquipmentList')
       );
   }
 
@@ -67,7 +60,7 @@ export class EquipmentListComponent {
       .subscribe(
         data => this.postData = JSON.stringify(data),
         error => alert(error),
-        ()  => console.log('Finished')
+        ()  => console.log('Finished onPostEquipment')
       );
   }
 }

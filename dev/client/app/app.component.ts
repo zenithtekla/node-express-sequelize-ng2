@@ -6,6 +6,7 @@ import {EndpointListComponent} from "./routes/endpoint-list.component";
     selector: 'my-app',
     template: `  
         <h1>Home Content</h1>
+        <br>
         <endpoint-list></endpoint-list>
         <calibrates></calibrates>
     `,
