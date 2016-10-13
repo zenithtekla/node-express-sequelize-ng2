@@ -150,3 +150,4 @@ appConfig.json
 routeConfig.json
 testConfig.json
 /public/js/bundle.js
+/testConfig.json

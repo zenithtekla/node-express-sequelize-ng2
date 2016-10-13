@@ -20,6 +20,12 @@ export class EquipmentRestfulService {
     return this.PostRequest(uri1,data);
   }
 
+  deleteEquipment(calibrate){
+    return this._http.delete('/asset_number/'+calibrate.asset_number)
+      .map(res => res.json())
+      .catch(this.handleError);
+  }
+
   private PostRequest(url, data){
     let headers = new Headers({'Content-Type': 'application/json'});
     let requestoptions = new RequestOptions({

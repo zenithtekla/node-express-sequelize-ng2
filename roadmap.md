@@ -15,3 +15,7 @@ $ gulp test-site
 
 Perhaps, layer the app with Strongloop for UI of all restful API endpoints
 https://www.youtube.com/watch?v=0RIrdFfy9t4
+
+Exposure:
+tsconfig.compilerOptions.module
+http://blog.thoughtram.io/angular/2016/06/08/component-relative-paths-in-angular-2.html
