@@ -210,7 +210,30 @@ gulp.task('test-site', function () {
   return stream;
 });
 
-gulp.task('build', ['merge-ts-coffee', 'uglify-all']);
+gulp.task("angular2:moveLibs", function () {
+  return gulp.src([
+      "node_modules/@angular/common/**/*",
+      "node_modules/@angular/compiler/**/*",
+      "node_modules/@angular/core/**/*",
+      "node_modules/@angular/http/**/*",
+      "node_modules/@angular/platform-browser/**/*",
+      "node_modules/@angular/platform-browser-dynamic/**/*",
+      "node_modules/@angular/router/**/*",
+      "node_modules/@angular/router-deprecated/**/*",
+      "node_modules/@angular/upgrade/**/*",
+      "node_modules/systemjs/dist/system.src.js",
+      "node_modules/systemjs/dist/system-polyfills.js",
+      "node_modules/rxjs/**/*",
+      "node_modules/core-js/**/*",
+      "node_modules/zone.js/dist/zone.js",
+      "node_modules/reflect-metadata/Reflect.js",
+      "node_modules/reflect-metadata/Reflect.js.map"
+    ],
+    { base: "node_modules" })
+    .pipe(gulp.dest(config.public.lib));
+});
+
+gulp.task('build', ['merge-ts-coffee', 'uglify-all', 'angular2:moveLibs']);
 gulp.task('build:watch', ['watch', 'uglify-all']);
 
 gulp.task('test', ['test:server']);

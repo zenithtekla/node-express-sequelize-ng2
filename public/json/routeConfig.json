@@ -1,0 +1,18 @@
+[
+    {
+        "route": "/app/calibrates/routes/calibrates.routes.js",
+        "endpoints": [
+            {
+                "module_name": "calibrates",
+                "equipment": "/equipment",
+                "equipment_model": "/equipment/:model",
+                "asset_number": "/asset_number/:asset_number",
+                "table_equipment": "/table_equipment",
+                "table_main": "/table_main",
+                "table_location": "/table_location",
+                "equipment_model_asset_number": "/equipment/:model/:asset_number",
+                "location": "/location/:location_id"
+            }
+        ]
+    }
+]

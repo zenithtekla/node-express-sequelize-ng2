@@ -56,6 +56,7 @@ var gulpConfig = function(){
       js: 'public/js/' ,
       css: 'public/css/' ,
       img: 'public/img/' ,
+      lib: 'public/lib/' ,
       dir: 'public/',
       dist: 'public/dist/',
       html: 'public/html/'

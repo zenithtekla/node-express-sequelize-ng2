@@ -144,10 +144,8 @@ docs/*.html
 docs/*.json
 modules/yzt/
 public/img/
-public/js/
 dev/server/app/dodo/
-appConfig.json
-routeConfig.json
-testConfig.json
-/public/js/bundle.js
+/appConfig.json
+/routeConfig.json
+public/js/
 /testConfig.json
