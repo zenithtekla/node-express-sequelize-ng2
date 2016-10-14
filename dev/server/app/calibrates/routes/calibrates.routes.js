@@ -10,6 +10,8 @@ module.exports = function(app, endpoints){
 
   var points = {
     module_name: module_name,
+    equipments: '/equipments',
+    equipments_asset_number: '/equipments/:asset_number',
     equipment: '/equipment',
     equipment_model: '/equipment/:model',
     asset_number: '/asset_number/:asset_number',
@@ -21,11 +23,19 @@ module.exports = function(app, endpoints){
   };
   endpoints.push(points);
 
+  app.route(points.equipments)
+    .get(controller.getEquipment)
+    .post(controller.createEquipment);
+  app.route(points.equipments_asset_number)
+    .get(controller.getEquipmentBy)
+    .put(controller.updateEquipment)
+    // .put(controller.upsertEquipment)
+    .delete(controller.deleteEquipment);
 
   app.route(points.equipment)
-    .get( controller.getEquipment)
+    .get(controller.getEquipment)
     // create the entire new model of equipments.
-    .post( controller.createModel);
+    .post(controller.createModel);
 
   app.route(points.equipment_model)
     .get(controller.getEquipmentBy)

@@ -48,9 +48,18 @@ module.exports = function(app){
 
   route.createEquipment = function(req,res,next){
     console.log('Display the params: ', req.body);
-    req.body.model = req.params.model;
+    if (req.params.model)
+      req.body.model = req.params.model;
+
     // SHOULD the location remain unchanged and unchangeable, add route /:model/?desc to set req.body.desc = req.params.desc;
     utils.createLocation(req, res, next);
+  };
+
+  route.upsertEquipment = function (req, res, next) {
+    if (req.body.model)
+      req.params = {model: req.body.model};
+
+    utils.upsertMethod(req, res, next);
   };
 
   route.updateEquipment = function(req,res,next){

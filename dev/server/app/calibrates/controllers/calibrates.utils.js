@@ -1,4 +1,7 @@
 'use strict';
+var path    = require('path'),
+  config    = require(path.resolve('app-config')),
+  appUtils  = require(path.resolve(config.serverConfigDir, 'assets/utils'));
 
 /* utility method */
 module.exports  = function(db, env) {
@@ -25,7 +28,7 @@ module.exports  = function(db, env) {
         res.json({error: err});
       });
     },
-    findOneMethod: function (req, res, next, callback) {
+    findOneMethod: function (req, res, next, onSuccess, onError) {
       ECMS_Equipment.findOne({
         where: req.params,
         attributes: ["model", "asset_number", "location_id"],
@@ -34,9 +37,10 @@ module.exports  = function(db, env) {
           { model: ECMS_Location, attributes: ["desc"]}
         ]
       }).then(function(result){
-        callback(result);
+        onSuccess(result);
         return null;
       }).catch(function (err) {
+        onError();
         res.json({error: err});
       });
     },
@@ -139,31 +143,30 @@ module.exports  = function(db, env) {
     }
   }
 
-  var updateMethod = function (req, res, next){
+  var updateMethod = function (req, res, next, onError){
+    utils.findOneMethod(req, res, next, onSuccess, onError);
 
-    utils.findOneMethod(req, res, next, callback);
-
-    function callback(result){
-      console.log(chalk.red('My RESULT '));
+    function onSuccess(result){
       console.log(result.dataValues);
-      req.body.model = req.params.model;
-      req.body.asset_number = req.params.asset_number;
+      req.body.model = req.params.model || result.dataValues.model;
+      req.body.asset_number = req.params.asset_number || result.dataValues.asset_number;
+      appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
       // SHOULD the location remain unchanged and unchangeable, give it req.body.desc = result.desc;
       if (req.body.desc)
-        ECMS_Location.updateRecord({
-          newRecord: req.body,
-          cond: { where: {id: result.dataValues.location_id}},
-          onError: (err) => res.json({error: err}),
-          onSuccess: handler
-    });
+      ECMS_Location.updateRecord({
+        newRecord: req.body,
+        cond: { where: {id: result.dataValues.location_id}},
+        onError: (err) => res.json({error: err}),
+        onSuccess: handler
+      });
 
       if (req.body.file || req.body.schedule)
-        ECMS_Attribute.updateRecord({
-            newRecord: req.body,
-            cond: { where: { asset_number: result.dataValues.asset_number}},
-            onError: (err) => res.json({error: err}),
-          onSuccess: handler
-    });
+      ECMS_Attribute.updateRecord({
+        newRecord: req.body,
+        cond: { where: { asset_number: result.dataValues.asset_number}},
+        onError: (err) => res.json({error: err}),
+        onSuccess: handler
+      });
 
       function handler() {
         utils.findOneMethod(req, res, next, function(result){
@@ -173,7 +176,18 @@ module.exports  = function(db, env) {
     }
   };
 
+  var upsertMethod = function (req, res, next){
+    // query to find if the model from user input exists
+    updateMethod(req, res, next, onError);
+
+    // fails, non-existent, perform full creation.
+    function onError(){
+      utils.createLocation(req, res, next);
+    }
+  };
+
   utils.updateMethod = updateMethod;
+  utils.upsertMethod = upsertMethod;
 
   return utils;
 };

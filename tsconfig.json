@@ -9,7 +9,7 @@
     "removeComments": false,
     "noImplicitAny": false,
     "outDir": "public/js/",
-    "outFile": "bundle.js"
+    "outFile": "public/js/bundle.js"
   },
   "filesGlob": [
     "./dev/**/*.ts",

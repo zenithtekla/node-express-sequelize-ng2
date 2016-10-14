@@ -4,6 +4,8 @@
         "endpoints": [
             {
                 "module_name": "calibrates",
+                "equipments": "/equipments",
+                "equipments_asset_number": "/equipments/:asset_number",
                 "equipment": "/equipment",
                 "equipment_model": "/equipment/:model",
                 "asset_number": "/asset_number/:asset_number",
