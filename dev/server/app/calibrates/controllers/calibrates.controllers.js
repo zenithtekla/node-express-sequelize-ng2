@@ -34,12 +34,19 @@ module.exports = function(app){
 
   route.getEquipment = function(req,res, next) {
     utils.findAllMethod(req, res, next, function(records){
-      res.json({env: env, moment: moment, calibrates: records});
+      // res.json({env: env, moment: moment, calibrates: records});
+      res.json(records);
     });
   };
 
   route.getEquipmentBy = function(req,res, next) {
     utils.findAllMethod(req, res, next, function(result){
+      res.json(result);
+    });
+  };
+
+  route.getAnEquipmentBy = function(req,res, next) {
+    utils.findOneMethod(req, res, next, function(result){
       res.json(result);
     });
   };

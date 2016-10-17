@@ -52,7 +52,7 @@ export class EquipmentListComponent implements OnInit{
       .subscribe(
         data => {
           this.calibrate_json = JSON.stringify(data);
-          this.calibrates = data.calibrates;
+          this.calibrates = data;
         },
         error => alert(error),
         ()  => console.log('Finished getEquipmentList')

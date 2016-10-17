@@ -27,7 +27,7 @@ module.exports = function(app, endpoints){
     .get(controller.getEquipment)
     .post(controller.createEquipment);
   app.route(points.equipments_asset_number)
-    .get(controller.getEquipmentBy)
+    .get(controller.getAnEquipmentBy)
     .put(controller.updateEquipment)
     // .put(controller.upsertEquipment)
     .delete(controller.deleteEquipment);

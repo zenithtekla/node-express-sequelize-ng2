@@ -16,6 +16,8 @@ cache/
 # MEAN.js app and assets
 # ======================
 public/dist/
+public/js/
+public/img/
 uploads
 modules/users/client/img/profile/uploads
 assets/config/env/local.js
@@ -143,9 +145,7 @@ Desktop.ini
 docs/*.html
 docs/*.json
 modules/yzt/
-public/img/
 dev/server/app/dodo/
 /appConfig.json
 /routeConfig.json
-public/js/
 /testConfig.json
