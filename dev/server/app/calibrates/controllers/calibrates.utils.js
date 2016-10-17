@@ -1,7 +1,8 @@
 'use strict';
 var path    = require('path'),
-  config    = require(path.resolve('app-config')),
-  appUtils  = require(path.resolve(config.serverConfigDir, 'assets/utils'));
+  config    = require(path.resolve('./app-config')),
+  appUtils  = require(path.resolve(config.utilsDir)),
+errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers'));
 
 /* utility method */
 module.exports  = function(db, env) {
@@ -41,7 +42,7 @@ module.exports  = function(db, env) {
         return null;
       }).catch(function (err) {
         onError();
-        res.json({error: err});
+        res.status(422).send({message: errorHandler.getErrorMessage(err)});
       });
     },
     deleteMethod: function(req,res,next){
@@ -147,16 +148,20 @@ module.exports  = function(db, env) {
     utils.findOneMethod(req, res, next, onSuccess, onError);
 
     function onSuccess(result){
-      console.log(result.dataValues);
       req.body.model = req.params.model || result.dataValues.model;
       req.body.asset_number = req.params.asset_number || result.dataValues.asset_number;
+
+      req.body.desc = req.body.desc || req.body.ECMS_Location.desc;
+      req.body.file = req.body.file || req.body.ECMS_Attributes[0].file;
+      req.body.schedule = req.body.schedule || req.body.ECMS_Attributes[0].schedule;
+
       appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
       // SHOULD the location remain unchanged and unchangeable, give it req.body.desc = result.desc;
       if (req.body.desc)
       ECMS_Location.updateRecord({
         newRecord: req.body,
         cond: { where: {id: result.dataValues.location_id}},
-        onError: (err) => res.json({error: err}),
+        onError: (err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}),
         onSuccess: handler
       });
 
@@ -164,15 +169,20 @@ module.exports  = function(db, env) {
       ECMS_Attribute.updateRecord({
         newRecord: req.body,
         cond: { where: { asset_number: result.dataValues.asset_number}},
-        onError: (err) => res.json({error: err}),
+        onError: (err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}),
         onSuccess: handler
       });
 
       function handler() {
         utils.findOneMethod(req, res, next, function(result){
-          res.json(result);
+          appUtils.exportJSON(result.dataValues, config.publicDir + '/json/myJSON.json');
+          res.json(result.dataValues);
         });
       }
+    }
+
+    function onError(){
+
     }
   };
 

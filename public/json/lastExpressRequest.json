@@ -1,18 +1,73 @@
 {
     "body": {
-        "schedule": 11,
-        "model": "brts31",
-        "asset_number": "1"
-    },
-    "dataValues": {
-        "model": "brts31",
-        "asset_number": "1",
-        "location_id": 1,
+        "assetNumber": "1256 5",
+        "model": "brts2233",
+        "asset_number": "1256",
+        "location_id": 5,
         "ECMS_Attributes": [
             {
-                "last_cal": "2012-08-22T07:00:00.000Z",
-                "schedule": 9,
-                "next_cal": "2013-08-22T07:00:00.000Z",
+                "last_cal": "2012-09-23T07:00:00.000Z",
+                "schedule": 3,
+                "next_cal": "2013-09-23T07:00:00.000Z",
+                "file": {
+                    "type": "Buffer",
+                    "data": [
+                        102,
+                        105,
+                        108,
+                        101,
+                        95,
+                        112,
+                        108,
+                        97,
+                        99,
+                        101,
+                        104,
+                        111,
+                        108,
+                        100,
+                        101,
+                        114
+                    ]
+                }
+            }
+        ],
+        "ECMS_Location": {
+            "desc": "3119"
+        },
+        "desc": "3119",
+        "file": {
+            "type": "Buffer",
+            "data": [
+                102,
+                105,
+                108,
+                101,
+                95,
+                112,
+                108,
+                97,
+                99,
+                101,
+                104,
+                111,
+                108,
+                100,
+                101,
+                114
+            ]
+        },
+        "schedule": 3
+    },
+    "dataValues": {
+        "model": "brts2233",
+        "asset_number": "1256",
+        "location_id": 5,
+        "ECMS_Attributes": [
+            {
+                "last_cal": "2012-09-23T07:00:00.000Z",
+                "schedule": 3,
+                "next_cal": "2013-09-23T07:00:00.000Z",
                 "file": {
                     "type": "Buffer",
                     "data": [
@@ -41,6 +96,6 @@
         }
     },
     "params": {
-        "asset_number": "1"
+        "asset_number": "1256"
     }
 }

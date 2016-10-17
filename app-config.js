@@ -34,6 +34,13 @@ var initGlobalConfig = function(){
     view_engine: {
       template: 'hbs',
       ext: 'hbs'
+    },
+    uploads: {
+      profileUpload: {
+        limits: {
+          fileSize: 10000
+        }
+      }
     }
   };
 
