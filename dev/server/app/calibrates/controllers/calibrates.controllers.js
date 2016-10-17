@@ -47,7 +47,7 @@ module.exports = function(app){
 
   route.getAnEquipmentBy = function(req,res, next) {
     utils.findOneMethod(req, res, next, function(result){
-      res.json(result);
+      return res.json(result);
     });
   };
 

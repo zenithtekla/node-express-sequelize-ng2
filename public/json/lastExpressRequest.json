@@ -1,9 +1,9 @@
 {
     "body": {
-        "assetNumber": "1256 5",
-        "model": "brts2233",
-        "asset_number": "1256",
-        "location_id": 5,
+        "assetNumber": "807 11",
+        "model": "brts2499",
+        "asset_number": "807",
+        "location_id": 11,
         "ECMS_Attributes": [
             {
                 "last_cal": "2012-09-23T07:00:00.000Z",
@@ -12,90 +12,87 @@
                 "file": {
                     "type": "Buffer",
                     "data": [
-                        102,
-                        105,
-                        108,
-                        101,
-                        95,
-                        112,
-                        108,
-                        97,
-                        99,
-                        101,
-                        104,
+                        91,
                         111,
-                        108,
-                        100,
+                        98,
+                        106,
                         101,
-                        114
-                    ]
-                }
-            }
-        ],
-        "ECMS_Location": {
-            "desc": "3119"
-        },
-        "desc": "3119",
-        "file": {
-            "type": "Buffer",
-            "data": [
-                102,
-                105,
-                108,
-                101,
-                95,
-                112,
-                108,
-                97,
-                99,
-                101,
-                104,
-                111,
-                108,
-                100,
-                101,
-                114
-            ]
-        },
-        "schedule": 3
-    },
-    "dataValues": {
-        "model": "brts2233",
-        "asset_number": "1256",
-        "location_id": 5,
-        "ECMS_Attributes": [
-            {
-                "last_cal": "2012-09-23T07:00:00.000Z",
-                "schedule": 3,
-                "next_cal": "2013-09-23T07:00:00.000Z",
-                "file": {
-                    "type": "Buffer",
-                    "data": [
-                        102,
-                        105,
-                        108,
-                        101,
-                        95,
-                        112,
-                        108,
-                        97,
                         99,
+                        116,
+                        32,
+                        79,
+                        98,
+                        106,
                         101,
-                        104,
-                        111,
-                        108,
-                        100,
-                        101,
-                        114
+                        99,
+                        116,
+                        93
                     ]
                 }
             }
         ],
         "ECMS_Location": {
             "desc": "labroom"
+        },
+        "desc": "labroom",
+        "file": {
+            "type": "Buffer",
+            "data": [
+                91,
+                111,
+                98,
+                106,
+                101,
+                99,
+                116,
+                32,
+                79,
+                98,
+                106,
+                101,
+                99,
+                116,
+                93
+            ]
+        },
+        "schedule": 3
+    },
+    "dataValues": {
+        "model": "brts2499",
+        "asset_number": "807",
+        "location_id": 11,
+        "ECMS_Attributes": [
+            {
+                "last_cal": "2012-09-23T07:00:00.000Z",
+                "schedule": 3,
+                "next_cal": "2013-09-23T07:00:00.000Z",
+                "file": {
+                    "type": "Buffer",
+                    "data": [
+                        91,
+                        111,
+                        98,
+                        106,
+                        101,
+                        99,
+                        116,
+                        32,
+                        79,
+                        98,
+                        106,
+                        101,
+                        99,
+                        116,
+                        93
+                    ]
+                }
+            }
+        ],
+        "ECMS_Location": {
+            "desc": "production"
         }
     },
     "params": {
-        "asset_number": "1256"
+        "location_id": "11"
     }
 }

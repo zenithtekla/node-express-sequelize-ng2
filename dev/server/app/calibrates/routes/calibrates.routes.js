@@ -11,7 +11,7 @@ module.exports = function(app, endpoints){
   var points = {
     module_name: module_name,
     equipments: '/equipments',
-    equipments_asset_number: '/equipments/:asset_number',
+    equipments_asset_number: '/equipments/:location_id',
     equipment: '/equipment',
     equipment_model: '/equipment/:model',
     asset_number: '/asset_number/:asset_number',

@@ -25,9 +25,7 @@ module.exports  = function(db, env) {
         ]
       }).then(function(result){
         callback(result);
-      }).catch(function (err) {
-        res.json({error: err});
-      });
+      }).catch(_errorHandler);
     },
     findOneMethod: function (req, res, next, onSuccess, onError) {
       ECMS_Equipment.findOne({
@@ -39,7 +37,7 @@ module.exports  = function(db, env) {
         ]
       }).then(function(result){
         onSuccess(result);
-        return null;
+        // return null;
       }).catch(function (err) {
         onError();
         res.status(422).send({message: errorHandler.getErrorMessage(err)});
@@ -47,9 +45,9 @@ module.exports  = function(db, env) {
     },
     deleteMethod: function(req,res,next){
       ECMS_Equipment.deleteRecord({
-          cond: {where: req.params},
-          onSuccess: () => res.json('model deleted!'),
-        onError: (err)=> res.json({error: err})
+        cond: {where: req.params},
+        onError: _errorHandler,
+        onSuccess: () => res.json('model deleted!')
       });
     }
   };
@@ -71,11 +69,12 @@ module.exports  = function(db, env) {
    Functional programming (NO to callback hell):
    the createEquipment method: create_location => create_equipment => create_ECMS_attrs_entry
    */
+
   function create_location(req, res, next){
-    var input  = { desc: req.body.desc };
+    var input  = { desc: req.body.desc || req.body.ECMS_Location.desc };
     ECMS_Location.createRecord({
-        newRecord: input,
-        onError: (err)=>console.log(err),
+      newRecord: input,
+      onError: _errorHandler,
       onSuccess: (record) => {
         EquipmentRecord(req.body, res, record.dataValues);
       }
@@ -103,9 +102,9 @@ module.exports  = function(db, env) {
 
   function create_equipment(req, res, record){
     ECMS_Equipment.createRecord({
-        newRecord: record,
-        onError: (err)=>console.log(err),
-      onSuccess:(record)=>{
+      newRecord: record,
+      onError: _errorHandler,
+      onSuccess:(record)=> {
         create_ECMS_attrs_entry(req, res, record.dataValues);
       }
     });
@@ -113,18 +112,18 @@ module.exports  = function(db, env) {
 
   function create_ECMS_attrs_entry(req, res, record){
     ECMS_Attribute.createRecord({
-        newRecord: {
-          asset_number: record.asset_number,
-          last_cal: new Date(req.last_cal || '2012/08/22'),
-          schedule: req.schedule || 3,
-          next_cal: new Date(req.next_cal || '2013/08/22'),
-          file: req.file || 'file_placeholder'
-        },
-        onError: (err)=>console.log(err),
-      onSuccess: (record) =>{
-      if (env !=='seed')
-        res.json(record.dataValues);
-      return null;
+      newRecord: {
+        asset_number: record.asset_number,
+        last_cal: new Date(req.last_cal || '2012/08/22'),
+        schedule: req.schedule || 3,
+        next_cal: new Date(req.next_cal || '2013/08/22'),
+        file: req.file || 'file_placeholder'
+      },
+      onError: _errorHandler,
+      onSuccess: (rec) =>{
+        if (env !=='seed')
+          return res.json(_.extend(record,rec.dataValues));
+        else return null;
       }
     });
   }
@@ -161,28 +160,24 @@ module.exports  = function(db, env) {
       ECMS_Location.updateRecord({
         newRecord: req.body,
         cond: { where: {id: result.dataValues.location_id}},
-        onError: (err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}),
-        onSuccess: handler
+        onError: _errorHandler,
+        onSuccess: __successHandler
       });
 
       if (req.body.file || req.body.schedule)
       ECMS_Attribute.updateRecord({
         newRecord: req.body,
         cond: { where: { asset_number: result.dataValues.asset_number}},
-        onError: (err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}),
-        onSuccess: handler
+        onError: _errorHandler,
+        onSuccess: __successHandler
       });
 
-      function handler() {
+      function __successHandler() {
         utils.findOneMethod(req, res, next, function(result){
           appUtils.exportJSON(result.dataValues, config.publicDir + '/json/myJSON.json');
           res.json(result.dataValues);
         });
       }
-    }
-
-    function onError(){
-
     }
   };
 
@@ -195,6 +190,10 @@ module.exports  = function(db, env) {
       utils.createLocation(req, res, next);
     }
   };
+
+  function _errorHandler(err) {
+    res.status(422).send({message: errorHandler.getErrorMessage(err)});
+  }
 
   utils.updateMethod = updateMethod;
   utils.upsertMethod = upsertMethod;
