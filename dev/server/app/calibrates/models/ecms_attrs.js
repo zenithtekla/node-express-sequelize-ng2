@@ -3,7 +3,8 @@
 
 module.exports = function(sequelize, DataTypes) {
   var Schema = sequelize.define('ECMS_Attribute', {
-      file: DataTypes.BLOB()
+      file: DataTypes.BLOB(),
+      filename: DataTypes.STRING(100)
     },
     {
       tableName: 'ECMS_attrs_table',

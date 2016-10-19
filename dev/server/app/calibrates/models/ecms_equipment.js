@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       collate: 'utf8_unicode_ci',
       getterMethods: {
         equipmentInfo: function () {
-          return 'model: [' + this.model + ']- asset: [' + this.asset_number + ']';
+          return 'model: [' + this.model + '] - asset: [' + this.asset_number + ']';
         },
         retrieveLocation: function (models) {
           /*return this.getLocation().then(function(location){

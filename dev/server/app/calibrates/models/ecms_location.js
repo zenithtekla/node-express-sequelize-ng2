@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       getterMethods: {
         getLocation: function () {
-          return '- location: [' + this.desc + ']';
+          return ' - location: [' + this.desc + ']';
         }
       }
     });

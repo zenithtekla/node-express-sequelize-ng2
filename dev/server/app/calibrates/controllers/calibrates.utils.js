@@ -18,10 +18,10 @@ module.exports  = function(db, env) {
     findAllMethod: function (req, res, next, callback) {
       ECMS_Equipment.findAll({
         where: req.params,
-        attributes: ["asset_id", "model", "asset_number", "last_cal", "schedule", "next_cal"],
+        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Attribute, attributes: ["file", "createdAt", "updatedAt"]},
-          { model: ECMS_Location, attributes: ["desc"]}
+          { model: ECMS_Attribute, attributes: ['file', 'filename', 'createdAt', 'updatedAt']},
+          { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
         callback(result);
@@ -30,10 +30,10 @@ module.exports  = function(db, env) {
     findOneMethod: function (req, res, next, onSuccess, onError) {
       ECMS_Equipment.findOne({
         where: req.params,
-        attributes: ["asset_id", "model", "asset_number", "last_cal", "schedule", "next_cal"],
+        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Attribute, attributes: ["file", "createdAt", "updatedAt"]},
-          { model: ECMS_Location, attributes: ["desc"]}
+          { model: ECMS_Attribute, attributes: ['file', 'filename', 'createdAt', 'updatedAt']},
+          { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
         onSuccess(result);
@@ -114,10 +114,12 @@ module.exports  = function(db, env) {
   }
 
   function create_ECMS_attrs_entry(req, res, record){
+    var file = 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
     ECMS_Attribute.createRecord({
       newRecord: {
         asset_number: record.asset_number,
-        file: req.file || 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString()
+        file: req.file || file,
+        filename: req.filename || file
       },
       onError: _errorHandler,
       onSuccess: (rec) =>{
