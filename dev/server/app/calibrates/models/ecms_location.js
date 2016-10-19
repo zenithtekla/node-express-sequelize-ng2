@@ -6,7 +6,10 @@ module.exports = function(sequelize, DataTypes) {
       desc: {
         type: DataTypes.STRING(20),
         //notEmpty: true,
-        allowNull: false
+        allowNull: false/*,
+        get: function () {
+          return this.getDataValue('desc');
+        }*/
       }
     },
     {
@@ -19,6 +22,11 @@ module.exports = function(sequelize, DataTypes) {
         associate: function(models){
           // hasOne - foreignKey sits on the Equipment (target) table, this Schema is the source table
           Schema.hasOne(models.ECMS_Equipment, { foreignKey: 'asset_id', onDelete: 'CASCADE' } );
+        }
+      },
+      getterMethods: {
+        getLocation: function () {
+          return '- location: [' + this.desc + ']';
         }
       }
     });

@@ -18,9 +18,9 @@ module.exports  = function(db, env) {
     findAllMethod: function (req, res, next, callback) {
       ECMS_Equipment.findAll({
         where: req.params,
-        attributes: ["model", "asset_number", "asset_id"],
+        attributes: ["asset_id", "model", "asset_number", "last_cal", "schedule", "next_cal"],
         include: [
-          { model: ECMS_Attribute, attributes: ["last_cal", "schedule", "next_cal", "file"]},
+          { model: ECMS_Attribute, attributes: ["file", "createdAt", "updatedAt"]},
           { model: ECMS_Location, attributes: ["desc"]}
         ]
       }).then(function(result){
@@ -30,9 +30,9 @@ module.exports  = function(db, env) {
     findOneMethod: function (req, res, next, onSuccess, onError) {
       ECMS_Equipment.findOne({
         where: req.params,
-        attributes: ["model", "asset_number", "asset_id"],
+        attributes: ["asset_id", "model", "asset_number", "last_cal", "schedule", "next_cal"],
         include: [
-          { model: ECMS_Attribute, attributes: ["last_cal", "schedule", "next_cal", "file"]},
+          { model: ECMS_Attribute, attributes: ["file", "createdAt", "updatedAt"]},
           { model: ECMS_Location, attributes: ["desc"]}
         ]
       }).then(function(result){
@@ -85,7 +85,10 @@ module.exports  = function(db, env) {
     var equip = {
       asset_id: record.id,
       model: req.model,
-      asset_number: req.asset_number
+      asset_number: req.asset_number,
+      last_cal: new Date(req.last_cal || '2012/08/22'),
+      schedule: req.schedule || (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString(),
+      next_cal: new Date(req.next_cal || '2013/08/22')
     };
 
     switch (env) {
@@ -114,14 +117,11 @@ module.exports  = function(db, env) {
     ECMS_Attribute.createRecord({
       newRecord: {
         asset_number: record.asset_number,
-        last_cal: new Date(req.last_cal || '2012/08/22'),
-        schedule: req.schedule || (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString(),
-        next_cal: new Date(req.next_cal || '2013/08/22'),
         file: req.file || 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString()
       },
       onError: _errorHandler,
       onSuccess: (rec) =>{
-        if (env !=='seed')
+        if (env !=='seed' && res)
           return res.json(_.extend(record,rec.dataValues));
         else return null;
       }

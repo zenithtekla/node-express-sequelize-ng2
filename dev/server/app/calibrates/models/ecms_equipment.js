@@ -12,11 +12,14 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
         unique: true,
         primaryKey:true
+      },
+      last_cal: DataTypes.DATE(),
+      schedule: DataTypes.INTEGER(20),
+      next_cal: DataTypes.DATE(),
+      status: {
+        type: DataTypes.INTEGER(2).UNSIGNED,
+        defaultValue: 1
       }
-      /*    status: {
-       type: DataTypes.INTEGER(2).UNSIGNED ,
-       defaultValue: 1
-       }*/
     } ,
     {
       timestamps: false ,
@@ -25,10 +28,17 @@ module.exports = function(sequelize, DataTypes) {
       charset: 'utf8' ,
       collate: 'utf8_unicode_ci',
       getterMethods: {
-        assetNumber: function () {
-          return this.asset_number + ' ' + this.asset_id;
+        equipmentInfo: function () {
+          return 'model: [' + this.model + ']- asset: [' + this.asset_number + ']';
+        },
+        retrieveLocation: function (models) {
+          /*return this.getLocation().then(function(location){
+            return location.desc;
+          });*/
+          // return models.ECMS_Location.get('desc');
         }
       },
+      // for setterMethods reference to https://gist.github.com/pranildasika/2964211
       classMethods: {
         associate: function(models){
           // by default, will reference to targetKey of primary id in the Location table

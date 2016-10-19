@@ -84,7 +84,7 @@ module.exports  = function(db) {
         last_cal: '2012/09/23',
         next_cal: '2013/09/23'
       }
-    }, res = '';
-    util_method.createLocation(req, res);
+    };
+    util_method.createLocation(req);
   }
 };

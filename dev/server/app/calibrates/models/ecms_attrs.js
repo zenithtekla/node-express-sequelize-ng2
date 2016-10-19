@@ -3,13 +3,9 @@
 
 module.exports = function(sequelize, DataTypes) {
   var Schema = sequelize.define('ECMS_Attribute', {
-      last_cal: DataTypes.DATE(),
-      schedule: DataTypes.INTEGER(20),
-      next_cal: DataTypes.DATE(),
       file: DataTypes.BLOB()
     },
     {
-      timestamps: false,
       tableName: 'ECMS_attrs_table',
       freezeTableName: true,
       charset: 'utf8',
