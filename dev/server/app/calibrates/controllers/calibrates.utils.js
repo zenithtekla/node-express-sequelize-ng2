@@ -115,9 +115,9 @@ module.exports  = function(db, env) {
       newRecord: {
         asset_number: record.asset_number,
         last_cal: new Date(req.last_cal || '2012/08/22'),
-        schedule: req.schedule || 3,
+        schedule: req.schedule || (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString(),
         next_cal: new Date(req.next_cal || '2013/08/22'),
-        file: req.file || 'file_placeholder'
+        file: req.file || 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString()
       },
       onError: _errorHandler,
       onSuccess: (rec) =>{
@@ -129,8 +129,8 @@ module.exports  = function(db, env) {
   }
 
   function EquipmentSeed(equip) {
-    equip.model = equip.model || 'brts' + Math.floor(Math.random()*Math.random()*2999).toString();
-    equip.asset_number= equip.asset_number || Math.floor(Math.random()*Math.random()*2999);
+    equip.model = equip.model || 'brts' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+    equip.asset_number= equip.asset_number || (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200));
   }
 
   var updateMethod = function (req, res, next, onError){

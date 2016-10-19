@@ -2,9 +2,10 @@
 
 /* seed for Calibrates */
 module.exports  = function(db) {
-  var _ = require('lodash'),
-    path= require('path'),
-    config = db.config,
+  var _         = require('lodash'),
+    path        = require('path'),
+    config      = db.config,
+    utils       = require(path.resolve(config.assetsDir, 'utils')),
     util_method = require(path.resolve(config.serverAppDir, 'calibrates/controllers/calibrates.utils'))(db, 'seed');
 
   var ECMS_Location   = db.ECMS_Location,
@@ -49,7 +50,7 @@ module.exports  = function(db) {
     },
     {
       body: {
-        desc: 'Brussel',
+        desc: 'Brussels',
         model:"brts36",
         asset_number:6
       }
@@ -79,7 +80,7 @@ module.exports  = function(db) {
   for (var i = 1;i<10; i++){
     var req= {
       body: {
-        desc: 'latitude ' + Math.floor(Math.random()*2999).toString(),
+        desc: 'latitude ' + utils.getRandomInt(1,10000),
         last_cal: '2012/09/23',
         next_cal: '2013/09/23'
       }
