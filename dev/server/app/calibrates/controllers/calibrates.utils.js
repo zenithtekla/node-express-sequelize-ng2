@@ -90,7 +90,7 @@ module.exports  = function(db, env) {
 
     switch (env) {
       case 'seed':
-        EquipmentSeed(equip, record.desc);
+        EquipmentSeed(equip);
         break;
 
       default:
@@ -128,19 +128,9 @@ module.exports  = function(db, env) {
     });
   }
 
-  function EquipmentSeed(equip, desc) {
-    switch (desc) {
-      case 'labroom':
-        equip.model = equip.model || 'brts' + Math.floor(Math.random()*2999).toString();
-        equip.asset_number= equip.asset_number || Math.floor(Math.random()*2999);
-        break;
-      case 'production':
-        equip.model = equip.model || 'brts'+ Math.floor(Math.random()*2999).toString();
-        equip.asset_number= equip.asset_number || Math.floor(Math.random()*2999);
-        break;
-      default:
-        break;
-    }
+  function EquipmentSeed(equip) {
+    equip.model = equip.model || 'brts' + Math.floor(Math.random()*Math.random()*2999).toString();
+    equip.asset_number= equip.asset_number || Math.floor(Math.random()*Math.random()*2999);
   }
 
   var updateMethod = function (req, res, next, onError){
