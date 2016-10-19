@@ -28,7 +28,7 @@ module.exports  = function(db) {
     },
     {
       body: {
-        desc: 'production',
+        desc: 'Santa Ana',
         model:"brts33",
         asset_number:3
       }

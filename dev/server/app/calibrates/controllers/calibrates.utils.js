@@ -18,7 +18,7 @@ module.exports  = function(db, env) {
     findAllMethod: function (req, res, next, callback) {
       ECMS_Equipment.findAll({
         where: req.params,
-        attributes: ["model", "asset_number", "location_id"],
+        attributes: ["model", "asset_number", "asset_id"],
         include: [
           { model: ECMS_Attribute, attributes: ["last_cal", "schedule", "next_cal", "file"]},
           { model: ECMS_Location, attributes: ["desc"]}
@@ -30,7 +30,7 @@ module.exports  = function(db, env) {
     findOneMethod: function (req, res, next, onSuccess, onError) {
       ECMS_Equipment.findOne({
         where: req.params,
-        attributes: ["model", "asset_number", "location_id"],
+        attributes: ["model", "asset_number", "asset_id"],
         include: [
           { model: ECMS_Attribute, attributes: ["last_cal", "schedule", "next_cal", "file"]},
           { model: ECMS_Location, attributes: ["desc"]}
@@ -61,7 +61,7 @@ module.exports  = function(db, env) {
 
    ECMS_Location --(1:1)--> ECMS_Equipment --(1:m)--> EMCS_Attribute
 
-   Creation of an entry in ECMS_equipment_table requires foreign key location_id (an entry in ECMS_Location_table must pre-exist)
+   Creation of an entry in ECMS_equipment_table requires foreign key asset_id (an entry in ECMS_Location_table must pre-exist)
    Creation of an entry in ECMS_attribute_table requires foreign key asset_number (an entry in ECMS_Equipment_table must pre-exist)
 
    => It makes sense to have a location created first.
@@ -83,7 +83,7 @@ module.exports  = function(db, env) {
 
   function EquipmentRecord(req, res, record){
     var equip = {
-      location_id: record.id,
+      asset_id: record.id,
       model: req.model,
       asset_number: req.asset_number
     };
@@ -159,7 +159,7 @@ module.exports  = function(db, env) {
       if (req.body.desc)
       ECMS_Location.updateRecord({
         newRecord: req.body,
-        cond: { where: {id: result.dataValues.location_id}},
+        cond: { where: {id: result.dataValues.asset_id}},
         onError: _errorHandler,
         onSuccess: __successHandler
       });
@@ -174,7 +174,7 @@ module.exports  = function(db, env) {
 
       function __successHandler() {
         utils.findOneMethod(req, res, next, function(result){
-          appUtils.exportJSON(result.dataValues, config.publicDir + '/json/myJSON.json');
+          appUtils.exportJSON(result.dataValues, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
           res.json(result.dataValues);
         });
       }

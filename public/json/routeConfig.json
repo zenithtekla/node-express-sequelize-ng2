@@ -5,7 +5,7 @@
             {
                 "module_name": "calibrates",
                 "equipments": "/equipments",
-                "equipments_asset_number": "/equipments/:location_id",
+                "equipments_asset_number": "/equipments/:asset_id",
                 "equipment": "/equipment",
                 "equipment_model": "/equipment/:model",
                 "asset_number": "/asset_number/:asset_number",

@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function(models){
           // hasOne - foreignKey sits on the Equipment (target) table, this Schema is the source table
-          Schema.hasOne(models.ECMS_Equipment, { foreignKey: 'location_id', onDelete: 'CASCADE' } );
+          Schema.hasOne(models.ECMS_Equipment, { foreignKey: 'asset_id', onDelete: 'CASCADE' } );
         }
       }
     });

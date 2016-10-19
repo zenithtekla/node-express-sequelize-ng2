@@ -1,0 +1,35 @@
+{
+    "model": "brts778",
+    "asset_number": "1708",
+    "asset_id": 12,
+    "ECMS_Attributes": [
+        {
+            "last_cal": "2012-09-23T07:00:00.000Z",
+            "schedule": 3,
+            "next_cal": "2013-09-23T07:00:00.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    91,
+                    111,
+                    98,
+                    106,
+                    101,
+                    99,
+                    116,
+                    32,
+                    79,
+                    98,
+                    106,
+                    101,
+                    99,
+                    116,
+                    93
+                ]
+            }
+        }
+    ],
+    "ECMS_Location": {
+        "desc": "production777777"
+    }
+}

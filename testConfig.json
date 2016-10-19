@@ -1,10 +1,10 @@
 {
     "tests": [
-        "C:/Users/PhucTran/node-angular2-seed/dev/server/app/calibrates/tests/testing.js"
+        "C:/Users/PhucTran/node-express-sequelize-ng2/dev/server/app/calibrates/tests/testing.js"
     ],
     "content": [
         {
-            "test": "C:/Users/PhucTran/node-angular2-seed/dev/server/app/calibrates/tests/testing.js"
+            "test": "C:/Users/PhucTran/node-express-sequelize-ng2/dev/server/app/calibrates/tests/testing.js"
         }
     ]
 }
