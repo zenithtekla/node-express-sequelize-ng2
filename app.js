@@ -1,11 +1,13 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser    = require('body-parser'),
-    cors          = require('cors'),
-    config        = require('./app-config');
+var express     = require('express'),
+  _             = require('lodash'),
+  path          = require('path'),
+  favicon       = require('serve-favicon'),
+  morgan        = require('morgan'),
+  cookieParser  = require('cookie-parser'),
+  bodyParser    = require('body-parser'),
+  cors          = require('cors'),
+  config        = require('./app-config'),
+  logger        = require(path.resolve(config.serverConfigDir, './lib/logger'));
 
 var app = module.exports.app = exports.app = express();
 
@@ -28,7 +30,10 @@ app.set('view engine', config.view_engine.template);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public/fav', 'favicon.ico')));
 
-app.use(logger('dev'));
+// Enable logger (morgan) if enabled in the configuration file
+if (_.has(config, 'log.format')) {
+  app.use(morgan(logger.getLogFormat(), logger.getMorganOptions()));
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

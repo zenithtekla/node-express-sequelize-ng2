@@ -31,7 +31,7 @@ var utils = {
     return fs
       .readdirSync(srcpath)
       .filter(function(file) {
-        return file==="models"
+        return file==='models'
           && fs.statSync(path.join(srcpath, file)).isDirectory();
       });
   },
@@ -72,17 +72,48 @@ var utils = {
 
     return output;
   },
+  JSONstringify: function(data) {
+    return JSON.stringify(data, null, 4);
+  },
   exportJSON: function (data, outputFile) {
     fs.writeFile(outputFile, JSON.stringify(data, null, 4),
       function(err) {
         if(err) {
           console.log(err);
         } else {
-          console.log("JSON saved to " + outputFile);
+          console.log('JSON saved to ' + outputFile);
         }
       }
     );
   },
+  exportFile: function (data, outputFile) {
+    fs.writeFile(outputFile, data,
+      function(err) {
+        if(err) {
+          console.log(err);
+        } else {
+          console.log('Data saved to ' + outputFile);
+        }
+      }
+    );
+  },
+  appendFile: function (data, outputFile) {
+    fs.appendFile(outputFile, data, function (err) {
+      if (err) throw err;
+      else {
+        console.log('Data saved to ' + outputFile);
+      }
+    });
+  },
+  // http://code.runnable.com/VbK5NWjuHQI-PLsX/find-delete-files-for-node-js-glob-and-fs
+  deleteFile: function (filePath, callback){
+    callback = callback || function(err){
+      if (err) throw err;
+      console.log(filePath + " deleted");
+    };
+    fs.unlink(filePath, callback);
+  },
+
   /**
    * Returns a random integer between min (inclusive) and max (inclusive)
    * Using Math.round() will give you a non-uniform distribution!

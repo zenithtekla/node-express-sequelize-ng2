@@ -51,15 +51,15 @@ module.exports = function(app){
     });
   };
 
-  route.createModel = (req,res, next) => utils.createLocation(req, res, next);
+  route.createModel = (req, resolve, res, next) => utils.createLocation(req, resolve, res, next);
 
-  route.createEquipment = function(req,res,next){
+  route.createEquipment = function(req, resolve, res, next){
     console.log('Display the params: ', req.body);
     if (req.params.model)
       req.body.model = req.params.model;
 
     // SHOULD the location remain unchanged and unchangeable, add route /:model/?desc to set req.body.desc = req.params.desc;
-    utils.createLocation(req, res, next);
+    utils.createLocation(req, resolve, res, next);
   };
 
   route.upsertEquipment = function (req, res, next) {
@@ -76,6 +76,8 @@ module.exports = function(app){
   route.deleteEquipment = (req,res, next) => utils.deleteMethod(req,res,next);
 
   route.deleteModel = (req,res, next) => utils.deleteMethod(req,res,next);
+
+  function resolve(){}
 
   return route;
 };

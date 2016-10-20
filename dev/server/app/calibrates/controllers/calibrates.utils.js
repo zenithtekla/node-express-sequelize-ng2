@@ -115,17 +115,21 @@ module.exports  = function(db, env) {
 
   function create_ECMS_attrs_entry(req, res, record){
     var file = 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+
     ECMS_Attribute.createRecord({
       newRecord: {
         asset_number: record.asset_number,
         file: req.file || file,
         filename: req.filename || file
       },
-      onError: _errorHandler,
+      onError: (err) => {
+        if (env !=='seed' && res)
+          _errorHandler(err);
+      },
       onSuccess: (rec) =>{
         if (env !=='seed' && res)
           return res.json(_.extend(record,rec.dataValues));
-        else return null;
+        else return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
       }
     });
   }
@@ -189,6 +193,7 @@ module.exports  = function(db, env) {
 
   utils.updateMethod = updateMethod;
   utils.upsertMethod = upsertMethod;
+  utils.create_ECMS_attrs_entry = create_ECMS_attrs_entry;
 
   return utils;
 };
