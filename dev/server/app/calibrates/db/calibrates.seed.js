@@ -13,12 +13,6 @@ module.exports  = function(db) {
     ECMS_Attribute    = db.ECMS_Attribute,
     ECMS_Equipment    = db.ECMS_Equipment;
 
-  /*utils.deleteFile(config.publicDir + '/json/calibrates/dataSeeds.log').then(function(){
-    console.log('CASE A');
-  }, function(){
-    console.log('CASE B');
-  });*/
-
   var deleted = function () {
     return new Promise(function (resolve, reject) {
       utils.deleteFile(config.publicDir + '/json/calibrates/dataSeeds.log', callback);
@@ -59,16 +53,9 @@ module.exports  = function(db) {
     },
     {
       body: {
-        desc: 'Copenhagen',
-        model:"brts34",
-        asset_number:6
-      }
-    },
-    {
-      body: {
         desc: 'Stockholm',
         model:"brts35",
-        asset_number:5
+        asset_number:6
       }
     },
     {
@@ -96,20 +83,16 @@ module.exports  = function(db) {
   };
 
   var seedRecord = function(record){
-    return new Promise(resolve => util_method.createLocation(record, resolve));
+    return new Promise(resolve => util_method.createLocation(record));
   };
 
   var tasks = _.forEach(records, seedRecord);
-  var taskOne = seedRecord;
+
+  seedIteration();
+
+  var taskOne = seedRecord(record);
 
   var results = Promise.all(tasks, taskOne);
-
-  results.then(resolve => function(record){
-    var rec = { asset_number: record.dataValues.asset_number};
-    var req = { filename : 'xxxOOOxxx'+asset_number.toString()};
-    console.log('xxxOOO asset_number ', asset_number);
-    util_method.create_ECMS_attrs_entry(req, rec);
-  });
 
   function seedIteration(){
     for (var i = 1;i<10; i++){
@@ -123,6 +106,76 @@ module.exports  = function(db) {
       util_method.createLocation(req);
     }
   }
+
+  ECMS_Location.create({
+    desc: 'Copenhagen'
+  }).then(function(record){
+    var result = record.dataValues;
+     ECMS_Equipment.create({
+       asset_id: record.dataValues.id,
+       model: "brts34",
+       asset_number: 10,
+       last_cal: new Date('2015/05/15'),
+       schedule:7,
+       next_cal: new Date('2016/06/16')
+     }).then(function(record){
+       result = _.extend(result, record.dataValues);
+       ECMS_Attribute.bulkCreate([
+         { asset_number: record.dataValues.asset_number,
+           file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
+           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
+         },
+         { asset_number: record.dataValues.asset_number,
+           file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
+           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
+         },
+         { asset_number: record.dataValues.asset_number,
+           file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
+           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
+         }
+       ]).then(function(records){
+          result = _.extend(result, records);
+
+         utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
+
+       }).catch(err => console.dir(err))
+     }).catch(err => console.dir(err))
+  }).catch(err => console.dir(err));
+
+  ECMS_Location.create({
+    desc: 'Oslo'
+  }).then(function(record){
+    var result = record.dataValues;
+    ECMS_Equipment.create({
+      asset_id: record.dataValues.id,
+      model: "brts37",
+      asset_number: 11,
+      last_cal: new Date('2015/01/11'),
+      schedule:7,
+      next_cal: new Date('2016/09/19')
+    }).then(function(record){
+      result = _.extend(result, record.dataValues);
+      ECMS_Attribute.bulkCreate([
+        { asset_number: record.dataValues.asset_number,
+          file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
+          filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
+        },
+        { asset_number: record.dataValues.asset_number,
+          file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
+          filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
+        },
+        { asset_number: record.dataValues.asset_number,
+          file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
+          filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
+        }
+      ]).then(function(records){
+        result = _.extend(result, records);
+
+        utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
+
+      }).catch(err => console.dir(err))
+    }).catch(err => console.dir(err))
+  }).catch(err => console.dir(err));
 
   /* var asset_number = utils.getRandomInt(1,7);*/
 };

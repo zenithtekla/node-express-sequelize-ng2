@@ -135,8 +135,8 @@ module.exports  = function(db, env) {
   }
 
   function EquipmentSeed(equip) {
-    equip.model = equip.model || 'brts' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
-    equip.asset_number= equip.asset_number || (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200));
+    equip.model = equip.model || 'brts' + (appUtils.getRandomInt(20,200)*appUtils.getRandomInt(20,200)).toString();
+    equip.asset_number= equip.asset_number || (appUtils.getRandomInt(20,200)*appUtils.getRandomInt(20,200));
   }
 
   var updateMethod = function (req, res, next, onError){
