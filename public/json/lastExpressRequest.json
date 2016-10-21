@@ -1,101 +1,105 @@
 {
     "body": {
-        "assetNumber": "1708 12",
-        "model": "brts778",
-        "asset_number": "1708",
-        "asset_id": 12,
+        "equipmentInfo": "model: [brts31] - asset: [1]",
+        "asset_id": 1,
+        "model": "brts31",
+        "asset_number": "1",
+        "last_cal": "2012-08-22T07:00:00.000Z",
+        "schedule": 2448,
+        "next_cal": "2013-08-22T07:00:00.000Z",
         "ECMS_Attributes": [
             {
-                "last_cal": "2012-09-23T07:00:00.000Z",
-                "schedule": 3,
-                "next_cal": "2013-09-23T07:00:00.000Z",
                 "file": {
                     "type": "Buffer",
                     "data": [
-                        102,
-                        105,
-                        108,
-                        101,
-                        95,
-                        112,
-                        108,
-                        97,
-                        99,
-                        101,
-                        104,
+                        91,
                         111,
-                        108,
-                        100,
+                        98,
+                        106,
                         101,
-                        114
+                        99,
+                        116,
+                        32,
+                        79,
+                        98,
+                        106,
+                        101,
+                        99,
+                        116,
+                        93
                     ]
-                }
+                },
+                "filename": "file_placeholder19110",
+                "createdAt": "2016-10-21T16:48:49.000Z",
+                "updatedAt": "2016-10-21T22:56:48.000Z"
             }
         ],
         "ECMS_Location": {
-            "desc": "production777777"
+            "getLocation": " - location: [production999999]",
+            "desc": "production999999"
         },
-        "desc": "production777777",
+        "desc": "production999999",
         "file": {
             "type": "Buffer",
             "data": [
-                102,
-                105,
-                108,
-                101,
-                95,
-                112,
-                108,
-                97,
-                99,
-                101,
-                104,
+                91,
                 111,
-                108,
-                100,
+                98,
+                106,
                 101,
-                114
+                99,
+                116,
+                32,
+                79,
+                98,
+                106,
+                101,
+                99,
+                116,
+                93
             ]
-        },
-        "schedule": 3
+        }
     },
     "dataValues": {
-        "model": "brts778",
-        "asset_number": "1708",
-        "asset_id": 12,
+        "asset_id": 1,
+        "model": "brts31",
+        "asset_number": "1",
+        "last_cal": "2012-08-22T07:00:00.000Z",
+        "schedule": 2448,
+        "next_cal": "2013-08-22T07:00:00.000Z",
         "ECMS_Attributes": [
             {
-                "last_cal": "2012-09-23T07:00:00.000Z",
-                "schedule": 3,
-                "next_cal": "2013-09-23T07:00:00.000Z",
                 "file": {
                     "type": "Buffer",
                     "data": [
-                        102,
-                        105,
-                        108,
-                        101,
-                        95,
-                        112,
-                        108,
-                        97,
-                        99,
-                        101,
-                        104,
+                        91,
                         111,
-                        108,
-                        100,
+                        98,
+                        106,
                         101,
-                        114
+                        99,
+                        116,
+                        32,
+                        79,
+                        98,
+                        106,
+                        101,
+                        99,
+                        116,
+                        93
                     ]
-                }
+                },
+                "filename": "file_placeholder19110",
+                "createdAt": "2016-10-21T16:48:49.000Z",
+                "updatedAt": "2016-10-21T22:56:48.000Z"
             }
         ],
         "ECMS_Location": {
-            "desc": "production"
+            "getLocation": " - location: [production999999]",
+            "desc": "production999999"
         }
     },
     "params": {
-        "asset_id": "12"
+        "asset_id": "1"
     }
 }

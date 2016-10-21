@@ -134,7 +134,7 @@ module.exports  = function(db) {
            filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
          }
        ]).then(function(records){
-          result = _.extend(result, records);
+          result = _.extend(result, {bulkCreate: records});
 
          utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
 
@@ -169,7 +169,7 @@ module.exports  = function(db) {
           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
         }
       ]).then(function(records){
-        result = _.extend(result, records);
+        result = _.extend(result, {bulkCreate: records});
 
         utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
 
