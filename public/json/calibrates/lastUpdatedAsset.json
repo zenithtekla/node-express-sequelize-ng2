@@ -3,37 +3,31 @@
     "model": "brts31",
     "asset_number": "1",
     "last_cal": "2012-08-22T07:00:00.000Z",
-    "schedule": 2448,
+    "schedule": 20828,
     "next_cal": "2013-08-22T07:00:00.000Z",
     "ECMS_Attributes": [
         {
             "file": {
                 "type": "Buffer",
                 "data": [
-                    91,
-                    111,
-                    98,
-                    106,
-                    101,
-                    99,
-                    116,
-                    32,
-                    79,
-                    98,
-                    106,
-                    101,
-                    99,
-                    116,
-                    93
+                    97,
+                    115,
+                    100,
+                    115,
+                    97,
+                    100,
+                    97,
+                    115,
+                    100
                 ]
             },
-            "filename": "file_placeholder19110",
-            "createdAt": "2016-10-21T16:48:49.000Z",
-            "updatedAt": "2016-10-21T22:57:20.000Z"
+            "filename": "file_placeholder23700",
+            "createdAt": "2016-10-21T23:19:20.000Z",
+            "updatedAt": "2016-10-21T23:29:08.000Z"
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [production999999]",
-        "desc": "production999999"
+        "getLocation": " - location: [labroom]",
+        "desc": "labroom"
     }
 }

@@ -3,6 +3,11 @@
 
 module.exports = function(sequelize, DataTypes) {
   var Schema = sequelize.define('ECMS_Attribute', {
+      file_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       file: DataTypes.BLOB(),
       filename: DataTypes.STRING(100)
     },
@@ -18,5 +23,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     });
 
+  Schema.removeAttribute('id');
   return Schema;
 };

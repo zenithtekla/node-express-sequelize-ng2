@@ -16,11 +16,12 @@ module.exports  = function(db, env) {
       create_location(req, res, next);
     },
     findAllMethod: function (req, res, next, callback) {
+      console.log(req.params);
       ECMS_Equipment.findAll({
         where: req.params,
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Attribute, attributes: ['file', 'filename', 'createdAt', 'updatedAt']},
+          { model: ECMS_Attribute, attributes: ['file_id', 'file', 'filename', 'createdAt', 'updatedAt']},
           { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
@@ -28,11 +29,12 @@ module.exports  = function(db, env) {
       }).catch(_errorHandler);
     },
     findOneMethod: function (req, res, next, onSuccess, onError) {
+      appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
       ECMS_Equipment.findOne({
         where: req.params,
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Attribute, attributes: ['file', 'filename', 'createdAt', 'updatedAt']},
+          { model: ECMS_Attribute, attributes: ['file_id', 'file', 'filename', 'createdAt', 'updatedAt']},
           { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
@@ -148,7 +150,7 @@ module.exports  = function(db, env) {
 
       req.body.desc = req.body.desc || req.body.ECMS_Location.desc;
       req.body.file = req.body.file || req.body.ECMS_Attributes[0].file;
-      req.body.schedule = req.body.schedule || req.body.ECMS_Attributes[0].schedule;
+      req.body.schedule = req.body.schedule || result.dataValues.schedule;
 
       appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
       // SHOULD the location remain unchanged and unchangeable, give it req.body.desc = result.desc;
@@ -160,10 +162,11 @@ module.exports  = function(db, env) {
         onSuccess: __successHandler
       });
 
-      if (req.body.file || req.body.schedule)
+      if (req.params.file_id)
+      if (req.body.file)
       ECMS_Attribute.updateRecord({
         newRecord: req.body,
-        cond: { where: { asset_number: result.dataValues.asset_number}},
+        cond: { where: { asset_number: result.dataValues.asset_number, file_id: req.params.file_id}},
         onError: _errorHandler,
         onSuccess: __successHandler
       });

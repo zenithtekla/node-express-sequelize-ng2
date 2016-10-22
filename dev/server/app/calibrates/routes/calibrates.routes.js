@@ -12,6 +12,7 @@ module.exports = function(app, endpoints){
     module_name: module_name,
     equipments: '/equipments',
     equipments_asset_number: '/equipments/:asset_id',
+    equipments_asset_number_file: '/equipments/:asset_id/:file_id',
     equipment: '/equipment',
     equipment_model: '/equipment/:model',
     asset_number: '/asset_number/:asset_number',
@@ -19,7 +20,7 @@ module.exports = function(app, endpoints){
     table_main: '/table_main',
     table_location: '/table_location',
     equipment_model_asset_number: '/equipment/:model/:asset_number',
-    location: '/location/:location_id'
+    location: '/location/:asset_id'
   };
   endpoints.push(points);
 
@@ -30,6 +31,10 @@ module.exports = function(app, endpoints){
     .get(controller.getAnEquipmentBy)
     .put(controller.updateEquipment)
     // .put(controller.upsertEquipment)
+    .delete(controller.deleteEquipment);
+  app.route(points.equipments_asset_number_file)
+    .get(controller.getAnEquipmentBy)
+    .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);
 
   app.route(points.equipment)
