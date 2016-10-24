@@ -107,75 +107,102 @@ module.exports  = function(db) {
     }
   }
 
-  ECMS_Location.create({
-    desc: 'Copenhagen'
-  }).then(function(record){
-    var result = record.dataValues;
-     ECMS_Equipment.create({
-       asset_id: record.dataValues.id,
-       model: "brts34",
-       asset_number: 10,
-       last_cal: new Date('2015/05/15'),
-       schedule:7,
-       next_cal: new Date('2016/06/16')
-     }).then(function(record){
-       result = _.extend(result, record.dataValues);
-       ECMS_Attribute.bulkCreate([
-         { asset_number: record.dataValues.asset_number,
-           file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
-           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
-         },
-         { asset_number: record.dataValues.asset_number,
-           file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
-           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
-         },
-         { asset_number: record.dataValues.asset_number,
-           file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
-           filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
-         }
-       ]).then(function(records){
+  var data_seeds = [
+    {
+      desc: 'Copenhagen',
+      model: "brts34",
+      asset_number: 10,
+      last_cal: new Date('2015/05/15'),
+      schedule:7,
+      next_cal: new Date('2016/06/16'),
+      file_quantity: 2
+    },
+    {
+      desc: 'Reykjavik',
+      model: 'brts34',
+      asset_number:13,
+      file_quantity: 5
+    },
+    {
+      desc: 'Oslo',
+      model: 'brts37',
+      asset_number:11,
+      last_cal: new Date('2016/02/22'),
+      schedule:9,
+      next_cal: new Date('2017/07/17'),
+      documents: [
+        {
+          file: 'Oslo_file110',
+          filename:'Oslo_file110'
+        },
+        {
+          file: 'Oslo_file111',
+          filename:'Oslo_file111'
+        },
+        {
+          file: 'Oslo_file112',
+          filename:'Oslo_file112'
+        },
+        {
+          file: 'Oslo_file113',
+          filename:'Oslo_file113'
+        }
+      ]
+    }
+  ];
+
+  _.forEach(data_seeds, function (seed) {
+    seedMethod(seed);
+  });
+
+  /* desc, model, asset_number REQUIRED
+   file_quantity : number of files or 2 files
+   document: a set of files */
+  function seedMethod(o){
+    ECMS_Location.create({
+      desc: o.desc
+    }).then(function(record){
+      var result = record.dataValues;
+      ECMS_Equipment.create({
+        asset_id: record.dataValues.id,
+        model: o.model,
+        asset_number: o.asset_number,
+        last_cal: new Date(o.last_cal || '2015/01/11'),
+        schedule:o.schedule || 7,
+        next_cal: new Date(o.next_cal || '2016/09/19')
+      }).then(function(record){
+        result = _.extend(result, record.dataValues);
+        var cluster = [];
+
+        if(_.has(o,'documents')){
+          _.forEach(o.documents, function(document){
+            document.asset_number = record.dataValues.asset_number;
+            var file_attr = 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString();
+            document.file = document.file || file_attr;
+            document.filename = document.filename || file_attr;
+            cluster.push(document);
+          });
+        } else {
+
+          var quantity = o.file_quantity || 2;
+
+          for (var i=0;i<quantity;i++){
+            var file_attr = 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString();
+            cluster.push({
+              asset_number: record.dataValues.asset_number,
+              file: o.file || file_attr,
+              filename: o.filename || file_attr
+            });
+          }
+        }
+
+        ECMS_Attribute.bulkCreate(cluster).then(function(records){
           result = _.extend(result, {bulkCreate: records});
 
-         utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
+          utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
 
-       }).catch(err => console.dir(err))
-     }).catch(err => console.dir(err))
-  }).catch(err => console.dir(err));
-
-  ECMS_Location.create({
-    desc: 'Oslo'
-  }).then(function(record){
-    var result = record.dataValues;
-    ECMS_Equipment.create({
-      asset_id: record.dataValues.id,
-      model: "brts37",
-      asset_number: 11,
-      last_cal: new Date('2015/01/11'),
-      schedule:7,
-      next_cal: new Date('2016/09/19')
-    }).then(function(record){
-      result = _.extend(result, record.dataValues);
-      ECMS_Attribute.bulkCreate([
-        { asset_number: record.dataValues.asset_number,
-          file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
-          filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
-        },
-        { asset_number: record.dataValues.asset_number,
-          file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
-          filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
-        },
-        { asset_number: record.dataValues.asset_number,
-          file: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString(),
-          filename: 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString()
-        }
-      ]).then(function(records){
-        result = _.extend(result, {bulkCreate: records});
-
-        utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');
-
+        }).catch(err => console.dir(err))
       }).catch(err => console.dir(err))
-    }).catch(err => console.dir(err))
-  }).catch(err => console.dir(err));
-
-  /* var asset_number = utils.getRandomInt(1,7);*/
+    }).catch(err => console.dir(err));
+  }
 };
