@@ -231,8 +231,8 @@ module.exports = function(model){
    ).catch(next);
    };*/
   var bulkRecords = function (o) {
-    model.bulkCreate(o.records).then(function() {
-      o.onSuccess();
+    model.bulkCreate(o.records).then(function(records) {
+      o.onSuccess(records);
     }).catch(function(err) {
       o.onError(err);
     });

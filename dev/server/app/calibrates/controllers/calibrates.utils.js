@@ -76,7 +76,9 @@ module.exports  = function(db, env) {
     var input  = { desc: req.body.desc || req.body.ECMS_Location.desc };
     ECMS_Location.createRecord({
       newRecord: input,
-      onError: _errorHandler,
+      onError: (err) => {
+        if (env !=='seed' && res) _errorHandler(err);
+      },
       onSuccess: (record) => {
         EquipmentRecord(req.body, res, record.dataValues);
       }
@@ -108,9 +110,12 @@ module.exports  = function(db, env) {
   function create_equipment(req, res, record){
     ECMS_Equipment.createRecord({
       newRecord: record,
-      onError: _errorHandler,
+      onError: (err) => {
+        if (env !=='seed' && res) _errorHandler(err);
+        // else console.log(err);
+      },
       onSuccess:(record)=> {
-        create_ECMS_attrs_entry(req, res, record.dataValues);
+        create_ECMS_attrs_entries(req, res, record.dataValues);
       }
     });
   }
@@ -118,15 +123,22 @@ module.exports  = function(db, env) {
   function create_ECMS_attrs_entry(req, res, record){
     var file = 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
 
+    if(!_.has(req,'documents')){
+      req.documents = [{
+        file: null,
+        filename: null
+      }];
+    }
+
     ECMS_Attribute.createRecord({
       newRecord: {
         asset_number: record.asset_number,
-        file: req.file || file,
-        filename: req.filename || file
+        file: req.documents[0].file || file,
+        filename: req.documents[0].filename || file
       },
       onError: (err) => {
-        if (env !=='seed' && res)
-          _errorHandler(err);
+        if (env !=='seed' && res) _errorHandler(err);
+        // else console.log(err);
       },
       onSuccess: (rec) =>{
         if (env !=='seed' && res)
@@ -134,6 +146,49 @@ module.exports  = function(db, env) {
         else return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
       }
     });
+  }
+
+  function create_ECMS_attrs_entries(req, res, record){
+    var records = [];
+
+    if(_.has(req,'documents')){
+      _.forEach(req.documents, function(document){
+        document.asset_number = record.asset_number;
+        var file_attr = 'place_of_file' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+        document.file = document.file || file_attr;
+        document.filename = document.filename || file_attr;
+        records.push(document);
+      });
+    } else {
+
+      var quantity = req.file_quantity || appUtils.getRandomInt(1,3);
+
+      for (var i=0;i<quantity;i++){
+        var file_attr = 'place_of_file' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+        records.push({
+          asset_number: record.asset_number,
+          file: file_attr,
+          filename: file_attr
+        });
+      }
+    }    
+
+    ECMS_Attribute.bulkRecords({
+      records: records,
+      onError: (err) => {
+        if (env !=='seed' && res) _errorHandler(err);
+      },
+      onSuccess: (rec) =>{
+        if (env !=='seed' && res)
+          return res.json(_.extend(record,rec.dataValues));
+        return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
+      }
+    });
+
+   /* ECMS_Attribute.bulkCreate(records).then(function(rec){
+      appUtils.appendFile(appUtils.JSONstringify({bulkCreate: rec}), config.publicDir + '/json/calibrates/dataSeeds.log');
+    }).catch(err => console.dir(err));*/
+
   }
 
   function EquipmentSeed(equip) {
@@ -196,7 +251,8 @@ module.exports  = function(db, env) {
 
   utils.updateMethod = updateMethod;
   utils.upsertMethod = upsertMethod;
-  utils.create_ECMS_attrs_entry = create_ECMS_attrs_entry;
+  utils.create_ECMS_attrs_entry   = create_ECMS_attrs_entry;
+  utils.create_ECMS_attrs_entries = create_ECMS_attrs_entries;
 
   return utils;
 };

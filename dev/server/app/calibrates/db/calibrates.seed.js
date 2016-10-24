@@ -13,21 +13,8 @@ module.exports  = function(db) {
     ECMS_Attribute    = db.ECMS_Attribute,
     ECMS_Equipment    = db.ECMS_Equipment;
 
-  var deleted = function () {
-    return new Promise(function (resolve, reject) {
-      utils.deleteFile(config.publicDir + '/json/calibrates/dataSeeds.log', callback);
-      function callback(err, data){
-        if(err) reject(err);
-        else resolve('File deleted');
-      }
-    })
-  };
 
-  deleted().then(function(data){
-    console.log(data);
-  }).catch(function (err) {
-    console.dir(err);
-  });
+  utils.deleteFile(config.publicDir + '/json/calibrates/dataSeeds.log');
 
   var records = [
     {
@@ -78,7 +65,8 @@ module.exports  = function(db) {
     body: {
       desc:'Singapore',
       model:"brts32",
-      asset_number:4
+      asset_number:4,
+      file_quantity: 3
     }
   };
 
@@ -88,12 +76,11 @@ module.exports  = function(db) {
 
   var tasks = _.forEach(records, seedRecord);
 
-  seedIteration();
-
   var taskOne = seedRecord(record);
 
   var results = Promise.all(tasks, taskOne);
 
+  seedIteration(); // seed without model and asset_number
   function seedIteration(){
     for (var i = 1;i<10; i++){
       var req= {
@@ -115,13 +102,13 @@ module.exports  = function(db) {
       last_cal: new Date('2015/05/15'),
       schedule:7,
       next_cal: new Date('2016/06/16'),
-      file_quantity: 2
+      file_quantity: 6
     },
     {
       desc: 'Reykjavik',
       model: 'brts34',
       asset_number:13,
-      file_quantity: 5
+      file_quantity: 4
     },
     {
       desc: 'Oslo',
