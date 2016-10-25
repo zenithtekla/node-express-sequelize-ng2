@@ -97,7 +97,33 @@ var utils = {
       }
     );
   },
-  appendFile: function (data, outputFile) {
+  checkFile: function(filePath, onSuccess, onError){
+    fs.stat(filePath, function (err, stat) {
+      if(err == null) {
+        console.log('File ', filePath, ' exists');
+        if(onSuccess) onSuccess();
+      } else if(err.code == 'ENOENT') {
+        // file does not exist
+        if(onError) onError();
+        // fs.writeFile('log.txt', 'Some log\n');
+      } else {
+        console.log('Some other error: ', err.code);
+      }
+    })
+  },
+  readFile: function (filePath, type, callback) {
+    type = type || 'utf8';
+    fs.readFile(path, "utf8", function(error, data) {
+      if (err) console.log("ERROR reading file ", outputFile, ", message ", err.message);
+      else if(callback) callback();
+    });
+  },
+  writeFile: function(data, outputFile){
+    fs.writeFile(outputFile, data, function (err) {
+       if (err) console.log("ERROR writing to ", outputFile, ", message ", err.message);
+    });
+  },
+  expandFile: function (data, outputFile) {
     fs.appendFile(outputFile, data, function (err) {
       if (err) throw err;
       else {
@@ -121,6 +147,14 @@ var utils = {
   getRandomInt: function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+};
+
+utils.appendFile = function (data, outputFile) {
+  utils.checkFile(outputFile, function(){
+    utils.expandFile(data, outputFile);
+  }, function(){
+    utils.writeFile(data, outputFile);
+  });
 };
 
 utils.appendJSON = function (data, jsonFile, raw) {
