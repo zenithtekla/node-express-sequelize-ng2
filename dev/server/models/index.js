@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 module.exports = function(app){
-  var fs      = require("fs"),
-    path      = require("path"),
+  var fs      = require('fs'),
+    path      = require('path'),
     _         = require('lodash'),
-    Sequelize = require("sequelize"),
+    Sequelize = require('sequelize'),
     epilogue  = require('epilogue'),
-    env       = process.env.NODE_ENV || "development",
+    env       = process.env.NODE_ENV || 'development',
     config    = app.get('config'),
     utils     = require(config.utilsDir),
     dbPaths   = config.models(),
@@ -30,7 +30,7 @@ module.exports = function(app){
     fs
       .readdirSync(dbPath)
       .filter(function(file) {
-        return (file.indexOf(".") !== 0) && (file.indexOf("compiled") === -1);
+        return (file.indexOf('.') !== 0) && (file.indexOf('compiled') === -1);
       })
       .forEach(function(file) {
         var model = sequelize.import(path.resolve(dbPath, file));
@@ -40,7 +40,7 @@ module.exports = function(app){
   });
 
   Object.keys(db).forEach(function(modelName) {
-    if ("associate" in db[modelName]) {
+    if ('associate' in db[modelName]) {
       db[modelName].associate(db);
     }
   });

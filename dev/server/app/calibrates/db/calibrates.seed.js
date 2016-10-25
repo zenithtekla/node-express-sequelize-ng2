@@ -6,7 +6,7 @@ module.exports  = function(db) {
     path        = require('path'),
     Promise     = require('bluebird'),
     config      = db.config,
-    utils       = require(path.resolve(config.assetsDir, 'utils')),
+    utils       = require(config.utilsDir),
     util_method = require(path.resolve(config.serverAppDir, 'calibrates/controllers/calibrates.utils'))(db, 'seed');
 
   var ECMS_Location   = db.ECMS_Location,

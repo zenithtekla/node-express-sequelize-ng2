@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function(app, endpoints){
   // root definition is optional

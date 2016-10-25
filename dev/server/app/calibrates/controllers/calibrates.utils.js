@@ -1,7 +1,7 @@
 'use strict';
 var path    = require('path'),
   config    = require(path.resolve('./app-config')),
-  appUtils  = require(path.resolve(config.utilsDir)),
+  appUtils  = require(config.utilsDir),
 errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers'));
 
 /* utility method */
@@ -171,7 +171,7 @@ module.exports  = function(db, env) {
           filename: file_attr
         });
       }
-    }    
+    }
 
     ECMS_Attribute.bulkRecords({
       records: records,

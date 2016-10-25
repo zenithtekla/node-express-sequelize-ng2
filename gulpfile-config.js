@@ -3,9 +3,9 @@ var appConfig = require('./app-config');
 
 var gulpConfig = function(){
   var config = {
-    server: './bin/www' ,
-    routes: 'routes/' ,
-    views: 'views/' ,
+    server:           appConfig.site ,
+    routes:           'routes/' ,
+    views:            'views/' ,
     serverJSfiles: [
       'dev/server/**/*.js',
       'app*.js'
@@ -43,32 +43,32 @@ var gulpConfig = function(){
       }
     } ,
     src: {
-      client: 'dev/client/' ,
-      server: 'dev/server/' ,
-      serverAppDir: appConfig.serverAppDir,
-      scss: 'dev/client/scss/**/*.scss' ,
-      ts: 'dev/client/app/**/**/*.ts' ,
-      img: 'dev/client/img/**/*' ,
-      html: 'dev/client/**/*.html',
-      coffee: 'dev/_coffee/'
+      client:           'dev/client/' ,
+      server:           'dev/server/' ,
+      serverAppDir:     appConfig.serverAppDir,
+      scss:             'dev/client/scss/**/*.scss' ,
+      ts:               'dev/client/app/**/**/*.ts' ,
+      img:              'dev/client/img/**/*' ,
+      html:             'dev/client/**/*.html',
+      coffee:           'dev/_coffee/'
     } ,
     public: {
-      js: 'public/js/' ,
-      css: 'public/css/' ,
-      img: 'public/img/' ,
-      lib: 'public/lib/' ,
-      dir: 'public/',
-      dist: 'public/dist/',
-      html: 'public/html/'
+      js:               'public/js/' ,
+      css:              'public/css/' ,
+      img:              'public/img/' ,
+      lib:              'public/lib/' ,
+      dir:              'public/',
+      dist:             'public/dist/',
+      html:             'public/html/'
     },
     dist: {
-      coffee: 'bundle_cafe.js',
-      js: 'bundle.js',
-      min_js:'bundle.min.js'
+      coffee:           'bundle_cafe.js',
+      js:               'bundle.js',
+      min_js:           'bundle.min.js'
     },
-    tests: appConfig.serverApps.tests,
-    test_interface: 'dev/test_interface/runner.html',
-    test_site: 'http://localhost:3000/',
+    tests:              appConfig.serverApps.tests,
+    test_interface:     'dev/test_interface/runner.html',
+    test_site:          'http://localhost:3000/',
     lint: {
       scripts: ['**/*.js', '!node_modules/**']
     }

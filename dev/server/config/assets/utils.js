@@ -100,7 +100,7 @@ var utils = {
   checkFile: function(filePath, onSuccess, onError){
     fs.stat(filePath, function (err, stat) {
       if(err == null) {
-        console.log('File ', filePath, ' exists');
+        // console.log('File ', filePath, ' exists');
         if(onSuccess) onSuccess();
       } else if(err.code == 'ENOENT') {
         // file does not exist
@@ -127,7 +127,7 @@ var utils = {
     fs.appendFile(outputFile, data, function (err) {
       if (err) throw err;
       else {
-        console.log('Data saved to ' + outputFile);
+        // console.log('Data saved to ' + outputFile);
       }
     });
   },

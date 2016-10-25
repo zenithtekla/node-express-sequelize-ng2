@@ -3,28 +3,52 @@ var path    = require('path'),
     _       = require('lodash');
 
 var initGlobalConfig = function(){
-  var base_path = process.cwd(),
-    devDir      = path.resolve(base_path, 'dev/'),
-    serverDir   = path.resolve(devDir, 'server/'),
-    utils       = require(path.resolve(serverDir,'config/assets/utils'));
+  var configurator = {
+    projDir:            process.cwd(),
+    site:               './bin/www',
+    publicDir:          './public',
+    devDir:             './dev/',
+
+    assetsDir:          './dev/server/config/assets/',
+    utils:              './dev/server/config/assets/utils',
+
+    clientDir:          './dev/client/',
+    clientAppDir:       './dev/client/app',
+
+    serverDir:          './dev/server/',
+    serverAppDir:       './dev/server/app/',
+    serverConfigDir:    './dev/server/config/',
+
+    expressSrc:         './dev/server/app/*',
+    expressViews:       './dev/server/{,*/}views'
+  };
+
+  var utils  = require(configurator.utils);
 
   var config = {
-    env: process.env.NODE_ENV || 'development',
-    port: process.env.PORT || 3000,
-    // modules: utils.getDirectories('modules'),
-    projDir: base_path,
-    site: path.resolve(base_path,'bin/www'),
-    publicDir: path.resolve('./public/'),
-    devDir: devDir,
-    clientDir:path.resolve(devDir, 'client/'),
-    clientAppDir:path.resolve(devDir, 'client/app/'),
-    serverDir: serverDir,
-    serverAppDir: path.resolve(serverDir, 'app/'),
-    serverConfigDir: path.resolve(serverDir, 'config/'),
-    // apps: utils.getAppsDir(path.resolve(serverDir,'app')),
+    env:                process.env.NODE_ENV || 'development',
+    port:               process.env.PORT || 3000,
+    // modules:         utils.getDirectories('modules'),
+    projDir:            configurator.projDir,
+    site:               configurator.site,
+    publicDir:          configurator.publicDir,
+    devDir:             configurator.devDir,
+    clientDir:          configurator.clientDir,
+    clientAppDir:       configurator.clientAppDir,
+    serverDir:          configurator.serverDir,
+    serverAppDir:       configurator.serverAppDir,
+    serverConfigDir:    configurator.serverConfigDir,
+    assetsDir:          configurator.assetsDir,
+    utilsDir:           path.resolve(configurator.utils),
+    // apps:            utils.getAppsDir(path.resolve(serverDir,'app')),
     serverApps: {
       name: 'app',
-      list: utils.getAppsDir(path.resolve(serverDir,'app')),
+      path: configurator.serverAppDir,
+      list: utils.getAppsDir(path.resolve(configurator.serverAppDir)),
+      src:  utils.getGlobbedPaths(path.resolve(configurator.expressSrc)),
+
+      // config.serverApps.views
+      views: utils.getGlobbedPaths(path.resolve(configurator.expressViews)),
       routes: [],
       tests: []
     },
@@ -59,13 +83,6 @@ var initGlobalConfig = function(){
     }
   };
 
-  config.assetsDir = path.resolve(config.serverConfigDir, 'assets');
-  config.utilsDir = path.resolve(config.assetsDir, 'utils.js');
-  config.serverApps.path = config.serverAppDir;
-  config.serverApps.src  = utils.getGlobbedPaths(path.resolve(config.serverAppDir, '*'));
-
-  // config.serverApps.views
-  config.serverApps.views = utils.getGlobbedPaths(path.resolve(config.serverDir, '{,*/}views'));
   // config.serverApps.tests
   // config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
 
@@ -77,7 +94,7 @@ var initGlobalConfig = function(){
       name: app,
       list: utils.getAppsDir(path.resolve(config.serverAppDir,app)),
       path: path.resolve(config.serverAppDir,app),
-      src: utils.getGlobbedPaths(path.resolve(config.serverAppDir,app,'*'))
+      src:  utils.getGlobbedPaths(path.resolve(config.serverAppDir,app,'*'))
     };
 
     _.forEach(apps[app].list, function(item){
@@ -86,7 +103,7 @@ var initGlobalConfig = function(){
         name: item,
         list: utils.getAppsDir(path.resolve(config.serverAppDir,app,item)),
         path: path.resolve(config.serverAppDir,app,item),
-        src: srcFiles
+        src:  srcFiles
       };
 
       if (item === 'routes') {

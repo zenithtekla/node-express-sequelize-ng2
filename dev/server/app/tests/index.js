@@ -1,8 +1,8 @@
-var request = require('supertest'),
-  _ = require('lodash'),
-  path = require('path'),
-  config = require(path.resolve('./app-config')),
-  utils  = require(path.resolve(config.serverConfigDir,'assets/utils')),
+var request   = require('supertest'),
+  _           = require('lodash'),
+  path        = require('path'),
+  config      = require(path.resolve('./app-config')),
+  utils       = require(config.utilsDir),
   tests       = config.serverApps.tests,
   testConfig  =  {
     tests: tests,

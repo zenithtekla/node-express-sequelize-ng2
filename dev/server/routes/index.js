@@ -8,7 +8,7 @@ module.exports = function (app) {
   });
 
   var config    = app.get('config'),
-    utils       = require(path.resolve(config.serverConfigDir,'assets/utils')),
+    utils       = require(config.utilsDir),
     routes      = config.serverApps.routes,
     routeConfig = {
       routes: routes,

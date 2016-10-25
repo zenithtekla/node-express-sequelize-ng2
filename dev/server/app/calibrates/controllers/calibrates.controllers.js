@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var env         = process.env.NODE_ENV || "development",
+var env         = process.env.NODE_ENV || 'development',
     moment      = require('moment');
 
 module.exports = function(app){

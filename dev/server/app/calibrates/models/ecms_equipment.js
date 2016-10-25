@@ -1,5 +1,5 @@
 // model schema
-"use strict";
+'use strict';
 
 module.exports = function(sequelize, DataTypes) {
   var Schema = sequelize.define('ECMS_Equipment' , {
