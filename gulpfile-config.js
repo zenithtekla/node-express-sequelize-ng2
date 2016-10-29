@@ -3,24 +3,76 @@ var appConfig = require('./app-config');
 
 var gulpConfig = function(){
   var config = {
-    server:           appConfig.site ,
-    routes:           'routes/' ,
-    views:            'views/' ,
+    clientDir:            appConfig.clientDir,
+    dist:                 './public/dist/',
+    lib:                  './public/lib/',
+
+    scripts: {
+      src: [
+                  './dev/client/app/**/*.+(ts|js)'
+      ],
+      watch:    [
+                  './dev/client/app/**/*.+(ts|js)',
+                  './dev/_coffee/**/*.coffee'
+      ]
+    },
+
+    coffee: {
+      src:        './dev/_coffee/**/*.coffee',
+      output:     'bundle_cafe.js',
+      dest:       './public/dist/'
+    },
+
+    styles: {
+      src: {
+        scss: [
+                  './dev/client/assets/**/*.+(css|scss)',
+                  '!./dev/client/assets/styles{,.min}.+(css|scss)'
+        ],
+        bundle: [
+/*                './public/lib/bootstrap/dist/css/bootstrap.css',
+                  './public/lib/font-awesome/css/font-awesome.css',*/
+                  './public/dist/assets/**/*.css',
+                  '!./public/dist/assets/styles{,.min}.css'
+        ]
+      },
+      dest:       './public/dist/assets/'
+    },
+
+    images: {
+      src: [
+                  'dev/client/images/**/*.+(png|img|bmp|jpg|jpeg|gif|ico|tff|tiff)'
+      ],
+      dest:       './public/dist/images/'
+    },
+
+    html: {
+      src:        './dev/client/app/**/*.html',
+      dest:       './public/dist/'
+    },
+
+    fonts: {
+      src: ['./public/lib/font-awesome/fonts/**/*'],
+      dest:'./public/dist/fonts/'
+    },
+
+    // server:site, the www for nodeMon configuration
+    site:               './bin/www' ,
+
+    // server js files for nodemon
     serverJSfiles: [
-      'dev/server/**/*.js',
-      'app*.js'
-    ] ,
+          'dev/server/**/*.js',
+          'app*.js'
+    ],
     browser_sync: {
       reload_delay: 500,
       watch: [
-        'public/js/**/*.js' ,
-        'public/css/**/*.css' ,
-        'public/img/*' ,
-        'routes/**/*.js' ,
-        'views/**/*.hbs' ,
-        'dev/server/*',
-        'dev/client/**/*.html',
-        'dev/_coffee/*.coffee'
+          './public/dist/**/*.{img,png,jpg,jpeg,gif,ico,bmp}',
+          './public/dist/*.bundle.js',
+          './public/dist/styles.css',
+          './dev/server/*',
+          './dev/client/**/*.{html,htm}',
+          './dev/_coffee/*.coffee'
       ],
       options: {
         /*port: 8080,
@@ -28,54 +80,30 @@ var gulpConfig = function(){
          baseDir: "./"
          }*/
         // informs browser-sync to proxy our expressjs app which would run at the following location
-        proxy: 'http://localhost:3000',
+        proxy:  'http://localhost:3000',
 
         // informs browser-sync to use the following port for the proxied app
         // notice that the default port is 3000, which would clash with our expressjs
-        port: 4000,
+        port:   4000,
 
         // open the proxied app in chrome
         // browser: ['google-chrome'],
-        files: ["public/**/*.*"],
+        files:  ["public/**/*.*"],
         ui: {
           port: 3002
         }
       }
-    } ,
-    src: {
-      client:           'dev/client/' ,
-      server:           'dev/server/' ,
-      serverAppDir:     appConfig.serverAppDir,
-      scss:             'dev/client/scss/**/*.scss' ,
-      ts:               'dev/client/app/**/**/*.ts' ,
-      img:              'dev/client/img/**/*' ,
-      html:             'dev/client/**/*.html',
-      coffee:           'dev/_coffee/'
-    } ,
-    public: {
-      js:               'public/js/' ,
-      css:              'public/css/' ,
-      img:              'public/img/' ,
-      lib:              'public/lib/' ,
-      dir:              'public/',
-      dist:             'public/dist/',
-      html:             'public/html/'
-    },
-    dist: {
-      coffee:           'bundle_cafe.js',
-      js:               'bundle.js',
-      min_js:           'bundle.min.js'
     },
     tests:              appConfig.serverApps.tests,
     test_interface:     'dev/test_interface/runner.html',
     test_site:          'http://localhost:3000/',
     lint: {
-      scripts: ['**/*.js', '!node_modules/**']
+      scripts: ['**/*.js', '!node_modules/**', '!public/**']
     }
   };
 
   config.nodemonOptions = {
-    script: config.server,
+    script: config.site,
     delayTime: 50,
     env: {
       PORT: 3000

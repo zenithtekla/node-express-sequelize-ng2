@@ -1,44 +1,64 @@
-var gulp = require('gulp'),
-    browserSync = require('browser-sync').create(),
+var gulp                = require('gulp'),
+    config              = require('./gulpfile-config'),
 
-    /* CSS */
-    postcss = require('gulp-postcss'),
-    sourcemaps = require('gulp-sourcemaps'),
-    autoprefixer = require('autoprefixer'),
-    precss = require('precss'),
-    cssnano = require('cssnano'),
-    minify  = require('gulp-minify-css'),
+    /*-- CSS --*/
+    sass                = require('gulp-sass'),
+    postcss             = require('gulp-postcss'),
+    autoprefixer        = require('autoprefixer'),
+    precss              = require('precss'),
+    cssnano             = require('cssnano'),
+    minify              = require('gulp-minify-css'),
 
-    /* Mixed */
-    ext_replace = require('gulp-ext-replace'),
+    /*-- Mixed --*/
+    _                   = require('lodash'),
+    sourcemaps          = require('gulp-sourcemaps'),
+    ext_replace         = require('gulp-ext-replace'),
+    concat              = require('gulp-concat'),
+    es                  = require('event-stream'),
+    browserSync         = require('browser-sync').create(),
+    runSequence         = require('run-sequence'),
+    shell               = require('gulp-shell'),
+    // sanity
+    clean               = require('gulp-clean'),
+    // dependencies management
+    bower               = require('gulp-bower'),
 
-    /* Images */
-    imagemin = require('gulp-imagemin'),
+    /*-- Images --*/
+    imagemin            = require('gulp-imagemin'),
 
-    /* Server */
-    nodemon = require('gulp-nodemon'),
-    config = require('./gulpfile-config'),
+    /*-- Server --*/
+    nodemon             = require('gulp-nodemon'),
 
-    /* Test tool */
-    mocha = require('gulp-mocha'),
-    mochaPhantomJS = require('gulp-mocha-phantomjs'),
-    /* QA tool */
-    jshint = require('gulp-jshint')
+
+    /*-- Test tool --*/
+    mocha               = require('gulp-mocha'),
+    mochaPhantomJS      = require('gulp-mocha-phantomjs'),
+
+    /*-- QA tool --*/
+    jshint              = require('gulp-jshint'),
+
+    /*-- JS & TS --*/
+    uglify              = require('gulp-uglify'),
+    rename              = require('gulp-rename'),
+
+    typescript          = require('gulp-typescript'),
+    tsProject           = typescript.createProject('tsconfig.json'),
+
+    /*-- Coffee --*/
+    coffee              = require('gulp-coffee'),
+
+    /*-- Bundling --*/
+    htmlreplace         = require('gulp-html-replace'),
+
+    bundleHash          = new Date().getTime(),
+    mainBundleName      = bundleHash + '.main.bundle.js',
+    mainShortName       = 'main.bundle.js',
+    vendorBundleName    = bundleHash + '.vendor.bundle.js',
+    vendorShortName     = 'vendor.bundle.js',
+    mainStylesBundleName= bundleHash + '.styles.min.css'
 ;
 
-/* JS & TS */
-var uglify = require('gulp-uglify'),
-    rename   = require('gulp-rename');
-var typescript = require('gulp-typescript');
 
-// Other
-var concat = require('gulp-concat'),
-    es = require('event-stream');
-
-// Coffee
-var coffee = require('gulp-coffee');
-
-var tsProject = typescript.createProject('tsconfig.json');
 
 // Set NODE_ENV to 'test'
 gulp.task('env:test', function () {
@@ -55,91 +75,193 @@ gulp.task('env:prod', function () {
   process.env.NODE_ENV = 'production';
 });
 
-gulp.task('build-css', function () {
-  return gulp.src(config.src.scss)
-    .pipe(sourcemaps.init())
-    .pipe(postcss([precss, autoprefixer, cssnano]))
-    .pipe(sourcemaps.write())
-    .pipe(ext_replace('.css'))
-    .pipe(gulp.dest(config.public.css));
+var tasks = {
+  bundle_css: {
+    dev:                () => gulp.src(config.styles.src.bundle)
+      .pipe(concat('styles.css'))
+      .pipe(gulp.dest(config.styles.dest)),
+    dist:               () => gulp.src(config.styles.src.bundle)
+      .pipe(concat(mainStylesBundleName))
+      .pipe(gulp.dest(config.styles.dest))
+  },
+  bundle_vendor: {
+    dev:                (vendor) => vendor.pipe(concat(vendorShortName))
+      .pipe(gulp.dest(config.dist)),
+    dist:               (vendor) => vendor
+      .pipe(sourcemaps.init())
+      .pipe(concat(vendorBundleName))
+      .pipe(sourcemaps.write('maps/'))
+      .pipe(gulp.dest(config.dist))
+  },
+  bundle_app: {
+    dev:                (app) =>  app.pipe(concat(mainShortName))
+      .pipe(gulp.dest(config.dist)),
+    dist:               (app) =>  app.pipe(sourcemaps.init())
+      .pipe(concat(mainBundleName))
+      .pipe(sourcemaps.write('maps/'))
+      .pipe(gulp.dest(config.dist))
+  },
+  build_css:            function(src, srcmaps = null, dest){
+    return gulp.src(src)
+      .pipe(sourcemaps.init())
+      .pipe(sass().on('error', sass.logError))
+      .pipe(postcss([precss, autoprefixer, cssnano]))
+      .pipe(sourcemaps.write(srcmaps))
+      .pipe(ext_replace('.css'))
+      .pipe(gulp.dest(dest));
+  },
+  build_ts:             function(src, tsconfig, srcmaps = null, output, dest) {
+    return gulp.src(src)
+      .pipe(sourcemaps.init())
+      .pipe(typescript(tsconfig))
+      .pipe(sourcemaps.write(srcmaps))
+      // .pipe(jsuglify())
+      .pipe(concat(output))
+      .pipe(gulp.dest(dest))
+  },
+  build_coffee:         function (src, output, dest) {
+    return gulp.src(src)
+      .pipe(coffee())
+      .pipe(concat(output))
+      .pipe(gulp.dest(dest));
+  },
+  merge_ts_coffee:      function (src, tsconfig, srcmaps = null, output, dest) {
+    var jsfromCoffeeScript = gulp.src(src.coffee).pipe(coffee()),
+
+        jsfromTS = gulp.src(src.scripts)
+                    .pipe(sourcemaps.init())
+                    .pipe(typescript(tsconfig))
+                    .pipe(sourcemaps.write())
+    ;
+    
+    return es.merge(jsfromCoffeeScript, jsfromTS)
+      .pipe(concat(output))
+      .pipe(gulp.dest(dest));
+  },
+  uglify_js:            function (src, options = {}, suffix = {}, dest) {
+    return gulp.src(src, options)
+      .pipe(uglify())
+      .pipe(rename(suffix))
+      .pipe(gulp.dest(dest));
+  },
+  uglify_css:           function (src, output, dest) {
+    return uglifyCSS = gulp.src(src)
+      .pipe(concat(output))
+      .pipe(minify())
+      .pipe(gulp.dest(dest));
+  },
+  uglify_both:          function (src, options = {}, suffix = {}, output, dest) {
+
+    var uglifyJS = gulp.src(src.js, options)
+      .pipe(uglify())
+      .pipe(rename(suffix));
+
+    var uglifyCSS = gulp.src(src.css)
+      .pipe(concat(output))
+      .pipe(minify());
+
+
+    return es.merge(uglifyJS, uglifyCSS)
+      .pipe(gulp.dest(dest));
+  }
+};
+
+gulp.task('build', ['merge_ts_coffee', 'uglify_all']);
+gulp.task('build:watch', ['watch', 'uglify_all']);
+
+gulp.task('test', ['test:server']);
+
+gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
+
+gulp.task('default', ['clean', 'serve']);
+
+gulp.task('build:css', function () {
+  return tasks.build_css(config.styles.src.scss, null, config.styles.dest);
 });
 
+gulp.task('bundle:css', ['build:css'], function() {
+  tasks.bundle_css.dev();
+  return tasks.bundle_css.dist();
+});
+
+gulp.task('bundle:css:dev', ['build:css'], function() {
+  return tasks.bundle_css.dev();
+});
+gulp.task('bundle:css:dist', ['build:css'], function() {
+  return tasks.bundle_css.dist();
+});
+
+
 // separate task to build JS from TS files
-gulp.task('build-ts', function () {
-    return gulp.src(config.src.ts)
-      .pipe(sourcemaps.init())
-      .pipe(typescript(tsProject))
-      .pipe(sourcemaps.write())
-      // .pipe(jsuglify())
-      .pipe(concat(config.dist.js))
-      .pipe(gulp.dest(config.public.js));
+gulp.task('build:ts', function () {
+  return tasks.build_ts(config.scripts.src,tsProject, null, mainShortName, config.dist);
 });
 
 // separate task to build JS from CS files
-gulp.task('build-coffee', function () {
-   return gulp.src(config.src.coffee + '**/*.coffee')
-     .pipe(coffee())
-     .pipe(concat(config.dist.coffee))
-     .pipe(gulp.dest(config.src.coffee));
+gulp.task('build:coffee', function () {
+  return tasks.build_coffee(config.coffee.src, config.coffee.output, config.coffee.dest);
 });
 
 // A combined task to build JS from both TypeScript and CoffeeScript sources and merge them together
-gulp.task('merge-ts-coffee', function () {
-  var jsfromCoffeeScript = gulp.src(config.src.coffee + '**/*.coffee')
-    .pipe(coffee());
-  var jsfromTS = gulp.src(config.src.ts)
-    .pipe(sourcemaps.init())
-    .pipe(typescript(tsProject))
-    .pipe(sourcemaps.write());
+gulp.task('merge_ts_coffee', function () {
+  var src = {
+    coffee: config.coffee.src,
+    scripts: config.scripts.src
+  };
 
-   return es.merge(jsfromCoffeeScript, jsfromTS)
-     .pipe(concat(config.dist.js))
-     .pipe(gulp.dest(config.public.js));
+  return tasks.merge_ts_coffee(src, tsProject, null, mainShortName, config.dist);
 });
 
-gulp.task('uglify', function () {
-   return gulp.src(config.public.js+config.dist.js, {base: "./"})
-     .pipe(uglify())
-     .pipe(rename({ suffix: '.min' }))
-     .pipe(gulp.dest("./"));
-}); // This task will create bundle.min.js in the same public/js folder
+gulp.task('uglify_js', function () {
+  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { suffix: '.min' }, './');
+}); // This task will create main.bundle.min.js in the same public/js folder
 
-gulp.task('uglify-all', function () {
-  var uglifyCSS = gulp.src(config.public.css+ '*.css')
-    .pipe(concat('bundle.min.css'))
-    .pipe(minify());
-  var uglifyJS = gulp.src(config.public.js+config.dist.js)
-    .pipe(uglify())
-    .pipe(rename({ suffix: '.min' }));
-
-  return es.merge(uglifyCSS,uglifyJS)
-    .pipe(gulp.dest(config.public.dist));
+gulp.task('uglify_css', function () {
+  return tasks.uglify_css(config.styles.bundle, 'styles.min.css', config.styles.dest);
 });
 
-gulp.task('build-img', function () {
-  return gulp.src(config.src.img)
+gulp.task('uglify_all', ['uglify_js', 'uglify_css']);
+
+gulp.task('copy_images', function () {
+  return gulp.src(config.images.src, { base: config.clientDir})
     .pipe(imagemin({
       progressive: true
+      // use: [pngquant()] ; with pngquant = require('imagemin-pngquant')
     }))
-    .pipe(gulp.dest(config.public.img));
+    .pipe(gulp.dest(config.images.dest));
 });
 
-gulp.task('build-html', function () {
-  return gulp.src(config.src.html)
-    .pipe(gulp.dest(config.public.html));
+gulp.task('copy_html', function () {
+  return gulp.src(config.html.src, {base: config.clientDir})
+    .pipe(gulp.dest(config.html.dest));
 });
 
+
+/*-- WATCHERS --*/
 gulp.task('watch:styles', function () {
-  return gulp.watch(config.src.scss, ['build-css']);
+  return gulp.watch(config.styles.src.scss, ['build:css']);
 });
 
-gulp.task('watch', function () {
-  gulp.watch(config.src.ts, ['merge-ts-coffee']); // ['build-ts', 'test']
-  gulp.watch(config.src.scss, ['build-css']);
-  gulp.watch(config.src.img, ['build-img']);
+gulp.task('watch:html', function () {
+  return gulp.watch(config.html.src);
 });
 
-gulp.task('browser-sync', ['nodemon'], function () {
+/*gulp.task('watch:vendors', function () {
+  return gulp.watch(config.vendor.watch, ['bundle:vendor:dev']);
+});*/
+
+gulp.task('watch:scripts', function () {
+  return gulp.watch(config.scripts.watch, ['merge_ts_coffee']);
+});
+
+gulp.task('watch:images', function () {
+  return gulp.watch(config.images.src, ['copy_images']);
+});
+
+gulp.task('watch', ['watch:styles', 'watch:images', 'watch:html'/*, 'watch:vendors'*/, 'watch:scripts']);
+
+/*-- DEV --*/
+gulp.task('browser_sync', ['nodemon'], function () {
   browserSync.init(config.browser_sync.options);
 
   gulp.watch(config.browser_sync.watch).on('change', browserSync.reload);
@@ -233,11 +355,33 @@ gulp.task("angular2:moveLibs", function () {
     .pipe(gulp.dest(config.public.lib));
 });
 
-gulp.task('build', ['merge-ts-coffee', 'uglify-all', 'angular2:moveLibs']);
-gulp.task('build:watch', ['watch', 'uglify-all']);
+/*-- CLEANERS --*/
+gulp.task('clean', ['clean:dist']);
 
-gulp.task('test', ['test:server']);
+gulp.task('clean:dist', function () {
+  return gulp.src([config.dist], {read: false})
+    .pipe(clean());
+});
 
-gulp.task('serve', ['browser-sync', 'merge-ts-coffee', 'watch']);
+gulp.task('clean:styles', function () {
+  return gulp.src([
+    config.styles.dest +'styles.css'
+  ], {read: false})
+    .pipe(clean());
+});
 
-gulp.task('default', ['serve']);
+gulp.task('clean:vendor', function () {
+  return gulp.src([
+    config.scripts.dest + vendorShortName
+  ], {read: false})
+    .pipe(clean());
+});
+
+gulp.task('clean:scripts', function () {
+  return gulp.src([
+    config.scripts.dest + mainShortName
+  ], {read: false})
+    .pipe(clean());
+});
+
+gulp.task('clean:dev', ['clean:styles', 'clean:vendor', 'clean:scripts']);

@@ -28,7 +28,7 @@ app.set('views', config.serverApps.views);
 app.set('view engine', config.view_engine.template);
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public/fav', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, './dev/client/images/fav', 'favicon.ico')));
 
 // Enable logger (morgan) if enabled in the configuration file
 if (_.has(config, 'log.format')) {

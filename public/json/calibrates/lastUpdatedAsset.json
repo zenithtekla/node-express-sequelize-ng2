@@ -3,31 +3,96 @@
     "model": "brts31",
     "asset_number": "1",
     "last_cal": "2012-08-22T07:00:00.000Z",
-    "schedule": 20828,
+    "schedule": 2970,
     "next_cal": "2013-08-22T07:00:00.000Z",
     "ECMS_Attributes": [
         {
+            "file_id": 1,
             "file": {
                 "type": "Buffer",
                 "data": [
+                    112,
+                    108,
                     97,
-                    115,
-                    100,
-                    115,
-                    97,
-                    100,
-                    97,
-                    115,
-                    100
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    49,
+                    49,
+                    54,
+                    49
                 ]
             },
-            "filename": "file_placeholder23700",
-            "createdAt": "2016-10-21T23:19:20.000Z",
-            "updatedAt": "2016-10-21T23:29:08.000Z"
+            "filename": "place_of_file1161",
+            "createdAt": "2016-10-26T18:42:02.000Z",
+            "updatedAt": "2016-10-26T18:42:02.000Z"
+        },
+        {
+            "file_id": 2,
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    49,
+                    53,
+                    48
+                ]
+            },
+            "filename": "place_of_file150",
+            "createdAt": "2016-10-26T18:42:02.000Z",
+            "updatedAt": "2016-10-26T18:42:02.000Z"
+        },
+        {
+            "file_id": 3,
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    50,
+                    48,
+                    53,
+                    57,
+                    48
+                ]
+            },
+            "filename": "place_of_file20590",
+            "createdAt": "2016-10-26T18:42:02.000Z",
+            "updatedAt": "2016-10-26T18:42:02.000Z"
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [labroom]",
-        "desc": "labroom"
+        "getLocation": " - location: [production]",
+        "desc": "production"
     }
 }

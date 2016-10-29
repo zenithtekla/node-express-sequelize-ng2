@@ -6,21 +6,28 @@ var initGlobalConfig = function(){
   var configurator = {
     projDir:            process.cwd(),
     site:               './bin/www',
-    publicDir:          './public',
+    
+    dist:               './public/dist/',
+    lib:                './public/lib/',
+    jsonDir:            './public/json/',
+    publicDir:          './public/',
+    favDir:             './public/fav/',
+    imagesDir:          './public/images/',
+    
     devDir:             './dev/',
 
     assetsDir:          './dev/server/config/assets/',
     utils:              './dev/server/config/assets/utils',
 
     clientDir:          './dev/client/',
-    clientAppDir:       './dev/client/app',
+    clientAppDir:       './dev/client/app/',
 
     serverDir:          './dev/server/',
     serverAppDir:       './dev/server/app/',
     serverConfigDir:    './dev/server/config/',
 
     expressSrc:         './dev/server/app/*',
-    expressViews:       './dev/server/{,*/}views'
+    expressViews:       './dev/server/{,*/}views/'
   };
 
   var utils  = require(configurator.utils);

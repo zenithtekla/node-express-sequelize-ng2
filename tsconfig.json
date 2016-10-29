@@ -8,8 +8,8 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "outDir": "public/js/",
-    "outFile": "public/js/bundle.js"
+    "outDir": "./public/dist/",
+    "outFile": "./public/dist/bundle.js"
   },
   "filesGlob": [
     "./dev/**/*.ts",

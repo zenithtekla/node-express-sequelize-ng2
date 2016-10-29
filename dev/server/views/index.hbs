@@ -3,23 +3,33 @@
 <head>
     <base href="/">
     <title>Angular 2 Messenger</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel='stylesheet' href='/css/main.css'/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.24/system.js"></script>
-    <script src="https://npmcdn.com/rxjs@5.0.0-beta.2/bundles/Rx.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/angular2-polyfills.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/angular2.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/http.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/router.js"></script>
-    <script src="https://npmcdn.com/angular2@2.0.0-beta.14/es6/dev/src/testing/shims_for_IE.js"></script>
-    <script src="/js/bundle.js"></script>
+    <link rel='stylesheet' href='/dist/assets/styles.css'/>
 </head>
 <body>
+
 <my-app>Loading...</my-app>
+
+<!-- build:vendor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.24/system.js"></script>
+<script src="https://npmcdn.com/rxjs@5.0.0-beta.2/bundles/Rx.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/angular2-polyfills.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/angular2.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/http.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/2.0.0-beta.14/router.js"></script>
+<script src="https://npmcdn.com/angular2@2.0.0-beta.14/es6/dev/src/testing/shims_for_IE.js"></script>
+<!-- endbuild -->
+
+<!-- build:app -->
+<script src="/dist/main.bundle.js"></script>
 
 <script>
     System.import('boot')
             .then(null, console.error.bind(console));
 </script>
+<!-- endbuild -->
+
 </body>
 </html>
