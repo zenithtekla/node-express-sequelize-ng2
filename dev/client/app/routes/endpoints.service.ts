@@ -8,7 +8,7 @@ export class EndpointsService {
   constructor(private _http: Http) {}
 
   getEndpointList() {
-    return this._http.get('/json/routeConfig.json')
+    return this._http.get('/public/json/routeConfig.json')
       .map(res => res.json())
       .catch(this.handleError);
   }

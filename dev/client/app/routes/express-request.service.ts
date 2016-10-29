@@ -9,7 +9,7 @@ export class ExpressRequestService {
   }
 
   getEndpointList() {
-    return this._http.get('/json/lastExpressRequest.json')
+    return this._http.get('/public/json/lastExpressRequest.json')
       .map(res => res.json())
       .catch(this.handleError);
   }
