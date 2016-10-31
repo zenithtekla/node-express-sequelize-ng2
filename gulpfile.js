@@ -50,7 +50,7 @@ var gulp                = require('gulp'),
     /*-- Bundling --*/
     htmlreplace         = require('gulp-html-replace'),
 
-    bundleHash          = new Date().getTime(),
+    bundleHash          = new Date().getTime() + '',
     mainBundleName      = bundleHash + '.main.bundle.js',
     mainShortName       = 'main.bundle.js',
     vendorBundleName    = bundleHash + '.vendor.bundle.js',
@@ -78,10 +78,11 @@ gulp.task('env:prod', function () {
 var tasks = {
   bundle_css: {
     dev:                () => gulp.src(config.styles.src.bundle)
-      .pipe(concat('styles.css'))
+      .pipe(concat(config.styles.output))
       .pipe(gulp.dest(config.styles.dest)),
     dist:               () => gulp.src(config.styles.src.bundle)
       .pipe(concat(mainStylesBundleName))
+      .pipe(minify())
       .pipe(gulp.dest(config.styles.dest))
   },
   bundle_vendor: {
@@ -101,7 +102,8 @@ var tasks = {
       .pipe(sourcemaps.write('maps/'))
       .pipe(gulp.dest(config.dist))
   },
-  build_css:            function(src, srcmaps = null, dest){
+  build_css:            function(src, srcmaps, dest){
+    srcmaps = srcmaps || null;
     return gulp.src(src)
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
@@ -110,7 +112,8 @@ var tasks = {
       .pipe(ext_replace('.css'))
       .pipe(gulp.dest(dest));
   },
-  build_ts:             function(src, tsconfig, srcmaps = null, output, dest) {
+  build_ts:             function(src, tsconfig, srcmaps, output, dest) {
+    srcmaps = srcmaps || null;
     return gulp.src(src)
       .pipe(sourcemaps.init())
       .pipe(typescript(tsconfig))
@@ -125,7 +128,9 @@ var tasks = {
       .pipe(concat(output))
       .pipe(gulp.dest(dest));
   },
-  merge_ts_coffee:      function (src, tsconfig, srcmaps = null, output, dest) {
+  merge_ts_coffee:      function (src, tsconfig, srcmaps, output, dest) {
+    srcmaps = srcmaps || null;
+
     var jsfromCoffeeScript = gulp.src(src.coffee).pipe(coffee()),
 
         jsfromTS = gulp.src(src.scripts)
@@ -133,12 +138,15 @@ var tasks = {
                     .pipe(typescript(tsconfig))
                     .pipe(sourcemaps.write())
     ;
-    
+
     return es.merge(jsfromCoffeeScript, jsfromTS)
       .pipe(concat(output))
       .pipe(gulp.dest(dest));
   },
-  uglify_js:            function (src, options = {}, suffix = {}, dest) {
+  uglify_js:            function (src, options, suffix, dest) {
+    options = options || {};
+    suffix  = suffix  || {};
+
     return gulp.src(src, options)
       .pipe(uglify())
       .pipe(rename(suffix))
@@ -150,8 +158,9 @@ var tasks = {
       .pipe(minify())
       .pipe(gulp.dest(dest));
   },
-  uglify_both:          function (src, options = {}, suffix = {}, output, dest) {
-
+  uglify_both:          function (src, options, suffix, output, dest) {
+    options = options || {};
+    suffix  = suffix  || {};
     var uglifyJS = gulp.src(src.js, options)
       .pipe(uglify())
       .pipe(rename(suffix));
@@ -166,12 +175,20 @@ var tasks = {
   }
 };
 
-gulp.task('build', ['merge_ts_coffee', 'uglify_all']);
+gulp.task('build', function(callback){
+  runSequence('clean', 'copy_images', 'copy_html', 'build:css', 'bundle:css', 'merge_ts_coffee', 'uglify_all', callback);
+});
+
 gulp.task('build:watch', ['watch', 'uglify_all']);
 
 gulp.task('test', ['test:server']);
 
-gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
+// gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
+gulp.task('serve', function(callback){
+  runSequence('build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
+});
+
+gulp.task('dev', ['clean:dev', 'serve']);
 
 gulp.task('default', ['clean', 'serve']);
 
@@ -213,17 +230,17 @@ gulp.task('merge_ts_coffee', function () {
 });
 
 gulp.task('uglify_js', function () {
-  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { suffix: '.min' }, './');
+  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash, suffix: '.min' }, './');
 }); // This task will create main.bundle.min.js in the same public/js folder
 
 gulp.task('uglify_css', function () {
-  return tasks.uglify_css(config.styles.bundle, 'styles.min.css', config.styles.dest);
+  return tasks.uglify_css(config.styles.dest + config.styles.output, 'styles.min.css', config.styles.dest);
 });
 
 gulp.task('uglify_all', ['uglify_js', 'uglify_css']);
 
 gulp.task('copy_images', function () {
-  return gulp.src(config.images.src, { base: config.clientDir})
+  return gulp.src(config.images.src, { base: config.clientDir+'/images'})
     .pipe(imagemin({
       progressive: true
       // use: [pngquant()] ; with pngquant = require('imagemin-pngquant')
@@ -239,7 +256,7 @@ gulp.task('copy_html', function () {
 
 /*-- WATCHERS --*/
 gulp.task('watch:styles', function () {
-  return gulp.watch(config.styles.src.scss, ['build:css']);
+  return gulp.watch(config.styles.src.scss, ['bundle:css:dev']);
 });
 
 gulp.task('watch:html', function () {
@@ -321,7 +338,7 @@ gulp.task('test:server', ['env:test'], function () {
   return gulp
     // .src('./dev/server/app/tests/')
     // .src(config.server)
-    .src(config.src.serverAppDir + '/tests/')
+    .src(config.serverAppDir + '/tests/')
     .pipe(mocha({reporter: 'spec'}));
 });
 
@@ -352,7 +369,7 @@ gulp.task("angular2:moveLibs", function () {
       "node_modules/reflect-metadata/Reflect.js.map"
     ],
     { base: "node_modules" })
-    .pipe(gulp.dest(config.public.lib));
+    .pipe(gulp.dest(config.lib));
 });
 
 /*-- CLEANERS --*/
@@ -365,7 +382,7 @@ gulp.task('clean:dist', function () {
 
 gulp.task('clean:styles', function () {
   return gulp.src([
-    config.styles.dest +'styles.css'
+    config.styles.dest +'*.css'
   ], {read: false})
     .pipe(clean());
 });

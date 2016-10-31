@@ -4,8 +4,8 @@ var appConfig = require('./app-config');
 var gulpConfig = function(){
   var config = {
     clientDir:            appConfig.clientDir,
-    dist:                 './public/dist/',
-    lib:                  './public/lib/',
+    dist:                 appConfig.dist,
+    lib:                  appConfig.lib,
 
     scripts: {
       src: [
@@ -20,7 +20,7 @@ var gulpConfig = function(){
     coffee: {
       src:        './dev/_coffee/**/*.coffee',
       output:     'bundle_cafe.js',
-      dest:       './public/dist/'
+      dest:       appConfig.dist
     },
 
     styles: {
@@ -33,9 +33,10 @@ var gulpConfig = function(){
 /*                './public/lib/bootstrap/dist/css/bootstrap.css',
                   './public/lib/font-awesome/css/font-awesome.css',*/
                   './public/dist/assets/**/*.css',
-                  '!./public/dist/assets/styles{,.min}.css'
+                  '!./public/dist/assets/{*.}styles{,.min}.css'
         ]
       },
+      output:     'styles.css',
       dest:       './public/dist/assets/'
     },
 
@@ -48,7 +49,7 @@ var gulpConfig = function(){
 
     html: {
       src:        './dev/client/app/**/*.html',
-      dest:       './public/dist/'
+      dest:       appConfig.dist
     },
 
     fonts: {
@@ -58,6 +59,7 @@ var gulpConfig = function(){
 
     // server:site, the www for nodeMon configuration
     site:               './bin/www' ,
+    serverAppDir:       appConfig.serverAppDir,
 
     // server js files for nodemon
     serverJSfiles: [

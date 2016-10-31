@@ -6,14 +6,16 @@ var initGlobalConfig = function(){
   var configurator = {
     projDir:            process.cwd(),
     site:               './bin/www',
-    
+    env:                process.env.NODE_ENV || 'development',
+    port:               process.env.PORT || 3000,
+
     dist:               './public/dist/',
     lib:                './public/lib/',
     jsonDir:            './public/json/',
     publicDir:          './public/',
     favDir:             './public/fav/',
     imagesDir:          './public/images/',
-    
+
     devDir:             './dev/',
 
     assetsDir:          './dev/server/config/assets/',
@@ -33,19 +35,8 @@ var initGlobalConfig = function(){
   var utils  = require(configurator.utils);
 
   var config = {
-    env:                process.env.NODE_ENV || 'development',
-    port:               process.env.PORT || 3000,
+
     // modules:         utils.getDirectories('modules'),
-    projDir:            configurator.projDir,
-    site:               configurator.site,
-    publicDir:          configurator.publicDir,
-    devDir:             configurator.devDir,
-    clientDir:          configurator.clientDir,
-    clientAppDir:       configurator.clientAppDir,
-    serverDir:          configurator.serverDir,
-    serverAppDir:       configurator.serverAppDir,
-    serverConfigDir:    configurator.serverConfigDir,
-    assetsDir:          configurator.assetsDir,
     utilsDir:           path.resolve(configurator.utils),
     // apps:            utils.getAppsDir(path.resolve(serverDir,'app')),
     serverApps: {
@@ -91,7 +82,7 @@ var initGlobalConfig = function(){
   };
 
   // config.serverApps.tests
-  // config.serverApps.tests = utils.getGlobbedPaths(path.resolve(config.serverAppDir, 'tests/*'));
+  // config.serverApps.tests = utils.getGlobbedPaths(path.resolve(configurator.serverAppDir, 'tests/*'));
 
   var apps = {};
   // get server.app info
@@ -99,17 +90,17 @@ var initGlobalConfig = function(){
 
     apps[app] = {
       name: app,
-      list: utils.getAppsDir(path.resolve(config.serverAppDir,app)),
-      path: path.resolve(config.serverAppDir,app),
-      src:  utils.getGlobbedPaths(path.resolve(config.serverAppDir,app,'*'))
+      list: utils.getAppsDir(path.resolve(configurator.serverAppDir,app)),
+      path: path.resolve(configurator.serverAppDir,app),
+      src:  utils.getGlobbedPaths(path.resolve(configurator.serverAppDir,app,'*'))
     };
 
     _.forEach(apps[app].list, function(item){
-      var srcFiles = utils.getGlobbedPaths(path.resolve(config.serverAppDir,app,item,'*'));
+      var srcFiles = utils.getGlobbedPaths(path.resolve(configurator.serverAppDir,app,item,'*'));
       apps[app][item] = {
         name: item,
-        list: utils.getAppsDir(path.resolve(config.serverAppDir,app,item)),
-        path: path.resolve(config.serverAppDir,app,item),
+        list: utils.getAppsDir(path.resolve(configurator.serverAppDir,app,item)),
+        path: path.resolve(configurator.serverAppDir,app,item),
         src:  srcFiles
       };
 
@@ -118,7 +109,7 @@ var initGlobalConfig = function(){
       }
 
       if (item === 'views') {
-        config.serverApps.views = _.union(config.serverApps.views,path.resolve(config.serverAppDir,app,item));
+        config.serverApps.views = _.union(config.serverApps.views,path.resolve(configurator.serverAppDir,app,item));
       }
 
       if (item === 'tests') {
@@ -129,9 +120,11 @@ var initGlobalConfig = function(){
 
   config.serverApps.content = apps;
 
-  utils.exportJSON(config, 'appConfig.json');
+  configurator = _.extend(configurator, config);
 
-  return config;
+  utils.exportJSON(configurator, 'appConfig.json');
+
+  return configurator;
 };
 
 /**
