@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/zenithtekla/node-express-sequelize-ng2",
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "gulp",
     "launch": "node ./bin/www",
     "gulp": "gulp",
     "dev": " \"gulp serve\" ",

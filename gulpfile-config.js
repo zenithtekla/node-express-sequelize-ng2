@@ -33,7 +33,7 @@ var gulpConfig = function(){
 /*                './public/lib/bootstrap/dist/css/bootstrap.css',
                   './public/lib/font-awesome/css/font-awesome.css',*/
                   './public/dist/assets/**/*.css',
-                  '!./public/dist/assets/{*.}styles{,.min}.css'
+                  '!./public/dist/assets/styles{,.min}.css'
         ]
       },
       output:     'styles.css',
@@ -71,10 +71,10 @@ var gulpConfig = function(){
       watch: [
           './public/dist/**/*.{img,png,jpg,jpeg,gif,ico,bmp}',
           './public/dist/*.bundle.js',
-          './public/dist/styles.css',
+          './public/dist/assets/styles.css',
           './dev/server/*',
-          './dev/client/**/*.{html,htm}',
-          './dev/_coffee/*.coffee'
+          './dev/client/**/*.{html,htm}'
+          // './dev/_coffee/*.coffee'
       ],
       options: {
         /*port: 8080,
@@ -109,6 +109,10 @@ var gulpConfig = function(){
     delayTime: 50,
     env: {
       PORT: 3000
+    },
+    // socket may be optional
+    socket: {
+      domain: 'localhost:3000'
     },
     watch: config.serverJSfiles
   };

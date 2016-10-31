@@ -185,15 +185,26 @@ gulp.task('test', ['test:server']);
 
 // gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
 gulp.task('serve', function(callback){
-  runSequence('build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
+  runSequence('clean:dev', 'build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
 });
 
-gulp.task('dev', ['clean:dev', 'serve']);
+gulp.task('dev', [, 'serve']);
 
-gulp.task('default', ['clean', 'serve']);
+gulp.task('default', ['serve']);
 
 gulp.task('build:css', function () {
   return tasks.build_css(config.styles.src.scss, null, config.styles.dest);
+});
+
+gulp.task('bundle', ['bundle:vendor', 'bundle:app', 'bundle:css'], function () {
+  return gulp.src('dev/server/views/index.hbs')
+    .pipe(htmlreplace({
+      'app': mainBundleName,
+      'vendor': vendorBundleName,
+      'css': 'assets/' + mainStylesBundleName
+    }))
+    .pipe(ext_replace('.html'))
+    .pipe(gulp.dest(config.dist));
 });
 
 gulp.task('bundle:css', ['build:css'], function() {
@@ -382,7 +393,7 @@ gulp.task('clean:dist', function () {
 
 gulp.task('clean:styles', function () {
   return gulp.src([
-    config.styles.dest +'*.css'
+    config.styles.dest +'styles.css'
   ], {read: false})
     .pipe(clean());
 });
