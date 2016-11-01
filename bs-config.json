@@ -1,0 +1,13 @@
+{
+  "files": [],
+  "server": {
+    "baseDir":                "./dev/client/",
+    "routes": {
+      "/public":              "./public/",
+      "/app":                 "./dev/client/app/",
+      "/node_modules":        "./node_modules/",
+      "/assets":              "./public/dist/assets/",
+      "/fonts":               "./public/dist/fonts/"
+    }
+  }
+}

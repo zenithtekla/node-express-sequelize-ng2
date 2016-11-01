@@ -9,11 +9,13 @@ var gulpConfig = function(){
 
     scripts: {
       src: [
-                  './dev/client/app/**/*.+(ts|js)'
+                  './dev/client/app/**/*.+(ts|js)',
+                  '!./dev/client/app/vendor.js'
       ],
       watch:    [
                   './dev/client/app/**/*.+(ts|js)',
-                  './dev/_coffee/**/*.coffee'
+                  './dev/_coffee/**/*.coffee',
+                  '!./dev/client/app/vendor.js'
       ]
     },
 
@@ -101,7 +103,8 @@ var gulpConfig = function(){
     test_site:          'http://localhost:3000/',
     lint: {
       scripts: ['**/*.js', '!node_modules/**', '!public/**']
-    }
+    },
+    vendor: require('./dev/client/app/vendor')
   };
 
   config.nodemonOptions = {

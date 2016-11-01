@@ -26,6 +26,9 @@
 <script src="/public/dist/main.bundle.js"></script>
 
 <script>
+    System.import('./app/vendor.js')
+      .then(function(data){console.log(data);}, console.error.bind(console));
+
     System.import('boot')
             .then(null, console.error.bind(console));
 </script>
