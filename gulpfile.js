@@ -258,8 +258,8 @@ gulp.task('merge_ts_coffee', function () {
   return tasks.merge_ts_coffee(src, tsProject, null, mainShortName, config.dist);
 });
 
-gulp.task('uglify_js', function () {
-  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash + '.', suffix: '.min' }, './');
+gulp.task('uglify_js', function () {   
+  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash + '.' }, './');
 }); // This task will create main.bundle.min.js in the same public/js folder
 
 gulp.task('uglify_css', function () {
