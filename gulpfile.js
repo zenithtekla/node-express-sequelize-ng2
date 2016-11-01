@@ -50,7 +50,9 @@ var gulp                = require('gulp'),
     /*-- Bundling --*/
     htmlreplace         = require('gulp-html-replace'),
 
-    bundleHash          = new Date().getTime() + '',
+    moment              = require('moment'),
+
+    bundleHash          = moment(new Date().getTime()).format('YYYY-MM-DD-HH-mm-ss'),
     mainBundleName      = bundleHash + '.main.bundle.js',
     mainShortName       = 'main.bundle.js',
     vendorBundleName    = bundleHash + '.vendor.bundle.js',
@@ -175,9 +177,11 @@ var tasks = {
   }
 };
 
+gulp.task('dist', ['build']);
 gulp.task('build', function(callback){
-  runSequence('clean', 'copy_images', 'copy_fonts', 'copy_html', 'build:css', 'bundle:css', 'merge_ts_coffee', 'uglify_all', callback);
+  runSequence('clean', 'copy_images', 'copy_fonts', 'copy_html', 'build:css', 'bundle', 'uglify_all', callback);
 });
+
 
 gulp.task('build:watch', ['watch', 'uglify_all']);
 
@@ -185,18 +189,32 @@ gulp.task('test', ['test:server']);
 
 // gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
 gulp.task('serve', function(callback){
-  runSequence('clean:dev', 'copy_fonts', 'build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
+  runSequence('clean:dev', 'copy_fonts', 'build:css', 'bundle:css:dev', 'bundle:vendor:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
+});
+
+gulp.task('serve:dev', function(callback){
+  runSequence('browser_sync', 'watch', callback);
 });
 
 gulp.task('dev', ['serve']);
-
 gulp.task('default', ['serve']);
+
+gulp.task('bundle:vendor', ['bundle:vendor:dev', 'bundle:vendor:dist']);
+
+gulp.task('bundle:vendor:dev', function () {
+  var vendor = gulp.src(config.vendor.js);
+  return tasks.bundle_vendor.dev(vendor);
+});
+gulp.task('bundle:vendor:dist', function () {
+  var vendor = gulp.src(config.vendor.js);
+  return tasks.bundle_vendor.dist(vendor);
+});
 
 gulp.task('build:css', function () {
   return tasks.build_css(config.styles.src.scss, null, config.styles.dest);
 });
 
-gulp.task('bundle', ['bundle:vendor', 'bundle:app', 'bundle:css'], function () {
+gulp.task('bundle', ['bundle:vendor', 'bundle:css', 'merge_ts_coffee'], function () {
   return gulp.src('dev/server/views/index.hbs')
     .pipe(htmlreplace({
       'app': mainBundleName,
@@ -241,7 +259,7 @@ gulp.task('merge_ts_coffee', function () {
 });
 
 gulp.task('uglify_js', function () {
-  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash, suffix: '.min' }, './');
+  return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash + '.', suffix: '.min' }, './');
 }); // This task will create main.bundle.min.js in the same public/js folder
 
 gulp.task('uglify_css', function () {
@@ -416,6 +434,14 @@ gulp.task('clean:scripts', function () {
     config.scripts.dest + mainShortName
   ], {read: false})
     .pipe(clean());
+});
+
+gulp.task('clean:client', function(){
+   return gulp.src([
+     './dev/client/app/**/*.js{,.map}',
+     '!./dev/client/app/vendor.js'
+   ], {read: false})
+     .pipe(clean());
 });
 
 gulp.task('clean:dev', ['clean:styles', 'clean:vendor', 'clean:scripts']);

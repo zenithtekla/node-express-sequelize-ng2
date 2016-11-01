@@ -74,7 +74,7 @@ var gulpConfig = function(){
           './public/dist/**/*.{img,png,jpg,jpeg,gif,ico,bmp}',
           './public/dist/*.bundle.js',
           './public/dist/assets/styles.css',
-          './dev/server/*',
+          './dev/server/**/*',
           './dev/client/**/*.{html,htm}'
           // './dev/_coffee/*.coffee'
       ],
