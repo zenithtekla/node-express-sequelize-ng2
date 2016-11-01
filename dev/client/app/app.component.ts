@@ -6,7 +6,7 @@ import {ExpressRequestComponent} from "./routes/express-request.component";
 @Component({
     selector: 'my-app',
     template: `  
-        <h1>Home Content</h1>
+        <h1><i class="fa fa-home" aria-hidden="true"></i> Home Content</h1>
         <br>
         <endpoint-list></endpoint-list>
         <express-request></express-request>

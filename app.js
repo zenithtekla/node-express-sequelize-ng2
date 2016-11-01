@@ -42,8 +42,9 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 app.use(cookieParser());
 
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use('/assets', express.static(path.join(__dirname, 'public/dist/assets')));
+app.use('/public', express.static(path.join(__dirname, './public/')));
+app.use('/assets', express.static(path.join(__dirname, './public/dist/assets/')));
+app.use('/fonts', express.static(path.join(__dirname, './public/dist/fonts/')));
 
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');

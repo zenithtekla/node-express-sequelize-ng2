@@ -176,7 +176,7 @@ var tasks = {
 };
 
 gulp.task('build', function(callback){
-  runSequence('clean', 'copy_images', 'copy_html', 'build:css', 'bundle:css', 'merge_ts_coffee', 'uglify_all', callback);
+  runSequence('clean', 'copy_images', 'copy_fonts', 'copy_html', 'build:css', 'bundle:css', 'merge_ts_coffee', 'uglify_all', callback);
 });
 
 gulp.task('build:watch', ['watch', 'uglify_all']);
@@ -185,10 +185,10 @@ gulp.task('test', ['test:server']);
 
 // gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
 gulp.task('serve', function(callback){
-  runSequence('clean:dev', 'build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
+  runSequence('clean:dev', 'copy_fonts', 'build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
 });
 
-gulp.task('dev', [, 'serve']);
+gulp.task('dev', ['serve']);
 
 gulp.task('default', ['serve']);
 
@@ -249,6 +249,12 @@ gulp.task('uglify_css', function () {
 });
 
 gulp.task('uglify_all', ['uglify_js', 'uglify_css']);
+
+/*-- COPY --*/
+gulp.task('copy_fonts', function(){
+  return gulp.src(config.fonts.src)
+    .pipe(gulp.dest(config.fonts.dest));
+});
 
 gulp.task('copy_images', function () {
   return gulp.src(config.images.src, { base: config.clientDir+'/images'})

@@ -30,8 +30,8 @@ var gulpConfig = function(){
                   '!./dev/client/assets/styles{,.min}.+(css|scss)'
         ],
         bundle: [
-/*                './public/lib/bootstrap/dist/css/bootstrap.css',
-                  './public/lib/font-awesome/css/font-awesome.css',*/
+                  './node_modules/bootstrap/dist/css/bootstrap.css',
+                  './node_modules/font-awesome/css/font-awesome.css',
                   './public/dist/assets/**/*.css',
                   '!./public/dist/assets/styles{,.min}.css'
         ]
@@ -53,7 +53,7 @@ var gulpConfig = function(){
     },
 
     fonts: {
-      src: ['./public/lib/font-awesome/fonts/**/*'],
+      src: ['./node_modules/font-awesome/fonts/**/*'],
       dest:'./public/dist/fonts/'
     },
 
