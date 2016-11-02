@@ -44,7 +44,7 @@ var gulpConfig = function(){
 
     images: {
       src: [
-                  'dev/client/images/**/*.+(png|img|bmp|jpg|jpeg|gif|ico|tff|tiff)'
+                  './dev/client/images/**/*.+(png|img|bmp|jpg|jpeg|gif|ico|tff|tiff)'
       ],
       dest:       './public/dist/images/'
     },
@@ -65,8 +65,9 @@ var gulpConfig = function(){
 
     // server js files for nodemon
     serverJSfiles: [
-          'dev/server/**/*.js',
-          'app*.js'
+          './dev/server/**/*.js',
+          'app*.js',
+          'bs-config.json'
     ],
     browser_sync: {
       reload_delay: 500,
@@ -99,7 +100,7 @@ var gulpConfig = function(){
       }
     },
     tests:              appConfig.serverApps.tests,
-    test_interface:     'dev/test_interface/runner.html',
+    test_interface:     './dev/test_interface/runner.html',
     test_site:          'http://localhost:3000/',
     lint: {
       scripts: ['**/*.js', '!node_modules/**', '!public/**']

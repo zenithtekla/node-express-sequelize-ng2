@@ -16,8 +16,6 @@ cache/
 # MEAN.js app and assets
 # ======================
 public/dist/
-public/js/
-public/img/
 uploads
 modules/users/client/img/profile/uploads
 assets/config/env/local.js

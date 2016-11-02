@@ -145,6 +145,14 @@ var tasks = {
       .pipe(concat(output))
       .pipe(gulp.dest(dest));
   },
+  copy_js:            function (src, options, suffix, dest) {
+    options = options || {};
+    suffix  = suffix  || {};
+
+    return gulp.src(src, options)
+      .pipe(rename(suffix))
+      .pipe(gulp.dest(dest));
+  },
   uglify_js:            function (src, options, suffix, dest) {
     options = options || {};
     suffix  = suffix  || {};
@@ -189,7 +197,7 @@ gulp.task('test', ['test:server']);
 
 // gulp.task('serve', ['build:css', 'bundle:css:dev', 'merge_ts_coffee', 'browser_sync', 'watch']);
 gulp.task('serve', function(callback){
-  runSequence('clean:dev', 'copy_fonts', 'build:css', 'bundle:css:dev', 'bundle:vendor:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
+  runSequence('clean:dev', 'copy_images', 'copy_fonts', 'build:css', 'bundle:css:dev', 'bundle:vendor:dev', 'merge_ts_coffee', 'browser_sync', 'watch', callback);
 });
 
 gulp.task('serve:dev', function(callback){
@@ -217,6 +225,7 @@ gulp.task('build:css', function () {
 gulp.task('bundle', ['bundle:vendor', 'bundle:css', 'merge_ts_coffee'], function () {
   return gulp.src('dev/server/views/index.hbs')
     .pipe(htmlreplace({
+      'base': '',
       'app': mainBundleName,
       'vendor': vendorBundleName,
       'css': 'assets/' + mainStylesBundleName
@@ -249,6 +258,7 @@ gulp.task('build:coffee', function () {
 });
 
 // A combined task to build JS from both TypeScript and CoffeeScript sources and merge them together
+// bundle:app
 gulp.task('merge_ts_coffee', function () {
   var src = {
     coffee: config.coffee.src,
@@ -258,7 +268,11 @@ gulp.task('merge_ts_coffee', function () {
   return tasks.merge_ts_coffee(src, tsProject, null, mainShortName, config.dist);
 });
 
-gulp.task('uglify_js', function () {   
+gulp.task('copy_js', function () {
+  return tasks.copy_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash + '.' }, './');
+}); // This task will create main.bundle.min.js in the same public/js folder
+
+gulp.task('uglify_js', function () {
   return tasks.uglify_js(config.dist+mainShortName, {base: "./"}, { prefix: bundleHash + '.' }, './');
 }); // This task will create main.bundle.min.js in the same public/js folder
 
@@ -266,7 +280,7 @@ gulp.task('uglify_css', function () {
   return tasks.uglify_css(config.styles.dest + config.styles.output, 'styles.min.css', config.styles.dest);
 });
 
-gulp.task('uglify_all', ['uglify_js', 'uglify_css']);
+gulp.task('uglify_all', ['copy_js', 'uglify_css']); // just copy_js cuz uglify_js cripples main.bundle.js
 
 /*-- COPY --*/
 gulp.task('copy_fonts', function(){
@@ -310,7 +324,7 @@ gulp.task('watch:images', function () {
   return gulp.watch(config.images.src, ['copy_images']);
 });
 
-gulp.task('watch', ['watch:styles', 'watch:images', 'watch:html'/*, 'watch:vendors'*/, 'watch:scripts']);
+gulp.task('watch', ['watch:images', 'watch:html', 'watch:styles' /*, 'watch:vendors'*/, 'watch:scripts']);
 
 /*-- DEV --*/
 gulp.task('browser_sync', ['nodemon'], function () {
