@@ -39,24 +39,28 @@ module.exports  = function(db, env) {
         onSuccess(result);
         // return null;
       }).catch(function (err) {
-        onError();
+        if (onError)
+          onError();
+
         res.status(422).send({message: errorHandler.getErrorMessage(err)});
       });
     },
     findAFileMethod: function (req, res, next, onSuccess, onError) {
       // appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
-      ECMS_Attribute.findOne({
-        where: { file_id: req.params.file_id },
-        attributes: ['asset_number', 'createdAt', 'file', 'filename', 'updatedAt'],
+      // https://github.com/sequelize/sequelize/issues/3944
+      ECMS_Equipment.findOne({
+        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Equipment, attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal']},
+          { model: ECMS_Attribute, attributes: ['asset_number', 'createdAt', 'file', 'filename', 'updatedAt'], where: { file_id: req.params.file_id }},
           { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
         onSuccess(result);
         // return null;
       }).catch(function (err) {
-        onError();
+        if (onError)
+          onError();
+
         res.status(422).send({message: errorHandler.getErrorMessage(err)});
       });
     },
