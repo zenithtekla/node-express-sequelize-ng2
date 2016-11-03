@@ -4,13 +4,19 @@
 
 /* SYNC */
 module.exports  = function(app) {
-  var db = app.get('models');
+  var db      = app.get('models'),
+    path      = require('path'),
+    config    = require(path.resolve('./app-config')),
+    appUtils  = require(config.utilsDir),
+    moment    = require('moment');
    /* rest = db.rest;
 
   // create RESTful endpoints in rest.js
   require('./rest')(db,rest);*/
 
-  db.sequelize.sync({ force: true /*, logging: console.log */}).then(function (task) {
+  appUtils.deleteFile(config.projDir + '/sequelize.log');
+
+  db.sequelize.sync({ force: true , logging: log }).then(function (task) {
 
     // buildTask.save();
     // console.log(arguments);
@@ -49,6 +55,12 @@ module.exports  = function(app) {
    }
    else console.dir('Unable to connect to the database Server', err);
    });*/
+
+  function log(data){
+    var obj   = {};
+    obj[moment(new Date().getTime()).format('YYYY-MM-DD-HH-mm-ss')] = data;
+    appUtils.appendFile(appUtils.JSONstringify(obj), config.projDir + '/sequelize.log');
+  }
   // var productModel = mongoose.model('Product', {product: String, description: String});
   // var product = new productModel ({product: 'Toshiba', description: 'quality build'} );
   // var user = mongoose.model(User);

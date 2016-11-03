@@ -12,9 +12,7 @@ module.exports  = function(db, env) {
     ECMS_Location   = db.ECMS_Location;
 
   var utils = {
-    createLocation: function(req, res, next){
-      create_location(req, res, next);
-    },
+    createLocation: create_location,
     findAllMethod: function (req, res, next, callback) {
       console.log(req.params);
       ECMS_Equipment.findAll({
@@ -35,6 +33,23 @@ module.exports  = function(db, env) {
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
           { model: ECMS_Attribute, attributes: ['file_id', 'file', 'filename', 'createdAt', 'updatedAt']},
+          { model: ECMS_Location, attributes: ['desc']}
+        ]
+      }).then(function(result){
+        onSuccess(result);
+        // return null;
+      }).catch(function (err) {
+        onError();
+        res.status(422).send({message: errorHandler.getErrorMessage(err)});
+      });
+    },
+    findAFileMethod: function (req, res, next, onSuccess, onError) {
+      // appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
+      ECMS_Attribute.findOne({
+        where: { file_id: req.params.file_id },
+        attributes: ['asset_number', 'createdAt', 'file', 'filename', 'updatedAt'],
+        include: [
+          { model: ECMS_Equipment, attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal']},
           { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
@@ -91,7 +106,7 @@ module.exports  = function(db, env) {
       model: req.model,
       asset_number: req.asset_number,
       last_cal: new Date(req.last_cal || '2012/08/22'),
-      schedule: req.schedule || (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString(),
+      schedule: req.schedule || (_.random(1,200)*_.random(1,200)).toString(),
       next_cal: new Date(req.next_cal || '2013/08/22')
     };
 
@@ -121,7 +136,7 @@ module.exports  = function(db, env) {
   }
 
   function create_ECMS_attrs_entry(req, res, record){
-    var file = 'file_placeholder' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+    var file = 'file_placeholder' + (_.random(1,200)*_.random(1,200)).toString();
 
     if(!_.has(req,'documents')){
       req.documents = [{
@@ -154,17 +169,17 @@ module.exports  = function(db, env) {
     if(_.has(req,'documents')){
       _.forEach(req.documents, function(document){
         document.asset_number = record.asset_number;
-        var file_attr = 'place_of_file' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+        var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
         document.file = document.file || file_attr;
         document.filename = document.filename || file_attr;
         records.push(document);
       });
     } else {
 
-      var quantity = req.file_quantity || appUtils.getRandomInt(1,3);
+      var quantity = req.file_quantity || _.random(1,3);
 
       for (var i=0;i<quantity;i++){
-        var file_attr = 'place_of_file' + (appUtils.getRandomInt(1,200)*appUtils.getRandomInt(1,200)).toString();
+        var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
         records.push({
           asset_number: record.asset_number,
           file: file_attr,
@@ -192,8 +207,8 @@ module.exports  = function(db, env) {
   }
 
   function EquipmentSeed(equip) {
-    equip.model = equip.model || 'brts' + (appUtils.getRandomInt(20,200)*appUtils.getRandomInt(20,200)).toString();
-    equip.asset_number= equip.asset_number || (appUtils.getRandomInt(20,200)*appUtils.getRandomInt(20,200));
+    equip.model = equip.model || 'brts' + (_.random(20,200)*_.random(20,200)).toString();
+    equip.asset_number= equip.asset_number || (_.random(20,200)*_.random(20,200));
   }
 
   var updateMethod = function (req, res, next, onError){
