@@ -6,9 +6,9 @@ import {ExpressRequestService} from "./express-request.service";
   selector: 'express-request',
   template:`
     <div id="express-request">
-      <h4 class="text-center">Last Express Request</h4>
+      <h4 class="text-lg-center">Last Express Request</h4>
       <div class="row">
-        <p class="text-right">Content from lastExpressRequest.json file</p>
+        <p class="text-sm-right">Content from lastExpressRequest.json file</p>
         <table class="table">
           <thead class="thead-inverse">
             <tr>

@@ -20,7 +20,7 @@ module.exports  = function(db, env) {
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
           { model: ECMS_Attribute, attributes: ['file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
-          { model: ECMS_Location, attributes: ['desc']}
+          { model: ECMS_Location, attributes: ['id', 'desc']}
         ]
       }).then(function(result){
         callback(result);
@@ -38,11 +38,11 @@ module.exports  = function(db, env) {
             attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
       }
         , location = {
-            model: ECMS_Location, 
+            model: ECMS_Location,
             attributes: ['desc']
       };
 
-      
+
       if (_.has(req.params, 'location_id')) {
         location.where = {id: req.params.location_id};
         _.omit(req.params, 'location_id');

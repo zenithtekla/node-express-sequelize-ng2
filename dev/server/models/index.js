@@ -17,12 +17,13 @@ module.exports = function(app){
 
   utils.deleteFile(config.projDir + '/sequelize.log');
 
-  db_config.logging = function(data){
+  db_config.logging = (db_config.logging) ? winston.verbose : (env ==='development') ? function(data){
     log[moment(new Date().getTime()).format('YYYY-MM-DD-HH-mm-ss')] = data;
     utils.appendFile(utils.JSONstringify(log), config.projDir + '/sequelize.log');
-  };
+  } : false;
 
   winston.info('Initializing Sequelize...');
+
   /* sequelize for JS, similar to Hibernate (ORM) to Java, Entity to .NET, Doctrine|Eloquent to PHP */
 var sequelize = new Sequelize(db_config.database, db_config.user, db_config.password, db_config),
     db        = {};

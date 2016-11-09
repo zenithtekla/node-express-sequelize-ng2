@@ -6,10 +6,10 @@ import {ValuesPipe} from "../assets/pipe.component";
   selector: 'endpoint-list',
   template:`
     <div id="endpoint-list">
-      <h4>LIST of API endpoints</h4>
+      <h3 class="text-lg-center">LIST of API endpoints</h3>
       <hr>
       <div *ngFor="#api of apis">
-        <span>{{api.route}}</span>
+        <span class="float-md-right">{{api.route}}</span>
         <table class="table table-striped">
           <thead class="thead-inverse">
             <tr>

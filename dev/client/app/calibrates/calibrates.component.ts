@@ -4,7 +4,7 @@ import {EquipmentListComponent} from "./equipments/equipment-list.component";
 @Component({
   selector: 'calibrates',
   template:`
-    <h2>Calibrates App</h2>
+    <h2 class="text-lg-center">Calibrates App</h2>
     <hr>
     <calibrate-list></calibrate-list>
   `,

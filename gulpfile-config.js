@@ -66,7 +66,7 @@ var gulpConfig = function(){
 
     // server js files for nodemon
     serverJSfiles: [
-          './dev/server/**/*.js',
+          './dev/server/**/*',
           'app*.js',
           'bs-config.json'
     ],
@@ -76,7 +76,7 @@ var gulpConfig = function(){
           './public/dist/**/*.{img,png,jpg,jpeg,gif,ico,bmp}',
           './public/dist/*.bundle.js',
           './public/dist/assets/styles.css',
-          './dev/server/**/*',
+          './dev/server/views/*.hbs',
           './dev/client/**/*.{html,htm}'
           // './dev/_coffee/*.coffee'
       ],
