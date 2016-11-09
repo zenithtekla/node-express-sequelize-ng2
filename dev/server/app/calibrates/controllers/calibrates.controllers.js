@@ -51,11 +51,11 @@ module.exports = function(app){
     });
   };
 
-  route.getFile = function(req, res, next){
-    utils.findAFileMethod(req, res, next, function(result){
+/*  route.getFile = function(req, res, next){
+    utils.findOneMethod(req, res, next, function(result){
       return res.json(result);
     });
-  };
+  };*/
 
   route.createModel = (req, res, next) => utils.createLocation(req, res, next);
 

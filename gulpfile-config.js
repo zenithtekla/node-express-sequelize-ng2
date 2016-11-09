@@ -1,5 +1,6 @@
 'use strict';
-var appConfig = require('./app-config');
+var appConfig = require('./app-config'),
+  bsConfig    = require('./bs-config.json');
 
 var gulpConfig = function(){
   var config = {
@@ -93,7 +94,7 @@ var gulpConfig = function(){
 
         // open the proxied app in chrome
         // browser: ['google-chrome'],
-        files:  ["public/**/*.*"],
+        files: bsConfig.files,
         ui: {
           port: 3002
         }

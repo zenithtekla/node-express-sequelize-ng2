@@ -24,6 +24,5 @@ module.exports = function (app) {
     routeConfig.content.push(o);
   });
 
-  utils.exportJSON(routeConfig, config.projDir + '/routeConfig.json');
   utils.exportJSON(routeConfig.content, config.publicDir + '/json/routeConfig.json');
 };

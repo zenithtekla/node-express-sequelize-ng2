@@ -1,5 +1,5 @@
 {
-  "files": [],
+  "files": ["public/json/*.json"],
   "server": {
     "baseDir":                "./dev/client/",
     "routes": {

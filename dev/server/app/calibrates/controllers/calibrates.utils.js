@@ -19,7 +19,7 @@ module.exports  = function(db, env) {
         where: req.params,
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Attribute, attributes: ['file_id', 'file', 'filename', 'createdAt', 'updatedAt']},
+          { model: ECMS_Attribute, attributes: ['file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
           { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
@@ -28,33 +28,36 @@ module.exports  = function(db, env) {
     },
     findOneMethod: function (req, res, next, onSuccess, onError) {
       appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
-      ECMS_Equipment.findOne({
-        where: req.params,
-        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
-        include: [
-          { model: ECMS_Attribute, attributes: ['file_id', 'file', 'filename', 'createdAt', 'updatedAt']},
-          { model: ECMS_Location, attributes: ['desc']}
-        ]
-      }).then(function(result){
-        onSuccess(result);
-        // return null;
-      }).catch(function (err) {
-        if (onError)
-          onError();
 
-        res.status(422).send({message: errorHandler.getErrorMessage(err)});
-      });
-    },
-    findAFileMethod: function (req, res, next, onSuccess, onError) {
-      // appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
-      // https://github.com/sequelize/sequelize/issues/3944
-      ECMS_Equipment.findOne({
-        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
-        include: [
-          { model: ECMS_Attribute, attributes: ['asset_number', 'createdAt', 'file', 'filename', 'updatedAt'], where: { file_id: req.params.file_id }},
-          { model: ECMS_Location, attributes: ['desc']}
-        ]
-      }).then(function(result){
+      var equipment = {
+            attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
+            include: []
+      }
+        , attribute = {
+            model: ECMS_Attribute,
+            attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
+      }
+        , location = {
+            model: ECMS_Location, 
+            attributes: ['desc']
+      };
+
+      
+      if (_.has(req.params, 'location_id')) {
+        location.where = {id: req.params.location_id};
+        _.omit(req.params, 'location_id');
+      }
+      if (_.has(req.params, 'file_id')) {
+        attribute.where = {file_id: req.params.file_id};
+        _.omit(req.params, 'file_id');
+      }
+      if (_.has(req.params, 'asset_id') || _.has(req.params, 'asset_number') || _.has(req.params, 'model')) {
+        equipment.where = req.params;
+      }
+
+      equipment.include.push(attribute, location);
+
+      ECMS_Equipment.findOne(equipment).then(function(result){
         onSuccess(result);
         // return null;
       }).catch(function (err) {

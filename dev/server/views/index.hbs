@@ -25,7 +25,7 @@
 
   <script>
       System.import('./app/vendor.js')
-        .then(function(data){console.log(data);}, console.error.bind(console));
+        .then(function(vendor){console.log(vendor);}, console.error.bind(console));
 
       System.import('boot')
               .then(null, console.error.bind(console));

@@ -131,14 +131,6 @@ var utils = {
       }
     });
   },
-  // http://code.runnable.com/VbK5NWjuHQI-PLsX/find-delete-files-for-node-js-glob-and-fs
-  deleteFile: function (filePath, callback){
-    callback = callback || function(err){
-      if (err) throw err;
-      console.log(filePath + " deleted");
-    };
-    fs.unlink(filePath, callback);
-  },
 
   /**
    * Returns a random integer between min (inclusive) and max (inclusive)
@@ -165,6 +157,16 @@ utils.appendJSON = function (data, jsonFile, raw) {
       fileContent = JSON.parse(fileContent);
       utils.exportJSON(_.merge(data, fileContent),jsonFile);
     }
+  });
+};
+
+// http://code.runnable.com/VbK5NWjuHQI-PLsX/find-delete-files-for-node-js-glob-and-fs
+utils.deleteFile = function (filePath, callback){
+  utils.checkFile(filePath, function(){
+    fs.unlink(filePath, callback);
+    console.log(filePath + " deleted");
+  }, function(){
+    console.log(filePath + " none-existent");
   });
 };
 

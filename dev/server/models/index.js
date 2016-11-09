@@ -6,13 +6,25 @@ module.exports = function(app){
     _         = require('lodash'),
     Sequelize = require('sequelize'),
     epilogue  = require('epilogue'),
+    moment    = require('moment'),
     env       = process.env.NODE_ENV || 'development',
     config    = app.get('config'),
     utils     = require(config.utilsDir),
+    winston   = require(config.winston),
     dbPaths   = config.models(),
     db_config = require(path.resolve(config.serverConfigDir, 'db_configuration/', 'sql_connection.json'))[env],
-  /* sequelize for JS, similar to Hibernate (ORM) to Java, Entity to .NET */
-    sequelize = new Sequelize(db_config.database, db_config.user, db_config.password, db_config),
+    log       = {};
+
+  utils.deleteFile(config.projDir + '/sequelize.log');
+
+  db_config.logging = function(data){
+    log[moment(new Date().getTime()).format('YYYY-MM-DD-HH-mm-ss')] = data;
+    utils.appendFile(utils.JSONstringify(log), config.projDir + '/sequelize.log');
+  };
+
+  winston.info('Initializing Sequelize...');
+  /* sequelize for JS, similar to Hibernate (ORM) to Java, Entity to .NET, Doctrine|Eloquent to PHP */
+var sequelize = new Sequelize(db_config.database, db_config.user, db_config.password, db_config),
     db        = {};
 
 
@@ -53,5 +65,8 @@ module.exports = function(app){
 
   /*var obj = { key: 'value'};
   utils.appendJSON(obj, path.resolve(config.projDir, 'appConfig.json'));*/
+
+  winston.info("Finished Connecting to Database");
+
   return db;
 };

@@ -38,6 +38,8 @@ var initGlobalConfig = function(){
 
     // modules:         utils.getDirectories('modules'),
     utilsDir:           path.resolve(configurator.utils),
+    logger:             path.resolve(configurator.serverConfigDir, 'lib/', 'logger'),
+    winston:            path.resolve(configurator.serverConfigDir, 'lib/', 'winston'),
     // apps:            utils.getAppsDir(path.resolve(serverDir,'app')),
     serverApps: {
       name: 'app',

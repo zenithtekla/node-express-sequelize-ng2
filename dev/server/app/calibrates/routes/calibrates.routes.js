@@ -42,12 +42,12 @@ module.exports = function(app, endpoints){
     .delete(controller.deleteEquipment);*/
 
   app.route(points.equipments_files)
-    .get(controller.getFile)
+    .get(controller.getAnEquipmentBy)
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);
 
   app.route(points.file)
-    .get(controller.getFile);
+    .get(controller.getAnEquipmentBy);
 
   app.route(points.equipment)
     .get(controller.getEquipment)

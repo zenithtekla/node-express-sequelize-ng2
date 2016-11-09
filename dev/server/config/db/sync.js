@@ -7,14 +7,12 @@ module.exports  = function(app) {
   var db      = app.get('models'),
     path      = require('path'),
     config    = require(path.resolve('./app-config')),
-    appUtils  = require(config.utilsDir),
+    utils  = require(config.utilsDir),
     moment    = require('moment');
    /* rest = db.rest;
 
   // create RESTful endpoints in rest.js
   require('./rest')(db,rest);*/
-
-  appUtils.deleteFile(config.projDir + '/sequelize.log');
 
   db.sequelize.sync({ force: true , logging: log }).then(function (task) {
 
@@ -59,7 +57,7 @@ module.exports  = function(app) {
   function log(data){
     var obj   = {};
     obj[moment(new Date().getTime()).format('YYYY-MM-DD-HH-mm-ss')] = data;
-    appUtils.appendFile(appUtils.JSONstringify(obj), config.projDir + '/sequelize.log');
+    utils.appendFile(utils.JSONstringify(obj), config.projDir + '/sequelize.log');
   }
   // var productModel = mongoose.model('Product', {product: String, description: String});
   // var product = new productModel ({product: 'Toshiba', description: 'quality build'} );
