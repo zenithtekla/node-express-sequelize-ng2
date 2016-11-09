@@ -16,7 +16,7 @@ var request   = require('supertest'),
   // connect to your app
   express = require(config.site)
 ;
-console.log(process.cwd()+'app-config');
+// console.log(process.cwd()+'app-config');
 describe('my feature', function () {
   it('works', function () {
     assert.equal('A','A');

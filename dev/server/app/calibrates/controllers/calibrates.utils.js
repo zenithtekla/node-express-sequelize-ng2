@@ -14,7 +14,6 @@ module.exports  = function(db, env) {
   var utils = {
     createLocation: create_location,
     findAllMethod: function (req, res, next, callback) {
-      console.log(req.params);
       ECMS_Equipment.findAll({
         where: req.params,
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],

@@ -79,7 +79,7 @@ var utils = {
     fs.writeFile(outputFile, JSON.stringify(data, null, 4),
       function(err) {
         if(err) {
-          console.log(err);
+          console.log('ERROR ', err);
         } else {
           console.log('JSON saved to ' + outputFile);
         }
@@ -90,7 +90,7 @@ var utils = {
     fs.writeFile(outputFile, data,
       function(err) {
         if(err) {
-          console.log(err);
+          console.log('ERROR ', err);
         } else {
           console.log('Data saved to ' + outputFile);
         }
