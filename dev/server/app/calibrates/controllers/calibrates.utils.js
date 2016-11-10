@@ -28,33 +28,7 @@ module.exports  = function(db, env) {
     findOneMethod: function (req, res, next, onSuccess, onError) {
       appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
 
-      var equipment = {
-            attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
-            include: []
-      }
-        , attribute = {
-            model: ECMS_Attribute,
-            attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
-      }
-        , location = {
-            model: ECMS_Location,
-            attributes: ['desc']
-      };
-
-
-      if (_.has(req.params, 'location_id')) {
-        location.where = {id: req.params.location_id};
-        _.omit(req.params, 'location_id');
-      }
-      if (_.has(req.params, 'file_id')) {
-        attribute.where = {file_id: req.params.file_id};
-        _.omit(req.params, 'file_id');
-      }
-      if (_.has(req.params, 'asset_id') || _.has(req.params, 'asset_number') || _.has(req.params, 'model')) {
-        equipment.where = req.params;
-      }
-
-      equipment.include.push(attribute, location);
+      var equipment = association(req.params).equipment;
 
       ECMS_Equipment.findOne(equipment).then(function(result){
         onSuccess(result);
@@ -67,14 +41,62 @@ module.exports  = function(db, env) {
       });
     },
     deleteMethod: function(req,res,next){
-      ECMS_Equipment.deleteRecord({
-        cond: {where: req.params},
-        onError: _errorHandler,
-        onSuccess: () => res.json('model deleted!')
-      });
+      var cond = association(req.params).cond;
+      // console.log(cond);
+
+      if(_.has(cond.where, 'file_id')){
+        ECMS_Attribute.deleteRecord({
+          cond: cond,
+          onError: _errorHandler ,
+          onSuccess: () => res.json('file deleted!')
+        });
+
+        // what to do when an equipment has NO file after last deletion?
+
+      } else {
+        ECMS_Equipment.deleteRecord({
+          cond: cond ,
+          onError: _errorHandler ,
+          onSuccess: () => res.json('model deleted!')
+        });
+      } // invoke deletion on routing with location_id ?
     }
   };
 
+
+  function association(params) {
+    var equipment = {
+        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
+        include: []
+    }
+      , attribute = {
+        model: ECMS_Attribute,
+        attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
+    }
+      , location = {
+        model: ECMS_Location,
+        attributes: ['desc']
+    }
+      , cond = {
+
+    };
+
+
+    if (_.has(params, 'location_id')) {
+      cond.where = location.where = {id: params.location_id};
+      _.omit(params, 'location_id');
+    }
+    if (_.has(params, 'file_id')) {
+      cond.where = attribute.where = {file_id: params.file_id};
+      _.omit(params, 'file_id');
+    }
+    if (_.has(params, 'asset_id') || _.has(params, 'asset_number') || _.has(params, 'model')) {
+      cond.where = equipment.where = params;
+    }
+
+    equipment.include.push(attribute, location);
+    return {equipment: equipment, cond: cond};
+  }
 
   /* RELATIONSHIP:
    1:1 with source being the ECMS_Equipment and target being the ECMS_Location
@@ -226,6 +248,7 @@ module.exports  = function(db, env) {
 
       req.body.desc = req.body.desc || req.body.ECMS_Location.desc;
       req.body.file = req.body.file || req.body.ECMS_Attributes[0].file;
+      req.body.filename = req.body.filename || req.body.ECMS_Attributes[0].filename;
       req.body.schedule = req.body.schedule || result.dataValues.schedule;
 
       appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
