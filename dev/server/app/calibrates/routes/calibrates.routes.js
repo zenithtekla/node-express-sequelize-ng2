@@ -9,21 +9,22 @@ module.exports = function(app, endpoints){
   var controller  = require('../controllers/' + module_name + '.controllers')(app);
 
   var points = {
-    module_name: module_name,
-    equipments: '/equipments',
-    equipments_asset_number: '/equipments/:asset_id',
+    module_name:                  module_name,
+    equipments:                   '/equipments',
+    equipments_asset_number:      '/equipments/:asset_id',
     equipments_asset_number_file: '/equipments/:asset_id/:file_id',
-    equipments_files: '/equipments/files/:file_id',
 
-    equipment: '/equipment',
-    equipment_model: '/equipment/:model',
-    asset_number: '/asset_number/:asset_number',
-    table_equipment: '/table_equipment',
-    table_main: '/table_main',
-    table_location: '/table_location',
+    equipments_fileId:            '/equipments/files/:file_id',
+
+    equipment:                    '/equipment',
+    equipment_model:              '/equipment/:model',
+    asset_number:                 '/asset_number/:asset_number',
+    table_equipment:              '/table_equipment',
+    table_main:                   '/table_main',
+    table_location:               '/table_location',
     equipment_model_asset_number: '/equipment/:model/:asset_number',
-    location: '/location/:asset_id',
-    file: '/files/:file_id'
+    location:                     '/location/:asset_id',
+    file:                         '/files/:file_id'
   };
   endpoints.push(points);
 
@@ -41,7 +42,7 @@ module.exports = function(app, endpoints){
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);*/
 
-  app.route(points.equipments_files)
+  app.route(points.equipments_fileId)
     .get(controller.getAnEquipmentBy)
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);
