@@ -52,12 +52,6 @@ module.exports = function(app){
     });
   };
 
-/*  route.getFile = function(req, res, next){
-    utils.findOneMethod(req, res, next, function(result){
-      return res.json(result);
-    });
-  };*/
-
   route.createEquipment   = function(req, res, next){
     console.log('Display the params: ', req.body);
     if (req.params.model)
@@ -67,6 +61,12 @@ module.exports = function(app){
     utils.createLocation(req, res, next);
   };
 
+  route.createFiles       = function(req, res, next) {
+    utils.findOneMethod(req, res, next, function(result){
+      return utils.create_ECMS_attrs_entries(req.body, res, {asset_number : result.asset_number});
+    });
+  };
+
   route.upsertEquipment   = function (req, res, next) {
     if (req.body.model)
       req.params = {model: req.body.model};
@@ -74,12 +74,9 @@ module.exports = function(app){
     utils.upsertMethod(req, res, next);
   };
 
+  route.updateEquipment   = (req, res, next) => utils.updateMethod(req, res, next);
   route.createModel       = utils.createLocation;
-  route.updateEquipment   = utils.updateMethod;
-  route.deleteEquipment   = utils.deleteMethod;
-  route.deleteModel       = utils.deleteMethod;
-
-  function resolve(){}
+  route.deleteEquipment   = route.deleteModel = utils.deleteMethod;
 
   return route;
 };

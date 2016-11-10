@@ -66,7 +66,7 @@ var gulpConfig = function(){
 
     // server js files for nodemon
     serverJSfiles: [
-          './dev/server/**/*',
+          './dev/server/**/**/*.js',
           'app*.js',
           'bs-config.json'
     ],

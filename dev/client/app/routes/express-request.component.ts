@@ -12,8 +12,8 @@ import {ExpressRequestService} from "./express-request.service";
         <table class="table">
           <thead class="thead-inverse">
             <tr>
-              <th>Title</th>
-              <th>Route</th>
+              <th>Keys</th>
+              <th>Values</th>
             </tr>
           </thead>
           <tbody *ngFor="#item of items | keys">

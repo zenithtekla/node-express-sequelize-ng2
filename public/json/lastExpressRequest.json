@@ -1,6 +1,17 @@
 {
-    "body": {},
+    "body": {
+        "documents": [
+            {
+                "file": "Arhus01",
+                "filename": "arhus01"
+            },
+            {
+                "file": "Haggen02",
+                "filename": "haggen02"
+            }
+        ]
+    },
     "params": {
-        "asset_id": "10"
+        "asset_id": "11"
     }
 }

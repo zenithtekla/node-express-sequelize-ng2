@@ -9,11 +9,10 @@ import {EquipmentRestfulService} from "../services/restful.service";
     <table class="table table-striped table-bordered">
       <thead class="thead-inverse">
         <tr class="bg-info"> 
-          <th>Asset Id</th>
-          <th>Asset Number</th>
-          <th>Model</th>
-          <th>Location Id</th>
+          <th>(Asset Id | Location Id)</th>
           <th>Location</th>
+          <th>Asset Number</th>
+          <th>Model</th> 
           <th>Last Cal</th>
           <th>Schedule</th>
           <th>Next Cal</th>
@@ -25,10 +24,9 @@ import {EquipmentRestfulService} from "../services/restful.service";
       <tbody *ngFor="#calibrate of calibrates">
       <tr> 
         <td>{{calibrate.asset_id}}</td>
-        <td>{{calibrate.asset_number}}</td>
-        <td>{{calibrate.model}}</td>
-        <td>{{calibrate.ECMS_Location.id}}</td>
         <td>{{calibrate.ECMS_Location.desc}}</td>
+        <td>{{calibrate.asset_number}}</td>
+        <td>{{calibrate.model}}</td> 
         <td>{{calibrate.last_cal}}</td>
         <td>{{calibrate.schedule}}</td>
         <td>{{calibrate.next_cal}}</td>

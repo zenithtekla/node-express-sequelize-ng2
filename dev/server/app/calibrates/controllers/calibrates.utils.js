@@ -19,7 +19,7 @@ module.exports  = function(db, env) {
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
           { model: ECMS_Attribute, attributes: ['file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
-          { model: ECMS_Location, attributes: ['id', 'desc']}
+          { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
         callback(result);
@@ -57,7 +57,7 @@ module.exports  = function(db, env) {
         ECMS_Equipment.deleteRecord({
           cond: cond ,
           onError: _errorHandler ,
-          onSuccess: () => res.json('model deleted!')
+          onSuccess: () => res.json('equipment deleted!')
         });
       } // invoke deletion on routing with location_id ?
     }
@@ -195,6 +195,7 @@ module.exports  = function(db, env) {
     var records = [];
 
     if(_.has(req,'documents')){
+      if (req.documents.length)
       _.forEach(req.documents, function(document){
         document.asset_number = record.asset_number;
         var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
@@ -216,6 +217,7 @@ module.exports  = function(db, env) {
       }
     }
 
+    if(records.length)
     ECMS_Attribute.bulkRecords({
       records: records,
       onError: (err) => {
@@ -243,13 +245,13 @@ module.exports  = function(db, env) {
     utils.findOneMethod(req, res, next, onSuccess, onError);
 
     function onSuccess(result){
-      req.body.model = req.params.model || result.dataValues.model;
+      req.body.model        = req.params.model || result.dataValues.model;
       req.body.asset_number = req.params.asset_number || result.dataValues.asset_number;
 
-      req.body.desc = req.body.desc || req.body.ECMS_Location.desc;
-      req.body.file = req.body.file || req.body.ECMS_Attributes[0].file;
-      req.body.filename = req.body.filename || req.body.ECMS_Attributes[0].filename;
-      req.body.schedule = req.body.schedule || result.dataValues.schedule;
+      req.body.desc         = (_.has(req.body, 'ECMS_Location'))    ? req.body.ECMS_Location.desc           : req.body.desc;
+      req.body.file         = (_.has(req.body, 'ECMS_Attributes'))  ? req.body.ECMS_Attributes[0].file      : req.body.file;
+      req.body.filename     = (_.has(req.body, 'ECMS_Attributes'))  ? req.body.ECMS_Attributes[0].filename  : req.body.filename;
+      req.body.schedule     = req.body.schedule || result.dataValues.schedule;
 
       appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
       // SHOULD the location remain unchanged and unchangeable, give it req.body.desc = result.desc;
@@ -262,7 +264,7 @@ module.exports  = function(db, env) {
       });
 
       if (req.params.file_id)
-      if (req.body.file)
+      // if (req.body.file)
       ECMS_Attribute.updateRecord({
         newRecord: req.body,
         cond: { where: { asset_number: result.dataValues.asset_number, file_id: req.params.file_id}},
@@ -293,8 +295,8 @@ module.exports  = function(db, env) {
     res.status(422).send({message: errorHandler.getErrorMessage(err)});
   }
 
-  utils.updateMethod = updateMethod;
-  utils.upsertMethod = upsertMethod;
+  utils.updateMethod              = updateMethod;
+  utils.upsertMethod              = upsertMethod;
   utils.create_ECMS_attrs_entry   = create_ECMS_attrs_entry;
   utils.create_ECMS_attrs_entries = create_ECMS_attrs_entries;
 

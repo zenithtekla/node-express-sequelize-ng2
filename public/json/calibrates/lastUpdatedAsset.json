@@ -1,13 +1,17 @@
 {
-    "asset_id": 10,
-    "model": "brts7680",
-    "asset_number": "10880",
-    "last_cal": "2012-09-23T07:00:00.000Z",
-    "schedule": 21450,
-    "next_cal": "2013-09-23T07:00:00.000Z",
+    "asset_id": 6,
+    "model": "brts34",
+    "asset_number": "7",
+    "last_cal": "2012-08-22T07:00:00.000Z",
+    "schedule": 14260,
+    "next_cal": "2013-08-22T07:00:00.000Z",
     "ECMS_Attributes": [
         {
-            "file_id": 18,
+            "asset_number": "7",
+            "createdAt": "2016-11-10T20:29:17.000Z",
+            "file_id": 11,
+            "filename": "place_of_file11899",
+            "updatedAt": "2016-11-10T20:30:49.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
@@ -24,18 +28,17 @@
                     105,
                     108,
                     101,
-                    52,
-                    48,
-                    56
+                    49,
+                    49,
+                    56,
+                    57,
+                    57
                 ]
-            },
-            "filename": "place_of_file408",
-            "createdAt": "2016-11-01T16:40:36.000Z",
-            "updatedAt": "2016-11-01T16:40:36.000Z"
+            }
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [latitude 8275]",
-        "desc": "latitude 8275"
+        "getLocation": " - location: [London]",
+        "desc": "London"
     }
 }

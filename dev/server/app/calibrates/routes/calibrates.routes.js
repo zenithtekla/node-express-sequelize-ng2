@@ -12,13 +12,14 @@ module.exports = function(app, endpoints){
     module_name:                  module_name,
     equipments:                   '/equipments',
     equipments_asset_number:      '/equipments/:asset_id',
-    equipments_asset_number_file: '/equipments/:asset_id/:file_id',
+    // equipments_asset_number_file: '/equipments/:asset_id/:file_id',
 
     equipments_fileId:            '/equipments/files/:file_id',
 
     equipment:                    '/equipment',
     equipment_model:              '/equipment/:model',
     asset_number:                 '/asset_number/:asset_number',
+
     table_equipment:              '/table_equipment',
     table_main:                   '/table_main',
     table_location:               '/table_location',
@@ -31,7 +32,9 @@ module.exports = function(app, endpoints){
   app.route(points.equipments)
     .get(controller.getEquipment)
     .post(controller.createEquipment);
+
   app.route(points.equipments_asset_number)
+    .post(controller.createFiles)
     .get(controller.getAnEquipmentBy)
     .put(controller.updateEquipment)
     // .put(controller.upsertEquipment)
@@ -47,8 +50,13 @@ module.exports = function(app, endpoints){
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);
 
-  app.route(points.file)
-    .get(controller.getAnEquipmentBy);
+
+  /*
+
+   Additional RESTful end-points
+
+   */
+
 
   app.route(points.equipment)
     .get(controller.getEquipment)
@@ -80,10 +88,6 @@ module.exports = function(app, endpoints){
     // DELETE an Equipment based on model & asset_number, must delete its location
     .delete(controller.deleteEquipment);
 
-  /*
-   Additional RESTful end-points
-
-   */
   app.get(points.table_equipment, controller.equipment)
     .get(points.table_main, controller.main)
     .get(points.table_location, controller.location);
@@ -93,6 +97,9 @@ module.exports = function(app, endpoints){
 
   app.route(points.location)
     .get(controller.getEquipmentBy);
+
+  app.route(points.file)
+    .get(controller.getAnEquipmentBy);
 
   /*app.route('/tasks').all(/!* taskPolicy.isAllowed *!/)
    .get(controller.list)
