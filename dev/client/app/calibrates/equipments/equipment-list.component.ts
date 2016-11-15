@@ -31,12 +31,12 @@ import {EquipmentRestfulService} from "../services/restful.service";
         <td>{{calibrate.schedule}}</td>
         <td>{{calibrate.next_cal}}</td>
         <td>
-          <ul *ngFor="#file of calibrate.ECMS_Attributes">
+          <ul *ngFor="#file of calibrate.ECMS_Dossiers">
             <li>{{file.file_id}}</li>
           </ul>
         </td>
         <td>
-          <ul *ngFor="#file of calibrate.ECMS_Attributes">
+          <ul *ngFor="#file of calibrate.ECMS_Dossiers">
             <li>{{file.filename}}</li>
           </ul>
         </td>

@@ -1,35 +1,189 @@
 {
-    "asset_id": 10,
-    "model": "brts2380",
-    "asset_number": "8520",
-    "last_cal": "2012-09-23T07:00:00.000Z",
-    "schedule": 22446,
-    "next_cal": "2013-09-23T07:00:00.000Z",
+    "asset_id": 17,
+    "model": "brts34",
+    "asset_number": "10",
+    "last_cal": "2015-05-15T07:00:00.000Z",
+    "schedule": 7,
+    "next_cal": "2016-06-16T07:00:00.000Z",
     "ECMS_Attributes": [
         {
-            "asset_number": "8520",
-            "createdAt": "2016-11-15T17:53:36.000Z",
-            "file_id": 22,
-            "filename": "Finnair98",
-            "updatedAt": "2016-11-15T17:54:48.000Z",
+            "asset_number": "10",
+            "createdAt": "2016-11-15T20:35:52.000Z",
+            "file_id": 29,
+            "filename": "place_of_file216",
+            "updatedAt": "2016-11-15T20:35:52.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
-                    70,
-                    105,
-                    110,
-                    110,
+                    112,
+                    108,
                     97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
                     105,
-                    114,
-                    57,
+                    108,
+                    101,
+                    50,
+                    49,
+                    54
+                ]
+            }
+        },
+        {
+            "asset_number": "10",
+            "createdAt": "2016-11-15T20:35:52.000Z",
+            "file_id": 30,
+            "filename": "place_of_file21783",
+            "updatedAt": "2016-11-15T20:35:52.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    50,
+                    49,
+                    55,
+                    56,
+                    51
+                ]
+            }
+        },
+        {
+            "asset_number": "10",
+            "createdAt": "2016-11-15T20:35:52.000Z",
+            "file_id": 31,
+            "filename": "place_of_file13300",
+            "updatedAt": "2016-11-15T20:35:52.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    49,
+                    51,
+                    51,
+                    48,
+                    48
+                ]
+            }
+        },
+        {
+            "asset_number": "10",
+            "createdAt": "2016-11-15T20:35:52.000Z",
+            "file_id": 32,
+            "filename": "place_of_file4448",
+            "updatedAt": "2016-11-15T20:35:52.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    52,
+                    52,
+                    52,
                     56
+                ]
+            }
+        },
+        {
+            "asset_number": "10",
+            "createdAt": "2016-11-15T20:35:52.000Z",
+            "file_id": 33,
+            "filename": "place_of_file3025",
+            "updatedAt": "2016-11-15T20:35:52.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    51,
+                    48,
+                    50,
+                    53
+                ]
+            }
+        },
+        {
+            "asset_number": "10",
+            "createdAt": "2016-11-15T20:35:52.000Z",
+            "file_id": 34,
+            "filename": "place_of_file5985",
+            "updatedAt": "2016-11-15T20:35:52.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    53,
+                    57,
+                    56,
+                    53
                 ]
             }
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [latitude 1935]",
-        "desc": "latitude 1935"
+        "getLocation": " - location: [Copenhagen]",
+        "desc": "Copenhagen"
     }
 }

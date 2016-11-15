@@ -26,9 +26,9 @@ import {EquipmentRestfulService} from "../services/restful.service";
         <td>{{calibrate.asset_number}}</td>
         <td>{{calibrate.model}}</td>
         <td>{{calibrate.ECMS_Location.desc}}</td>
-        <td>{{calibrate.ECMS_Attributes[0].last_cal}}</td>
-        <td>{{calibrate.ECMS_Attributes[0].next_cal}}</td>
-        <td>{{calibrate.ECMS_Attributes[0].file}}</td>
+        <td>{{calibrate.ECMS_Dossiers[0].last_cal}}</td>
+        <td>{{calibrate.ECMS_Dossiers[0].next_cal}}</td>
+        <td>{{calibrate.ECMS_Dossiers[0].file}}</td>
       </tr>
       </tbody>
     </table>

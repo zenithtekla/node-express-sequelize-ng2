@@ -10,7 +10,7 @@ module.exports  = function(db) {
     util_method = require(path.resolve(config.serverAppDir, 'calibrates/controllers/calibrates.utils'))(db, 'seed');
 
   var ECMS_Location   = db.ECMS_Location,
-    ECMS_Attribute    = db.ECMS_Attribute,
+    ECMS_Dossier      = db.ECMS_Dossier,
     ECMS_Equipment    = db.ECMS_Equipment;
 
 
@@ -183,7 +183,7 @@ module.exports  = function(db) {
           }
         }
 
-        ECMS_Attribute.bulkCreate(cluster).then(function(records){
+        ECMS_Dossier.bulkCreate(cluster).then(function(records){
           result = _.extend(result, {bulkCreate: records});
 
           utils.appendFile(utils.JSONstringify(result), config.publicDir + '/json/calibrates/dataSeeds.log');

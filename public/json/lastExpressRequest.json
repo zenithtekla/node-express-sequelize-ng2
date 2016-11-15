@@ -1,18 +1,6 @@
 {
-    "body": {
-        "ECMS_Attributes": [
-            {
-                "file": "Finnair98",
-                "filename": "Finnair98"
-            }
-        ],
-        "model": "brts2380",
-        "asset_number": "8520",
-        "file": "Finnair98",
-        "filename": "Finnair98",
-        "schedule": 22446
-    },
+    "body": {},
     "params": {
-        "file_id": "22"
+        "asset_id": "17"
     }
 }

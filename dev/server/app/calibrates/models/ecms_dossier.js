@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-  var Schema = sequelize.define('ECMS_Attribute', {
+  var Schema = sequelize.define('ECMS_Dossier', {
       file_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
       filename: DataTypes.STRING(100)
     },
     {
-      tableName: 'ECMS_attrs_table',
+      tableName: 'ECMS_dossier_table',
       freezeTableName: true,
       charset: 'utf8',
       collate: 'utf8_unicode_ci',

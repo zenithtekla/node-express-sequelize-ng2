@@ -8,7 +8,7 @@ errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers'));
 module.exports  = function(db, env) {
   var _     = require('lodash'),
     ECMS_Equipment  = db.ECMS_Equipment,
-    ECMS_Attribute  = db.ECMS_Attribute,
+    ECMS_Dossier  = db.ECMS_Dossier,
     ECMS_Location   = db.ECMS_Location;
 
   var utils = {
@@ -18,7 +18,7 @@ module.exports  = function(db, env) {
         where: req.params,
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Attribute, attributes: ['file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
+          { model: ECMS_Dossier, attributes: ['file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
           { model: ECMS_Location, attributes: ['desc']}
         ]
       }).then(function(result){
@@ -45,7 +45,7 @@ module.exports  = function(db, env) {
       // console.log(cond);
 
       if(_.has(cond.where, 'file_id')){
-        ECMS_Attribute.deleteRecord({
+        ECMS_Dossier.deleteRecord({
           cond: cond,
           onError: _errorHandler ,
           onSuccess: () => res.json('file deleted!')
@@ -69,8 +69,8 @@ module.exports  = function(db, env) {
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: []
     }
-      , attribute = {
-        model: ECMS_Attribute,
+      , dossier = {
+        model: ECMS_Dossier,
         attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
     }
       , location = {
@@ -87,14 +87,14 @@ module.exports  = function(db, env) {
       _.omit(params, 'location_id');
     }
     if (_.has(params, 'file_id')) {
-      cond.where = attribute.where = {file_id: params.file_id};
+      cond.where = dossier.where = {file_id: params.file_id};
       _.omit(params, 'file_id');
     }
     if (_.has(params, 'asset_id') || _.has(params, 'asset_number') || _.has(params, 'model')) {
       cond.where = equipment.where = params;
     }
 
-    equipment.include.push(attribute, location);
+    equipment.include.push(dossier, location);
     return {equipment: equipment, cond: cond};
   }
 
@@ -102,12 +102,12 @@ module.exports  = function(db, env) {
    1:1 with source being the ECMS_Equipment and target being the ECMS_Location
    ECMS_Equipment is a child to ECMS_Location parent.
    1:m with source being the ECMS_Atrribute and target being the ECMS_Equipment.
-   ECMS_Attribute are children to ECMS_Equipment parent.
+   ECMS_Dossier are children to ECMS_Equipment parent.
 
-   ECMS_Location --(1:1)--> ECMS_Equipment --(1:m)--> EMCS_Attribute
+   ECMS_Location --(1:1)--> ECMS_Equipment --(1:m)--> EMCS_Dossiers
 
    Creation of an entry in ECMS_equipment_table requires foreign key asset_id (an entry in ECMS_Location_table must pre-exist)
-   Creation of an entry in ECMS_attribute_table requires foreign key asset_number (an entry in ECMS_Equipment_table must pre-exist)
+   Creation of an entry in ECMS_dossier_table requires foreign key asset_number (an entry in ECMS_Equipment_table must pre-exist)
 
    => It makes sense to have a location created first.
 
@@ -173,7 +173,7 @@ module.exports  = function(db, env) {
       }];
     }
 
-    ECMS_Attribute.createRecord({
+    ECMS_Dossier.createRecord({
       newRecord: {
         asset_number: record.asset_number,
         file: req.documents[0].file || file,
@@ -218,7 +218,7 @@ module.exports  = function(db, env) {
     }
 
     if(records.length)
-    ECMS_Attribute.bulkRecords({
+    ECMS_Dossier.bulkRecords({
       records: records,
       onError: (err) => {
         if (env !=='seed' && res) _errorHandler(err);
@@ -230,7 +230,7 @@ module.exports  = function(db, env) {
       }
     });
 
-   /* ECMS_Attribute.bulkCreate(records).then(function(rec){
+   /* ECMS_Dossier.bulkCreate(records).then(function(rec){
       appUtils.appendFile(appUtils.JSONstringify({bulkCreate: rec}), config.publicDir + '/json/calibrates/dataSeeds.log');
     }).catch(err => console.dir(err));*/
 
@@ -249,8 +249,8 @@ module.exports  = function(db, env) {
       req.body.asset_number = result.dataValues.asset_number || req.params.asset_number;
 
       req.body.desc         = (_.has(req.body, 'ECMS_Location'))    ? req.body.ECMS_Location.desc           : req.body.desc;
-      req.body.file         = (_.has(req.body, 'ECMS_Attributes'))  ? req.body.ECMS_Attributes[0].file      : req.body.file;
-      req.body.filename     = (_.has(req.body, 'ECMS_Attributes'))  ? req.body.ECMS_Attributes[0].filename  : req.body.filename;
+      req.body.file         = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].file      : req.body.file;
+      req.body.filename     = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].filename  : req.body.filename;
       req.body.schedule     = req.body.schedule || result.dataValues.schedule;
 
       appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
@@ -265,7 +265,7 @@ module.exports  = function(db, env) {
 
       if (req.params.file_id)
       // if (req.body.file)
-      ECMS_Attribute.updateRecord({
+      ECMS_Dossier.updateRecord({
         newRecord: req.body,
         cond: { where: { asset_number: req.body.asset_number, file_id: req.params.file_id}},
         onError: _errorHandler,

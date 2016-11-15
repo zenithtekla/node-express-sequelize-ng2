@@ -44,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
           // by default, will reference to targetKey of primary id in the Location table
           // belongsTo - foreignKey sits on the source table: which is this Schema
           Schema.belongsTo(models.ECMS_Location, { foreignKey: 'asset_id', targetKey: 'id', onDelete: 'CASCADE' } );
-          Schema.hasMany(models.ECMS_Attribute, { foreignKey: 'asset_number', onDelete: 'CASCADE'});
+          Schema.hasMany(models.ECMS_Dossier, { foreignKey: 'asset_number', onDelete: 'CASCADE'});
         }
       }
     });

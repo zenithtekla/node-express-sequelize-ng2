@@ -8,7 +8,7 @@ module.exports = function(app){
     db = app.get('models'),
     utils           = require('./calibrates.utils')(db, env),
     ECMS_Equipment  = db.ECMS_Equipment,
-    ECMS_Attribute  = db.ECMS_Attribute,
+    ECMS_Dossier  = db.ECMS_Dossier,
     ECMS_Location   = db.ECMS_Location;
 
   /* initial dumps from tables */
@@ -19,7 +19,7 @@ module.exports = function(app){
     });
   };
   route.main              = function (req, res, next) {
-    ECMS_Attribute.findAll().then(function(mains){
+    ECMS_Dossier.findAll().then(function(mains){
       res.json(mains);
     });
   };
