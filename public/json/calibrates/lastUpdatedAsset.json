@@ -1,44 +1,35 @@
 {
-    "asset_id": 6,
-    "model": "brts34",
-    "asset_number": "7",
-    "last_cal": "2012-08-22T07:00:00.000Z",
-    "schedule": 14260,
-    "next_cal": "2013-08-22T07:00:00.000Z",
+    "asset_id": 10,
+    "model": "brts2380",
+    "asset_number": "8520",
+    "last_cal": "2012-09-23T07:00:00.000Z",
+    "schedule": 22446,
+    "next_cal": "2013-09-23T07:00:00.000Z",
     "ECMS_Attributes": [
         {
-            "asset_number": "7",
-            "createdAt": "2016-11-10T20:29:17.000Z",
-            "file_id": 11,
-            "filename": "place_of_file11899",
-            "updatedAt": "2016-11-10T20:30:49.000Z",
+            "asset_number": "8520",
+            "createdAt": "2016-11-15T17:53:36.000Z",
+            "file_id": 22,
+            "filename": "Finnair98",
+            "updatedAt": "2016-11-15T17:54:48.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    95,
-                    111,
-                    102,
-                    95,
-                    102,
+                    70,
                     105,
-                    108,
-                    101,
-                    49,
-                    49,
-                    56,
+                    110,
+                    110,
+                    97,
+                    105,
+                    114,
                     57,
-                    57
+                    56
                 ]
             }
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [London]",
-        "desc": "London"
+        "getLocation": " - location: [latitude 1935]",
+        "desc": "latitude 1935"
     }
 }

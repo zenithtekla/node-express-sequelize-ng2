@@ -246,7 +246,7 @@ module.exports  = function(db, env) {
 
     function onSuccess(result){
       req.body.model        = req.params.model || result.dataValues.model;
-      req.body.asset_number = req.params.asset_number || result.dataValues.asset_number;
+      req.body.asset_number = result.dataValues.asset_number || req.params.asset_number;
 
       req.body.desc         = (_.has(req.body, 'ECMS_Location'))    ? req.body.ECMS_Location.desc           : req.body.desc;
       req.body.file         = (_.has(req.body, 'ECMS_Attributes'))  ? req.body.ECMS_Attributes[0].file      : req.body.file;
@@ -267,7 +267,7 @@ module.exports  = function(db, env) {
       // if (req.body.file)
       ECMS_Attribute.updateRecord({
         newRecord: req.body,
-        cond: { where: { asset_number: result.dataValues.asset_number, file_id: req.params.file_id}},
+        cond: { where: { asset_number: req.body.asset_number, file_id: req.params.file_id}},
         onError: _errorHandler,
         onSuccess: __successHandler
       });

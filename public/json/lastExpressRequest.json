@@ -1,17 +1,18 @@
 {
     "body": {
-        "documents": [
+        "ECMS_Attributes": [
             {
-                "file": "Arhus01",
-                "filename": "arhus01"
-            },
-            {
-                "file": "Haggen02",
-                "filename": "haggen02"
+                "file": "Finnair98",
+                "filename": "Finnair98"
             }
-        ]
+        ],
+        "model": "brts2380",
+        "asset_number": "8520",
+        "file": "Finnair98",
+        "filename": "Finnair98",
+        "schedule": 22446
     },
     "params": {
-        "asset_id": "11"
+        "file_id": "22"
     }
 }

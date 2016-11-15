@@ -14,7 +14,7 @@ module.exports = function(app, endpoints){
     equipments_asset_number:      '/equipments/:asset_id',
     // equipments_asset_number_file: '/equipments/:asset_id/:file_id',
 
-    equipments_fileId:            '/equipments/files/:file_id',
+    equipments_file_id:            '/equipments/files/:file_id',
 
     equipment:                    '/equipment',
     equipment_model:              '/equipment/:model',
@@ -45,7 +45,7 @@ module.exports = function(app, endpoints){
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);*/
 
-  app.route(points.equipments_fileId)
+  app.route(points.equipments_file_id)
     .get(controller.getAnEquipmentBy)
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);

@@ -6,7 +6,7 @@
                 "module_name": "calibrates",
                 "equipments": "/equipments",
                 "equipments_asset_number": "/equipments/:asset_id",
-                "equipments_fileId": "/equipments/files/:file_id",
+                "equipments_file_id": "/equipments/files/:file_id",
                 "equipment": "/equipment",
                 "equipment_model": "/equipment/:model",
                 "asset_number": "/asset_number/:asset_number",
