@@ -28,10 +28,10 @@ module.exports  = function(db, env) {
     findOneMethod: function (req, res, next, onSuccess, onError) {
       appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
 
-      var equipment = association(req.params).equipment;
+      var equipment = association(req).equipment; // adding req.filter
 
       ECMS_Equipment.findOne(equipment).then(function(result){
-        onSuccess(result);
+        onSuccess(result.dataValues);
         // return null;
       }).catch(function (err) {
         if (onError)
@@ -41,7 +41,7 @@ module.exports  = function(db, env) {
       });
     },
     deleteMethod: function(req,res,next){
-      var cond = association(req.params).cond;
+      var cond = association(req).cond;
       // console.log(cond);
 
       if(_.has(cond.where, 'file_id')){
@@ -64,10 +64,11 @@ module.exports  = function(db, env) {
   };
 
 
-  function association(params) {
-    var equipment = {
-        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
-        include: []
+  function association(req) {
+    var params = req.params
+      , equipment = {
+      attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
+      include: []
     }
       , dossier = {
         model: ECMS_Dossier,
@@ -79,14 +80,15 @@ module.exports  = function(db, env) {
     }
       , cond = {
 
-    };
-
+    }, where, filter = _.get(req, 'filter'); // attempt to have filter support for orderBy: [], limit: 1 ..
 
     if (_.has(params, 'location_id')) {
-      cond.where = location.where = {id: params.location_id};
+      where = {id: params.location_id};
+      cond.where = location.where = where;
       _.omit(params, 'location_id');
     }
     if (_.has(params, 'file_id')) {
+      where = {file_id: params.file_id};
       cond.where = dossier.where = {file_id: params.file_id};
       _.omit(params, 'file_id');
     }
@@ -247,20 +249,20 @@ module.exports  = function(db, env) {
     utils.findOneMethod(req, res, next, onSuccess, onError);
 
     function onSuccess(result){
-      req.body.model        = req.params.model || result.dataValues.model;
-      req.body.asset_number = result.dataValues.asset_number || req.params.asset_number;
+      req.body.model        = req.params.model || result.model;
+      req.body.asset_number = result.asset_number || req.params.asset_number;
 
       req.body.desc         = (_.has(req.body, 'ECMS_Location'))  ? req.body.ECMS_Location.desc         : req.body.desc;
       req.body.file         = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].file      : req.body.file;
       req.body.filename     = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].filename  : req.body.filename;
-      req.body.schedule     = req.body.schedule || result.dataValues.schedule;
+      req.body.schedule     = req.body.schedule || result.schedule;
 
-      appUtils.exportJSON({body: req.body, dataValues: result.dataValues, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
+      appUtils.exportJSON({body: req.body, dataValues: result, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
       // SHOULD the location remain unchanged and unchangeable, give it req.body.desc = result.desc;
       if (req.body.desc)
       ECMS_Location.updateRecord({
         newRecord: req.body,
-        cond: { where: {id: result.dataValues.asset_id}},
+        cond: { where: {id: result.asset_id}},
         onError: _errorHandler,
         onSuccess: __successHandler
       });
@@ -276,8 +278,8 @@ module.exports  = function(db, env) {
 
       function __successHandler() {
         utils.findOneMethod(req, res, next, function(result){
-          appUtils.exportJSON(result.dataValues, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
-          res.json(result.dataValues);
+          appUtils.exportJSON(result, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
+          res.json(result);
         });
       }
     }
@@ -297,8 +299,8 @@ module.exports  = function(db, env) {
     res.status(422).send({message: errorHandler.getErrorMessage(err)});
   }
 
-  utils.updateMethod              = updateMethod;
-  utils.upsertMethod              = upsertMethod;
+  utils.updateMethod                = updateMethod;
+  utils.upsertMethod                = upsertMethod;
   utils.create_ECMS_dossier_entry   = create_ECMS_dossier_entry;
   utils.create_ECMS_dossier_entries = create_ECMS_dossier_entries;
 

@@ -339,8 +339,8 @@ gulp.task('nodemon', function (cb) {
   return nodemon(config.nodemonOptions)
     .on('start', function () {
       if (!started) {
-        cb();
         started = true;
+        cb();        
       }
       // console.log('Restarting server ...');
     })

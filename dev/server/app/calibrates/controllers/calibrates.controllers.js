@@ -1,7 +1,8 @@
 'use strict';
 
 var env         = process.env.NODE_ENV || 'development',
-    moment      = require('moment');
+    moment      = require('moment'),
+    _           = require('lodash');
 
 module.exports = function(app){
   var route = {},
@@ -33,27 +34,34 @@ module.exports = function(app){
    Business logic
    */
 
-  route.getEquipment      = function(req,res, next) {
+  route.getEquipments      = function(req,res, next) {
     utils.findAllMethod(req, res, next, function(records){
       // res.json({env: env, moment: moment, calibrates: records});
       res.json(records);
     });
   };
 
-  route.getEquipmentBy    = function(req,res, next) {
+  route.getEquipmentsBy    = function(req,res, next) {
     utils.findAllMethod(req, res, next, function(result){
       res.json(result);
     });
   };
 
-  route.getAnEquipmentBy  = function(req,res, next) {
+  route.getOneEquipment  = function(req,res, next) {
     utils.findOneMethod(req, res, next, function(result){
+      if (_(result).chain().get('ECMS_Dossiers').size().value()){
+        result.ECMS_Dossiers = _.orderBy(result.ECMS_Dossiers, ['time_field'], ['desc']);
+      }
+
       return res.json(result);
     });
   };
 
   route.getLastDossier  = function(req,res, next) {
     utils.findOneMethod(req, res, next, function(result){
+      if (_(result).chain().get('ECMS_Dossiers').size().value()){
+        result.ECMS_Dossiers = _.take(_.orderBy(result.ECMS_Dossiers, ['time_field'], ['desc']),1);
+      }
       return res.json(result);
     });
   };

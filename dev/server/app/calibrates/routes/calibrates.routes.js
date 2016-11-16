@@ -31,23 +31,23 @@ module.exports = function(app, endpoints){
   endpoints.push(points);
 
   app.route(points.equipments)
-    .get(controller.getEquipment)
+    .get(controller.getEquipments)
     .post(controller.createEquipment);
 
   app.route(points.equipments_asset_number)
     .post(controller.createFiles)
-    .get(controller.getAnEquipmentBy)
+    .get(controller.getOneEquipment)
     .put(controller.updateEquipment)
     // .put(controller.upsertEquipment)
     .delete(controller.deleteEquipment);
 
 /*  app.route(points.equipments_asset_number_file)
-    .get(controller.getAnEquipmentBy)
+    .get(controller.getOneEquipment)
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);*/
 
   app.route(points.equipments_file_id)
-    .get(controller.getAnEquipmentBy)
+    .get(controller.getOneEquipment)
     .put(controller.updateEquipment)
     .delete(controller.deleteEquipment);
 
@@ -61,12 +61,12 @@ module.exports = function(app, endpoints){
 
 
   app.route(points.equipment)
-    .get(controller.getEquipment)
+    .get(controller.getEquipments)
     // create the entire new model of equipments.
     .post(controller.createModel);
 
   app.route(points.equipment_model)
-    .get(controller.getEquipmentBy)
+    .get(controller.getEquipmentsBy)
 
     // CREATE an Equipment based on model, literally adds another asset_number to that existing model
     // and also add file, location, last_cal, schedule, ...)
@@ -80,7 +80,7 @@ module.exports = function(app, endpoints){
     .delete(controller.deleteModel)
   ;
   app.route(points.asset_number)
-    .get(controller.getEquipmentBy)
+    .get(controller.getEquipmentsBy)
 
     // UPDATE: update an Equipment by its specific asset_number
     // allow update of the following fiels: file, schedule for next_cal, location (if necessary,
@@ -95,13 +95,13 @@ module.exports = function(app, endpoints){
     .get(points.table_location, controller.location);
 
   app.route(points.equipment_model_asset_number)
-    .get(controller.getEquipmentBy);
+    .get(controller.getEquipmentsBy);
 
   app.route(points.location)
-    .get(controller.getEquipmentBy);
+    .get(controller.getEquipmentsBy);
 
   app.route(points.file)
-    .get(controller.getAnEquipmentBy);
+    .get(controller.getOneEquipment);
 
   /*app.route('/tasks').all(/!* taskPolicy.isAllowed *!/)
    .get(controller.list)
