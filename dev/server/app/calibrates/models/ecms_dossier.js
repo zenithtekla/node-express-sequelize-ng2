@@ -9,7 +9,8 @@ module.exports = function(sequelize, DataTypes) {
         autoIncrement: true
       },
       file: DataTypes.BLOB(),
-      filename: DataTypes.STRING(100)
+      filename: DataTypes.STRING(100),
+      time_field: DataTypes.DATE()
     },
     {
       tableName: 'ECMS_dossier_table',

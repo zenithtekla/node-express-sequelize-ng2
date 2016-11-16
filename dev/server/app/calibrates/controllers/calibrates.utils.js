@@ -71,7 +71,7 @@ module.exports  = function(db, env) {
     }
       , dossier = {
         model: ECMS_Dossier,
-        attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
+        attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file', 'time_field']
     }
       , location = {
         model: ECMS_Location,
@@ -112,7 +112,7 @@ module.exports  = function(db, env) {
    => It makes sense to have a location created first.
 
    Functional programming (NO to callback hell):
-   the createEquipment method: create_location => create_equipment => create_ECMS_attrs_entry
+   the createEquipment method: create_location => create_equipment => create_ECMS_dossier_entry
    */
 
   function create_location(req, res, next){
@@ -158,12 +158,12 @@ module.exports  = function(db, env) {
         // else console.log(err);
       },
       onSuccess:(record)=> {
-        create_ECMS_attrs_entries(req, res, record.dataValues);
+        create_ECMS_dossier_entries(req, res, record.dataValues);
       }
     });
   }
 
-  function create_ECMS_attrs_entry(req, res, record){
+  function create_ECMS_dossier_entry(req, res, record){
     var file = 'file_placeholder' + (_.random(1,200)*_.random(1,200)).toString();
 
     if(!_.has(req,'documents')){
@@ -191,7 +191,7 @@ module.exports  = function(db, env) {
     });
   }
 
-  function create_ECMS_attrs_entries(req, res, record){
+  function create_ECMS_dossier_entries(req, res, record){
     var records = [];
 
     if(_.has(req,'documents')){
@@ -201,6 +201,7 @@ module.exports  = function(db, env) {
         var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
         document.file = document.file || file_attr;
         document.filename = document.filename || file_attr;
+        document.time_field = new Date(_.random(2200000000000,2300000000000));
         records.push(document);
       });
     } else {
@@ -212,7 +213,8 @@ module.exports  = function(db, env) {
         records.push({
           asset_number: record.asset_number,
           file: file_attr,
-          filename: file_attr
+          filename: file_attr,
+          time_field: new Date(_.random(2200000000000,2300000000000))
         });
       }
     }
@@ -248,7 +250,7 @@ module.exports  = function(db, env) {
       req.body.model        = req.params.model || result.dataValues.model;
       req.body.asset_number = result.dataValues.asset_number || req.params.asset_number;
 
-      req.body.desc         = (_.has(req.body, 'ECMS_Location'))    ? req.body.ECMS_Location.desc           : req.body.desc;
+      req.body.desc         = (_.has(req.body, 'ECMS_Location'))  ? req.body.ECMS_Location.desc         : req.body.desc;
       req.body.file         = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].file      : req.body.file;
       req.body.filename     = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].filename  : req.body.filename;
       req.body.schedule     = req.body.schedule || result.dataValues.schedule;
@@ -297,8 +299,8 @@ module.exports  = function(db, env) {
 
   utils.updateMethod              = updateMethod;
   utils.upsertMethod              = upsertMethod;
-  utils.create_ECMS_attrs_entry   = create_ECMS_attrs_entry;
-  utils.create_ECMS_attrs_entries = create_ECMS_attrs_entries;
+  utils.create_ECMS_dossier_entry   = create_ECMS_dossier_entry;
+  utils.create_ECMS_dossier_entries = create_ECMS_dossier_entries;
 
   return utils;
 };

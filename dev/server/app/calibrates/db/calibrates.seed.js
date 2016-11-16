@@ -154,9 +154,9 @@ module.exports  = function(db) {
         asset_id: record.dataValues.id,
         model: o.model,
         asset_number: o.asset_number,
-        last_cal: new Date(o.last_cal || '2015/01/11'),
+        last_cal: new Date(o.last_cal || _.random(2200000000000,2300000000000)),
         schedule:o.schedule || 7,
-        next_cal: new Date(o.next_cal || '2016/09/19')
+        next_cal: new Date(o.next_cal || _.random(2200000000000,2300000000000))
       }).then(function(record){
         result = _.extend(result, record.dataValues);
         var cluster = [];
@@ -164,9 +164,10 @@ module.exports  = function(db) {
         if(_.has(o,'documents')){
           _.forEach(o.documents, function(document){
             document.asset_number = record.dataValues.asset_number;
-            var file_attr = 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString();
-            document.file = document.file || file_attr;
-            document.filename = document.filename || file_attr;
+            var file_attr         = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
+            document.file         = document.file || file_attr;
+            document.filename     = document.filename || file_attr;
+            document.time_field   = document.time_field || new Date(_.random(2200000000000,2300000000000));
             cluster.push(document);
           });
         } else {
@@ -174,11 +175,12 @@ module.exports  = function(db) {
           var quantity = o.file_quantity || 2;
 
           for (var i=0;i<quantity;i++){
-            var file_attr = 'place_of_file' + (utils.getRandomInt(1,200)*utils.getRandomInt(1,200)).toString();
+            var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
             cluster.push({
               asset_number: record.dataValues.asset_number,
               file: o.file || file_attr,
-              filename: o.filename || file_attr
+              filename: o.filename || file_attr,
+              time_field: new Date(_.random(2200000000000,2300000000000))
             });
           }
         }
