@@ -42,12 +42,12 @@ module.exports = function(app){
   };
 
   route.getEquipmentsBy    = function(req,res, next) {
-    utils.findAllMethod(req, res, next, function(result){
-      res.json(result);
+    utils.findAllMethod(req, res, next, function(records){
+      res.json(records);
     });
   };
 
-  route.getOneEquipment  = function(req,res, next) {
+  route.getOneEquipment    = function(req,res, next) {
     utils.findOneMethod(req, res, next, function(result){
       if (_(result).chain().get('ECMS_Dossiers').size().value()){
         result.ECMS_Dossiers = _.orderBy(result.ECMS_Dossiers, ['time_field'], ['desc']);
@@ -57,10 +57,14 @@ module.exports = function(app){
     });
   };
 
-  route.getLastDossier  = function(req,res, next) {
+  route.getLastDossier    = function(req,res, next) {
+    // utils.getlastDossierEagerLoading(req, res, next);
+    // utils.getLastDossierSequential(req, res, next);
+
     utils.findOneMethod(req, res, next, function(result){
       if (_(result).chain().get('ECMS_Dossiers').size().value()){
-        result.ECMS_Dossiers = _.take(_.orderBy(result.ECMS_Dossiers, ['time_field'], ['desc']),1);
+        // result.ECMS_Dossiers = _.take(_.orderBy(result.ECMS_Dossiers, ['time_field'], ['desc']),1); // without order in fineOneMethod
+        result.ECMS_Dossiers = _.take(result.ECMS_Dossiers,1); // with order in the method
       }
       return res.json(result);
     });

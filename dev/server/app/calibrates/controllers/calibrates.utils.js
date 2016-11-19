@@ -18,17 +18,17 @@ module.exports  = function(db, env) {
         where: req.params,
         attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
         include: [
-          { model: ECMS_Dossier, attributes: ['file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
+          { model: ECMS_Dossier, attributes: ['time_field', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
           { model: ECMS_Location, attributes: ['desc']}
-        ]
+        ],
+        order: [ [{model:ECMS_Dossier}, 'updatedAt', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
       }).then(function(result){
         callback(result);
       }).catch(_errorHandler);
     },
     findOneMethod: function (req, res, next, onSuccess, onError) {
-      appUtils.exportJSON({body: req.body, params: req.params}, config.publicDir + '/json/lastExpressRequest.json');
 
-      var equipment = association(req).equipment; // adding req.filter
+      var equipment = association(req).equipment;
 
       ECMS_Equipment.findOne(equipment).then(function(result){
         onSuccess(result.dataValues);
@@ -72,7 +72,7 @@ module.exports  = function(db, env) {
     }
       , dossier = {
         model: ECMS_Dossier,
-        attributes: ['asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file', 'time_field']
+        attributes: ['time_field', 'asset_number', 'createdAt', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']
     }
       , location = {
         model: ECMS_Location,
@@ -80,23 +80,24 @@ module.exports  = function(db, env) {
     }
       , cond = {
 
-    }, where, filter = _.get(req, 'filter'); // attempt to have filter support for orderBy: [], limit: 1 ..
+    }, filter = _.get(req, 'filter'); // attempt to have filter support for orderBy: [], limit: 1 ..
 
     if (_.has(params, 'location_id')) {
-      where = {id: params.location_id};
-      cond.where = location.where = where;
+      cond.where = location.where = {id: params.location_id};
       _.omit(params, 'location_id');
     }
     if (_.has(params, 'file_id')) {
-      where = {file_id: params.file_id};
       cond.where = dossier.where = {file_id: params.file_id};
       _.omit(params, 'file_id');
     }
     if (_.has(params, 'asset_id') || _.has(params, 'asset_number') || _.has(params, 'model')) {
       cond.where = equipment.where = params;
+      equipment.order = [ [{model:ECMS_Dossier}, 'updatedAt', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
     }
 
     equipment.include.push(dossier, location);
+
+    appUtils.exportJSON({body: req.body, params: req.params, filter: req.filter, cond: cond}, config.publicDir + '/json/lastExpressRequest.json');
     return {equipment: equipment, cond: cond};
   }
 
@@ -179,7 +180,8 @@ module.exports  = function(db, env) {
       newRecord: {
         asset_number: record.asset_number,
         file: req.documents[0].file || file,
-        filename: req.documents[0].filename || file
+        filename: req.documents[0].filename || file,
+        time_field: req.documents[0].time_field || new Date(_.random(2200000000000,2300000000000))
       },
       onError: (err) => {
         if (env !=='seed' && res) _errorHandler(err);
@@ -203,7 +205,7 @@ module.exports  = function(db, env) {
         var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
         document.file = document.file || file_attr;
         document.filename = document.filename || file_attr;
-        document.time_field = new Date(_.random(2200000000000,2300000000000));
+        document.time_field = document.time_field || new Date(_.random(2200000000000,2300000000000));
         records.push(document);
       });
     } else {
@@ -295,6 +297,45 @@ module.exports  = function(db, env) {
     }
   };
 
+  function getLastDossierSequential(req, res, next){
+    ECMS_Equipment.findOne({
+      where: req.params,
+      attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
+      include: [
+        { model: ECMS_Location, attributes: ['desc']}
+      ]
+    }).then(function(result){
+      var record = result.dataValues;
+      ECMS_Dossier.findAll({
+        where: {asset_number: record.asset_number},
+        attributes: ['time_field', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file'],
+        limit: 1,
+        order: [ ['time_field', 'DESC'] ]
+      }).then(function(result){
+        record.ECMS_Dossiers = _.has(result, 'dataValues') ? result.dataValues : result;
+        res.json(record);
+      }).catch(_errorHandler);
+    }).catch(_errorHandler);
+  }
+
+  function getlastDossierEagerLoading(req, res, next){
+    ECMS_Equipment.findOne({
+      where: req.params,
+      attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
+      include: [
+        { model: ECMS_Dossier, attributes: ['time_field', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']/*, limit: 1, separate: false*/}
+      ],
+      order: [ [ ECMS_Dossier.sequelize.col('ecms_dossier_table.time_field'), 'DESC'] ]
+      // order: [ [ ECMS_Dossier, ECMS_Dossier.sequelize.col('time_field'), 'DESC'] ]
+      // order: [ [ ECMS_Dossier, 'time_field', 'DESC'] ]
+
+      // limit: [ [ECMS_Dossier, 1] ], problem is the limit option does not support on associated model, resort to include.seperate?
+      // order: [ ['ECMS_Dossiers.time_field', 'DESC'] ] // orderBy is fine.
+    }/*, {subQuery: false}*/).then(function(result){
+      res.json(result);
+    }).catch(function(err){res.json(err);});
+  }
+
   function _errorHandler(err) {
     res.status(422).send({message: errorHandler.getErrorMessage(err)});
   }
@@ -303,6 +344,8 @@ module.exports  = function(db, env) {
   utils.upsertMethod                = upsertMethod;
   utils.create_ECMS_dossier_entry   = create_ECMS_dossier_entry;
   utils.create_ECMS_dossier_entries = create_ECMS_dossier_entries;
+  utils.getLastDossierSequential    = getLastDossierSequential;
+  utils.getlastDossierEagerLoading  = getlastDossierEagerLoading;
 
   return utils;
 };

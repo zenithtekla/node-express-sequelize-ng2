@@ -2,5 +2,10 @@
     "body": {},
     "params": {
         "asset_id": "19"
+    },
+    "cond": {
+        "where": {
+            "asset_id": "19"
+        }
     }
 }

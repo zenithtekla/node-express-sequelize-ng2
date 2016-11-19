@@ -1,123 +1,42 @@
 {
-    "asset_id": 10,
-    "model": "brts2520",
-    "asset_number": "20933",
-    "last_cal": "2012-09-23T07:00:00.000Z",
-    "schedule": 4386,
-    "next_cal": "2013-09-23T07:00:00.000Z",
+    "asset_id": 1,
+    "model": "brts31",
+    "asset_number": "1",
+    "last_cal": "2012-08-22T07:00:00.000Z",
+    "schedule": 4320,
+    "next_cal": "2013-08-22T07:00:00.000Z",
     "ECMS_Dossiers": [
         {
-            "asset_number": "20933",
-            "createdAt": "2016-11-15T23:32:00.000Z",
-            "file_id": 21,
-            "filename": "place_of_file5811",
-            "updatedAt": "2016-11-15T23:32:00.000Z",
+            "asset_number": "1",
+            "createdAt": "2016-11-16T22:48:06.000Z",
+            "file_id": 54,
+            "filename": "placeholder823",
+            "updatedAt": "2016-11-16T22:48:31.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    95,
+                    91,
                     111,
-                    102,
-                    95,
-                    102,
-                    105,
-                    108,
+                    98,
+                    106,
                     101,
-                    53,
-                    56,
-                    49,
-                    49
-                ]
-            }
-        },
-        {
-            "asset_number": "20933",
-            "createdAt": "2016-11-15T23:32:00.000Z",
-            "file_id": 22,
-            "filename": "place_of_file19180",
-            "updatedAt": "2016-11-15T23:32:00.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
                     99,
+                    116,
+                    32,
+                    79,
+                    98,
+                    106,
                     101,
-                    95,
-                    111,
-                    102,
-                    95,
-                    102,
-                    105,
-                    108,
-                    101,
-                    49,
-                    57,
-                    49,
-                    56,
-                    48
-                ]
-            }
-        },
-        {
-            "asset_number": "20933",
-            "createdAt": "2016-11-15T23:36:39.000Z",
-            "file_id": 52,
-            "filename": "placeholder33",
-            "updatedAt": "2016-11-15T23:36:39.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
                     99,
-                    101,
-                    104,
-                    111,
-                    108,
-                    100,
-                    101,
-                    114,
-                    51,
-                    51
+                    116,
+                    93
                 ]
-            }
-        },
-        {
-            "asset_number": "20933",
-            "createdAt": "2016-11-15T23:36:39.000Z",
-            "file_id": 53,
-            "filename": "placeholder44",
-            "updatedAt": "2016-11-15T23:36:39.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    104,
-                    111,
-                    108,
-                    100,
-                    101,
-                    114,
-                    52,
-                    52
-                ]
-            }
+            },
+            "time_field": "2042-11-18T05:26:09.000Z"
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [latitude 6410]",
-        "desc": "latitude 6410"
+        "getLocation": " - location: [labroom]",
+        "desc": "labroom"
     }
 }
