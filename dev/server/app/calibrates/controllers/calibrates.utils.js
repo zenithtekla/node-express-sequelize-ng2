@@ -23,7 +23,7 @@ module.exports  = function(db, env) {
         ],
         order: [ [{model:ECMS_Dossier}, 'updatedAt', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
       }).then(function(result){
-        callback(result);
+        return callback(result);
       }).catch(_errorHandler);
     },
     findOneMethod: function (req, res, next, onSuccess, onError) {
@@ -31,8 +31,7 @@ module.exports  = function(db, env) {
       var equipment = association(req).equipment;
 
       ECMS_Equipment.findOne(equipment).then(function(result){
-        onSuccess(result.dataValues);
-        // return null;
+        return onSuccess(_.has(result, 'dataValues') ? result.dataValues: result);
       }).catch(function (err) {
         if (onError)
           onError();
@@ -120,13 +119,14 @@ module.exports  = function(db, env) {
 
   function create_location(req, res, next){
     var input  = { desc: req.body.desc || req.body.ECMS_Location.desc };
-    ECMS_Location.createRecord({
+    return ECMS_Location.createRecord({
       newRecord: input,
-      onError: (err) => {
+      onError:    (err)    => {
         if (env !=='seed' && res) _errorHandler(err);
+        else return console.log(err);
       },
-      onSuccess: (record) => {
-        EquipmentRecord(req.body, res, record.dataValues);
+      onSuccess:  (record) => {
+        return EquipmentRecord(req.body, res, record.dataValues);
       }
     });
   }
@@ -150,18 +150,31 @@ module.exports  = function(db, env) {
         break;
     }
 
-    create_equipment(req, res, equip);
+    ECMS_Equipment.getRecord({
+      cond:       {asset_number: req.asset_number},
+      onError:    (err)     => {
+        if (env !=='seed' && res) _errorHandler(err);
+        else return console.log(err);
+      },
+      onSuccess:  (record)  => {
+        if(record) {
+          return create_ECMS_dossier_entries(req, res, record.dataValues);
+        } else {
+          return create_equipment(req, res, equip);
+        }
+      }
+    });
   }
 
   function create_equipment(req, res, record){
-    ECMS_Equipment.createRecord({
+    return ECMS_Equipment.createRecord({
       newRecord: record,
-      onError: (err) => {
+      onError: (err)      => {
         if (env !=='seed' && res) _errorHandler(err);
-        // else console.log(err);
+        else return console.log(err);
       },
-      onSuccess:(record)=> {
-        create_ECMS_dossier_entries(req, res, record.dataValues);
+      onSuccess:(record)  => {
+        return create_ECMS_dossier_entries(req, res, record.dataValues);
       }
     });
   }
@@ -183,11 +196,11 @@ module.exports  = function(db, env) {
         filename: req.documents[0].filename || file,
         time_field: req.documents[0].time_field || new Date(_.random(2200000000000,2300000000000))
       },
-      onError: (err) => {
+      onError:   (err)  => {
         if (env !=='seed' && res) _errorHandler(err);
-        // else console.log(err);
+        else return console.log(err);
       },
-      onSuccess: (rec) =>{
+      onSuccess: (rec)  => {
         if (env !=='seed' && res)
           return res.json(_.extend(record,rec.dataValues));
         else return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
@@ -226,10 +239,11 @@ module.exports  = function(db, env) {
     if(records.length)
     ECMS_Dossier.bulkRecords({
       records: records,
-      onError: (err) => {
+      onError:   (err)  => {
         if (env !=='seed' && res) _errorHandler(err);
+        else return console.log(err);
       },
-      onSuccess: (rec) =>{
+      onSuccess: (rec)  => {
         if (env !=='seed' && res)
           return res.json(_.extend(record,rec.dataValues));
         return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
@@ -279,9 +293,9 @@ module.exports  = function(db, env) {
       });
 
       function __successHandler() {
-        utils.findOneMethod(req, res, next, function(result){
+        return utils.findOneMethod(req, res, next, function(result){
           appUtils.exportJSON(result, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
-          res.json(result);
+          return res.json(result);
         });
       }
     }
@@ -293,7 +307,7 @@ module.exports  = function(db, env) {
 
     // fails, non-existent, perform full creation.
     function onError(){
-      utils.createLocation(req, res, next);
+      return utils.createLocation(req, res, next);
     }
   };
 
@@ -306,14 +320,14 @@ module.exports  = function(db, env) {
       ]
     }).then(function(result){
       var record = result.dataValues;
-      ECMS_Dossier.findAll({
+      return ECMS_Dossier.findAll({
         where: {asset_number: record.asset_number},
         attributes: ['time_field', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file'],
         limit: 1,
         order: [ ['time_field', 'DESC'] ]
       }).then(function(result){
         record.ECMS_Dossiers = _.has(result, 'dataValues') ? result.dataValues : result;
-        res.json(record);
+        return res.json(record);
       }).catch(_errorHandler);
     }).catch(_errorHandler);
   }
@@ -325,19 +339,19 @@ module.exports  = function(db, env) {
       include: [
         { model: ECMS_Dossier, attributes: ['time_field', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']/*, limit: 1, separate: false*/}
       ],
-      order: [ [ ECMS_Dossier.sequelize.col('ecms_dossier_table.time_field'), 'DESC'] ]
+      // order: [ [ ECMS_Dossier.sequelize.col('ecms_dossier_table.time_field'), 'DESC'] ]
       // order: [ [ ECMS_Dossier, ECMS_Dossier.sequelize.col('time_field'), 'DESC'] ]
-      // order: [ [ ECMS_Dossier, 'time_field', 'DESC'] ]
+      order: [ [ ECMS_Dossier, 'time_field', 'DESC'] ]
 
       // limit: [ [ECMS_Dossier, 1] ], problem is the limit option does not support on associated model, resort to include.seperate?
       // order: [ ['ECMS_Dossiers.time_field', 'DESC'] ] // orderBy is fine.
     }/*, {subQuery: false}*/).then(function(result){
-      res.json(result);
+      return res.json(result);
     }).catch(function(err){res.json(err);});
   }
 
   function _errorHandler(err) {
-    res.status(422).send({message: errorHandler.getErrorMessage(err)});
+    return res.status(422).send({message: errorHandler.getErrorMessage(err)});
   }
 
   utils.updateMethod                = updateMethod;

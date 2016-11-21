@@ -23,9 +23,9 @@ module.exports = function(model){
     model.findOrCreate(o.cond).then(function(record, created){
       /*if(record[0].dataValues) res.json({ record: record[0].dataValues });
        else res.sendStatus(200);*/
-      o.onSuccess(record);
+      return o.onSuccess(record);
     }).catch(function(err){
-      o.onError(err);
+      return o.onError(err);
     });
   };
 
@@ -53,23 +53,23 @@ module.exports = function(model){
         // Item not found, create a new one
         model.create(newRecord)
           .then(function () {
-            onCreate();
+            return onCreate();
           })
           .error(function (err) {
-            onError(err);
+            return onError(err);
           });
       } else {
         // Found an item, update it
         model.update(newRecord, {where: where})
           .then(function () {
-            onUpdate();
+            return onUpdate();
           })
           .catch(function (err) {
-            onError(err);
+            return onError(err);
           });
       }
     }).catch(function (err) {
-      onError(err);
+      return onError(err);
     });
   };
 
@@ -86,12 +86,12 @@ module.exports = function(model){
   var createRecord = function(o){
     model.create(o.newRecord).then(function(record){
       if (o.onSuccess)
-        o.onSuccess(record);
-      return null;
+        return o.onSuccess(record);
+      else return null;
     }).catch(function (err) {
       if (o.onError)
-        o.onError(err);
-      return null;
+        return o.onError(err);
+      else return null;
     })
   };
 
@@ -115,9 +115,9 @@ module.exports = function(model){
      });*/
     o.cond = o.cond || {};
     model.findAll(o.cond).then(function(records){
-      o.onSuccess(records);
+      return o.onSuccess(records);
     }).catch(function (err) {
-      o.onError(err);
+      return o.onError(err);
     })
   };
 
@@ -134,9 +134,9 @@ module.exports = function(model){
    * */
   var getRecordById = function (o) {
     model.findById(o.id).then(function(record){
-      o.onSuccess(record);
+      return o.onSuccess(record);
     }).catch(function (err) {
-      o.onError(err);
+      return o.onError(err);
     })
   };
 
@@ -154,9 +154,9 @@ module.exports = function(model){
   var getRecord = function (o) {
     o.cond = o.cond || {};
     model.findOne(o.cond).then(function (record) {
-      o.onSuccess(record);
+      return o.onSuccess(record);
     }).catch(function (err) {
-      o.onError(err);
+      return o.onError(err);
     })
   };
 
@@ -178,9 +178,9 @@ module.exports = function(model){
   var updateRecord = function (o) {
     o.cond = o.cond || {};
     model.update(o.newRecord, o.cond).then(function () {
-      o.onSuccess();
+      return o.onSuccess();
     }).catch(function (err) {
-      o.onError(err);
+      return o.onError(err);
     })
   };
 
@@ -201,9 +201,9 @@ module.exports = function(model){
   var deleteRecord = function (o) {
     o.cond = o.cond || {};
     model.destroy(o.cond).then(function () {
-      o.onSuccess();
+      return o.onSuccess();
     }).catch(function (err) {
-      o.onError(err);
+      return o.onError(err);
     })
   };
 
@@ -232,9 +232,9 @@ module.exports = function(model){
    };*/
   var bulkRecords = function (o) {
     model.bulkCreate(o.records).then(function(records) {
-      o.onSuccess(records);
+      return o.onSuccess(records);
     }).catch(function(err) {
-      o.onError(err);
+      return o.onError(err);
     });
   };
 
