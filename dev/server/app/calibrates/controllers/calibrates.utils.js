@@ -122,7 +122,7 @@ module.exports  = function(db, env) {
     return ECMS_Location.createRecord({
       newRecord: input,
       onError:    (err)    => {
-        if (env !=='seed' && res) _errorHandler(err);
+        if (env !=='seed' && res) return _errorHandler(err);
         else return console.log(err);
       },
       onSuccess:  (record) => {
@@ -151,14 +151,17 @@ module.exports  = function(db, env) {
     }
 
     ECMS_Equipment.getRecord({
-      cond:       {asset_number: req.asset_number},
+      cond:       {where: {asset_number: req.asset_number}, attributes: ['asset_id', 'asset_number', 'model'], include: {model: ECMS_Location, attributes: ['desc']} },
       onError:    (err)     => {
-        if (env !=='seed' && res) _errorHandler(err);
+        if (env !=='seed' && res) return _errorHandler(err);
         else return console.log(err);
       },
       onSuccess:  (record)  => {
         if(record) {
           return create_ECMS_dossier_entries(req, res, record.dataValues);
+
+          // extra logic goes here: whether force update Location if record.dataValues.ECMS_Location !== req.ECMS_Location.desc
+
         } else {
           return create_equipment(req, res, equip);
         }
@@ -170,7 +173,7 @@ module.exports  = function(db, env) {
     return ECMS_Equipment.createRecord({
       newRecord: record,
       onError: (err)      => {
-        if (env !=='seed' && res) _errorHandler(err);
+        if (env !=='seed' && res) return _errorHandler(err);
         else return console.log(err);
       },
       onSuccess:(record)  => {
@@ -197,7 +200,7 @@ module.exports  = function(db, env) {
         time_field: req.documents[0].time_field || new Date(_.random(2200000000000,2300000000000))
       },
       onError:   (err)  => {
-        if (env !=='seed' && res) _errorHandler(err);
+        if (env !=='seed' && res) return _errorHandler(err);
         else return console.log(err);
       },
       onSuccess: (rec)  => {
@@ -240,7 +243,7 @@ module.exports  = function(db, env) {
     ECMS_Dossier.bulkRecords({
       records: records,
       onError:   (err)  => {
-        if (env !=='seed' && res) _errorHandler(err);
+        if (env !=='seed' && res) return _errorHandler(err);
         else return console.log(err);
       },
       onSuccess: (rec)  => {

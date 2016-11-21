@@ -1,11 +1,11 @@
 {
     "body": {},
     "params": {
-        "asset_id": "1"
+        "asset_id": "14"
     },
     "cond": {
         "where": {
-            "asset_id": "1"
+            "asset_id": "14"
         }
     }
 }
