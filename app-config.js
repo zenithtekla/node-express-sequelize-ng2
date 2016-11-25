@@ -53,7 +53,7 @@ var initGlobalConfig = function(){
       tests: []
     },
     models: function() {
-      return utils.getGlobbedPaths(path.resolve(this.serverAppDir, '*/models'));
+      return utils.getGlobbedPaths(path.resolve(this.serverAppDir, '*/rdbmsModels'));
     },
     view_engine: {
       template: 'hbs',

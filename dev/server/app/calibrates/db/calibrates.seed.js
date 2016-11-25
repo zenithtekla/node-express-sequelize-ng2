@@ -70,9 +70,7 @@ module.exports  = function(db) {
     }
   };
 
-  var seedRecord = function(record){
-    return new Promise(resolve => util_method.createLocation(record));
-  };
+  var seedRecord = record => new Promise(resolve => util_method.createLocation(record));
 
   var tasks = _.forEach(records, seedRecord);
 
