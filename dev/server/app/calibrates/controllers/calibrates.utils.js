@@ -2,7 +2,8 @@
 var path    = require('path'),
   config    = require(path.resolve('./app-config')),
   appUtils  = require(config.utilsDir),
-errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers'));
+errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers')),
+  multer    = require('multer');
 
 /* utility method */
 module.exports  = function(db, env) {
@@ -119,6 +120,7 @@ module.exports  = function(db, env) {
 
   function create_location(req, res, next){
     var input  = { desc: req.body.desc || req.body.ECMS_Location.desc };
+
     return ECMS_Location.createRecord({
       newRecord: input,
       onError:    (err)    => {
@@ -357,12 +359,103 @@ module.exports  = function(db, env) {
     return res.status(422).send({message: errorHandler.getErrorMessage(err)});
   }
 
+  function fileUploader(req, res, next){
+    /* MORE from MEAN stack.
+     // profileImage
+     var upload = multer(config.uploads.profileUpload).single('newProfilePicture');
+     var profileUploadFileFilter = require(path.resolve(config.serverConfigDir, './lib/multer')).profileUploadFileFilter;
+     var existingImageUrl;
+
+     // Filtering to upload only images
+     upload.fileFilter = profileUploadFileFilter;*/
+
+    var upload = multer(config.uploads.dossierUpload).array('documents', config.uploads.dossierUpload.max_files);
+
+    uploadFiles()
+      .then(updateEquipment)
+      .then(extraStep1)
+      .then(extraStep2)
+      .then(function(output){
+        return res.json(output);
+      })
+      .catch(function (err) {
+        return res.status(400).send({message: 'ERROR out', err: err});
+      });
+
+    function uploadFiles () {
+      /* instantiate the promise chain*/
+      return new Promise(function (resolve, reject) {
+        var output = '[MULTER] ', uploadError = false;
+
+        if (uploadError) {
+          reject(errorHandler.getErrorMessage(uploadError));
+        } else {
+          output +='uploading files .., ';
+          resolve(output);
+        }
+        /*upload(req, res, function (uploadError) {
+          if (uploadError) {
+            reject(errorHandler.getErrorMessage(uploadError));
+          } else {
+            output +='uploading files .., ';
+            resolve(output);
+          }
+        });*/
+      });
+    }
+
+    function updateEquipment (output) {
+      return new Promise(function (resolve, reject) {
+        var err = false;
+        if (err) {
+          reject(err);
+        } else {
+          output += 'updating the Equipment.., ';
+          resolve(output);
+        }
+        /*user.profileImageURL = config.uploads.profileUpload.dest + req.file.filename;
+        user.save(function (err, theuser) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });*/
+      });
+    }
+
+    function extraStep1 (output) {
+      return new Promise(function (resolve, reject) {
+        var err = false;
+        if (err) {
+          reject(err);
+        } else {
+          output += 'extra processing1 .., ';
+          resolve(output);
+        }
+      });
+    }
+
+    function extraStep2 (output) {
+      return new Promise(function (resolve, reject) {
+        var err = false;
+        if (err) {
+          reject(err);
+        } else {
+          output += 'extra processing2 .., ';
+          resolve(output);
+        }
+      });
+    }
+  }
+
   utils.updateMethod                = updateMethod;
   utils.upsertMethod                = upsertMethod;
   utils.create_ECMS_dossier_entry   = create_ECMS_dossier_entry;
   utils.create_ECMS_dossier_entries = create_ECMS_dossier_entries;
   utils.getLastDossierSequential    = getLastDossierSequential;
   utils.getlastDossierEagerLoading  = getlastDossierEagerLoading;
+  utils.fileUploader                = fileUploader;
 
   return utils;
 };

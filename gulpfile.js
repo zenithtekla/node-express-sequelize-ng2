@@ -93,7 +93,7 @@ var tasks = {
     dist:               (vendor) => vendor
       .pipe(sourcemaps.init())
       .pipe(concat(vendorBundleName))
-      .pipe(sourcemaps.write('maps/'))
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.dist))
   },
   bundle_app: {
@@ -101,7 +101,7 @@ var tasks = {
       .pipe(gulp.dest(config.dist)),
     dist:               (app) =>  app.pipe(sourcemaps.init())
       .pipe(concat(mainBundleName))
-      .pipe(sourcemaps.write('maps/'))
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.dist))
   },
   build_css:            function(src, srcmaps, dest){

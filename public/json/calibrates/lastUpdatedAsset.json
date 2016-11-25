@@ -1,18 +1,18 @@
 {
-    "asset_id": 12,
-    "model": "brts2508",
-    "asset_number": "11371",
+    "asset_id": 13,
+    "model": "brts11970",
+    "asset_number": "20440",
     "last_cal": "2012-09-23T07:00:00.000Z",
-    "schedule": 6880,
+    "schedule": 15456,
     "next_cal": "2013-09-23T07:00:00.000Z",
     "ECMS_Dossiers": [
         {
-            "time_field": "2042-03-02T20:46:53.000Z",
-            "asset_number": "11371",
-            "createdAt": "2016-11-21T19:09:47.000Z",
-            "file_id": 45,
-            "filename": "placeholder50",
-            "updatedAt": "2016-11-21T19:09:47.000Z",
+            "time_field": "2041-09-14T17:09:50.000Z",
+            "asset_number": "20440",
+            "createdAt": "2016-11-24T21:42:24.000Z",
+            "file_id": 55,
+            "filename": "placeholder82",
+            "updatedAt": "2016-11-24T21:42:24.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
@@ -27,80 +27,129 @@
                     100,
                     101,
                     114,
-                    53,
-                    48
-                ]
-            }
-        },
-        {
-            "time_field": "2042-08-25T05:41:29.000Z",
-            "asset_number": "11371",
-            "createdAt": "2016-11-21T19:09:19.000Z",
-            "file_id": 24,
-            "filename": "place_of_file27264",
-            "updatedAt": "2016-11-21T19:09:19.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    95,
-                    111,
-                    102,
-                    95,
-                    102,
-                    105,
-                    108,
-                    101,
-                    50,
-                    55,
-                    50,
-                    54,
-                    52
-                ]
-            }
-        },
-        {
-            "time_field": "2042-08-03T10:08:19.000Z",
-            "asset_number": "11371",
-            "createdAt": "2016-11-21T19:09:19.000Z",
-            "file_id": 23,
-            "filename": "place_of_file15184",
-            "updatedAt": "2016-11-21T19:09:19.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    95,
-                    111,
-                    102,
-                    95,
-                    102,
-                    105,
-                    108,
-                    101,
-                    49,
-                    53,
-                    49,
                     56,
+                    50
+                ]
+            }
+        },
+        {
+            "time_field": "2041-08-09T19:59:07.000Z",
+            "asset_number": "20440",
+            "createdAt": "2016-11-24T21:42:24.000Z",
+            "file_id": 54,
+            "filename": "placeholder4",
+            "updatedAt": "2016-11-24T21:42:24.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    104,
+                    111,
+                    108,
+                    100,
+                    101,
+                    114,
                     52
                 ]
             }
         },
         {
-            "time_field": "2041-04-04T16:58:12.000Z",
-            "asset_number": "11371",
-            "createdAt": "2016-11-21T19:09:19.000Z",
-            "file_id": 22,
-            "filename": "place_of_file2024",
-            "updatedAt": "2016-11-21T19:09:19.000Z",
+            "time_field": "2042-03-12T11:00:31.000Z",
+            "asset_number": "20440",
+            "createdAt": "2016-11-24T21:40:24.000Z",
+            "file_id": 53,
+            "filename": "placeholder35",
+            "updatedAt": "2016-11-24T21:40:24.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    104,
+                    111,
+                    108,
+                    100,
+                    101,
+                    114,
+                    51,
+                    53
+                ]
+            }
+        },
+        {
+            "time_field": "2042-11-07T20:25:28.000Z",
+            "asset_number": "20440",
+            "createdAt": "2016-11-24T20:54:31.000Z",
+            "file_id": 42,
+            "filename": "place_of_file7896",
+            "updatedAt": "2016-11-24T20:54:31.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    55,
+                    56,
+                    57,
+                    54
+                ]
+            }
+        },
+        {
+            "time_field": "2041-10-22T21:10:44.000Z",
+            "asset_number": "20440",
+            "createdAt": "2016-11-24T20:54:31.000Z",
+            "file_id": 44,
+            "filename": "place_of_file1677",
+            "updatedAt": "2016-11-24T20:54:31.000Z",
+            "file": {
+                "type": "Buffer",
+                "data": [
+                    112,
+                    108,
+                    97,
+                    99,
+                    101,
+                    95,
+                    111,
+                    102,
+                    95,
+                    102,
+                    105,
+                    108,
+                    101,
+                    49,
+                    54,
+                    55,
+                    55
+                ]
+            }
+        },
+        {
+            "time_field": "2040-12-08T22:45:43.000Z",
+            "asset_number": "20440",
+            "createdAt": "2016-11-24T20:54:31.000Z",
+            "file_id": 43,
+            "filename": "place_of_file22302",
+            "updatedAt": "2016-11-24T20:54:31.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
@@ -118,15 +167,16 @@
                     108,
                     101,
                     50,
-                    48,
                     50,
-                    52
+                    51,
+                    48,
+                    50
                 ]
             }
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [latitude 4155]",
-        "desc": "latitude 4155"
+        "getLocation": " - location: [latitude 9089]",
+        "desc": "latitude 9089"
     }
 }

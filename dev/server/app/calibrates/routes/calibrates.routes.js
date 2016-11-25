@@ -26,7 +26,8 @@ module.exports = function(app, endpoints){
     table_location:               '/table_location',
     equipment_model_asset_number: '/equipment/:model/:asset_number',
     location:                     '/location/:asset_id',
-    file:                         '/files/:file_id'
+    file:                         '/files/:file_id',
+    dossier_upload:                '/dossier_upload'
   };
   endpoints.push(points);
 
@@ -53,6 +54,9 @@ module.exports = function(app, endpoints){
 
   app.route(points.equipments_last_dossier)
     .get(controller.getLastDossier);
+  
+  app.route(points.dossier_upload)
+    .get(controller.dossierUpload);
   /*
 
    Additional RESTful end-points

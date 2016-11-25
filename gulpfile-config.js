@@ -86,10 +86,10 @@ var gulpConfig = function(){
          baseDir: "./"
          }*/
         // informs browser-sync to proxy our expressjs app which would run at the following location
-        proxy:  'http://localhost:3000',
+        proxy:  'http://localhost:3003',
 
         // informs browser-sync to use the following port for the proxied app
-        // notice that the default port is 3000, which would clash with our expressjs
+        // notice that the default port is 3003, which would clash with our expressjs
         port:   4000,
 
         // open the proxied app in chrome
@@ -113,7 +113,7 @@ var gulpConfig = function(){
     script: config.site,
     delayTime: 50,
     env: {
-      PORT: 3000
+      PORT: 3003
     },
     // socket may be optional
     socket: {

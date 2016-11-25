@@ -7,7 +7,7 @@ var initGlobalConfig = function(){
     projDir:            process.cwd(),
     site:               './bin/www',
     env:                process.env.NODE_ENV || 'development',
-    port:               process.env.PORT || 3000,
+    port:               process.env.PORT || 3003,
 
     dist:               './public/dist/',
     lib:                './public/lib/',
@@ -61,9 +61,17 @@ var initGlobalConfig = function(){
     },
     uploads: {
       profileUpload: {
+        dest: './dev/client/images/',
         limits: {
           fileSize: 10000
         }
+      },
+      dossierUpload: {
+        dest: './public/dist/upload/',
+        limits: {
+          fileSize: 10000
+        },
+        max_files: 10
       }
     },
     log: {

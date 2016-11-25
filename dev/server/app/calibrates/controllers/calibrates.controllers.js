@@ -5,11 +5,11 @@ var env         = process.env.NODE_ENV || 'development',
     _           = require('lodash');
 
 module.exports = function(app){
-  var route = {},
-    db = app.get('models'),
+  var route         = {},
+    db              = app.get('models'),
     utils           = require('./calibrates.utils')(db, env),
     ECMS_Equipment  = db.ECMS_Equipment,
-    ECMS_Dossier  = db.ECMS_Dossier,
+    ECMS_Dossier    = db.ECMS_Dossier,
     ECMS_Location   = db.ECMS_Location;
 
   /* initial dumps from tables */
@@ -95,6 +95,7 @@ module.exports = function(app){
   route.updateEquipment   = (req, res, next) => utils.updateMethod(req, res, next);
   route.createModel       = utils.createLocation;
   route.deleteEquipment   = route.deleteModel = utils.deleteMethod;
+  route.dossierUpload     = utils.fileUploader;
 
   return route;
 };
