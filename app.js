@@ -21,6 +21,7 @@ app.set('config',config);
 
 // use cors
 app.use(cors());
+// app.use(cors({origin: 'http://esp21:3003'}));
 
 // use momentjs
 app.locals.moment = require('moment');
@@ -41,7 +42,7 @@ if (_.has(config, 'log.format')) {
 }
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/vnd.api+json as json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
@@ -54,6 +55,7 @@ _.forEach(routes, function(route,shortcut){
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE');
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 

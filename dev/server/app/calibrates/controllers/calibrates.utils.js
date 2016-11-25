@@ -449,6 +449,28 @@ module.exports  = function(db, env) {
     }
   }
 
+  function multerUploader(req, res, next){
+    console.log(req.file, req.dossier);
+    var upload = multer(config.uploads.dossierUpload).single('upl');
+
+    uploadMulterFile()
+      .then(()=>res.json('success'))
+      .catch(err=>res.status(400).send(err));
+
+    function uploadMulterFile(){
+      return new Promise(function(resolve, reject){
+        upload(req, res, function(uploadError){
+          if (uploadError){
+            reject(errorHandler.getErrorMessage(uploadError));
+          } else {
+            console.log(req.file);
+            resolve();
+          }
+        })
+      });
+    }
+  }
+
   utils.updateMethod                = updateMethod;
   utils.upsertMethod                = upsertMethod;
   utils.create_ECMS_dossier_entry   = create_ECMS_dossier_entry;
@@ -456,6 +478,7 @@ module.exports  = function(db, env) {
   utils.getLastDossierSequential    = getLastDossierSequential;
   utils.getlastDossierEagerLoading  = getlastDossierEagerLoading;
   utils.fileUploader                = fileUploader;
+  utils.multerUploader              = multerUploader;
 
   return utils;
 };

@@ -17,7 +17,8 @@
                 "equipment_model_asset_number": "/equipment/:model/:asset_number",
                 "location": "/location/:asset_id",
                 "file": "/files/:file_id",
-                "dossier_upload": "/dossier_upload"
+                "dossier_upload": "/dossier_upload",
+                "multer_upload": "/multer_upload"
             }
         ]
     }

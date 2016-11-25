@@ -96,6 +96,7 @@ module.exports = function(app){
   route.createModel       = utils.createLocation;
   route.deleteEquipment   = route.deleteModel = utils.deleteMethod;
   route.dossierUpload     = utils.fileUploader;
+  route.multerUpload      = utils.multerUploader;
 
   return route;
 };
