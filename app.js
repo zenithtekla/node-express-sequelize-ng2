@@ -7,6 +7,8 @@ var express     = require('express'),
   bodyParser    = require('body-parser'),
   cors          = require('cors'),
   config        = require('./app-config'),
+  flash         = require('connect-flash'),
+  methodOverride= require('method-override'),
   logger        = require(path.resolve(config.serverConfigDir, './lib/logger')),
 
   // simulate bs-config within Express
@@ -47,6 +49,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 app.use(cookieParser());
+app.use(flash());
 
 _.forEach(routes, function(route,shortcut){
   app.use(shortcut, express.static(path.join(__dirname, route)));
@@ -55,9 +58,12 @@ _.forEach(routes, function(route,shortcut){
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE');
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Credentials', '*');
     next();
 });
+
+app.use(methodOverride());
 
 require(path.resolve(config.serverDir, 'server'))(app);
 

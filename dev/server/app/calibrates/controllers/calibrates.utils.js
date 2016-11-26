@@ -450,11 +450,11 @@ module.exports  = function(db, env) {
   }
 
   function multerUploader(req, res, next){
-    console.log(req.file, req.dossier);
-    var upload = multer(config.uploads.dossierUpload).single('upl');
+    console.log(req.body.file, req.files);
+    var upload = multer(config.uploads.dossierUpload).single('file');
 
     uploadMulterFile()
-      .then(()=>res.json('success'))
+      .then(()=>{res.json(req.file)})
       .catch(err=>res.status(400).send(err));
 
     function uploadMulterFile(){
@@ -463,7 +463,7 @@ module.exports  = function(db, env) {
           if (uploadError){
             reject(errorHandler.getErrorMessage(uploadError));
           } else {
-            console.log(req.file);
+            console.log(req.body.file);
             resolve();
           }
         })

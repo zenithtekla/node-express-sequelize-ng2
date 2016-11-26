@@ -67,11 +67,15 @@ var initGlobalConfig = function(){
         }
       },
       dossierUpload: {
-        dest: './public/dist/upload/',
-        limits: {
-          fileSize: 10000
+        dest: './public/dist/uploads/',
+        rename: function (fieldname, filename) {
+          return filename.replace(/\W+/g, '-').toLowerCase() + Date.now()
         },
-        max_files: 10
+        limits: {
+          fileSize: 10000,
+          files: 10,
+          fields: 5
+        }
       }
     },
     log: {
