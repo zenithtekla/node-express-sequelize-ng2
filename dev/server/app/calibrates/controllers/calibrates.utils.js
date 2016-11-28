@@ -93,7 +93,7 @@ module.exports  = function(db, env) {
     }
     if (_.has(params, 'asset_id') || _.has(params, 'asset_number') || _.has(params, 'model')) {
       cond.where = equipment.where = params;
-      equipment.order = [ [{model:ECMS_Dossier}, 'updatedAt', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
+      equipment.order = [ [{model:ECMS_Dossier}, 'file_id', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
     }
 
     equipment.include.push(dossier, location);
@@ -229,8 +229,10 @@ module.exports  = function(db, env) {
       });
     } else {
 
-      var quantity = req.file_quantity || _.random(1,3);
+      // var quantity = req.file_quantity || _.random(1,3);
+      var quantity = req.file_quantity || 0;
 
+      if(quantity)
       for (var i=0;i<quantity;i++){
         var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
         records.push({
@@ -241,6 +243,8 @@ module.exports  = function(db, env) {
         });
       }
     }
+
+    if(!records.length) return res.json(record);
 
     if(records.length)
     ECMS_Dossier.bulkRecords({
@@ -255,6 +259,7 @@ module.exports  = function(db, env) {
         return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
       }
     });
+
 
    /* ECMS_Dossier.bulkCreate(records).then(function(rec){
       appUtils.appendFile(appUtils.JSONstringify({bulkCreate: rec}), config.publicDir + '/json/calibrates/dataSeeds.log');
@@ -450,7 +455,7 @@ module.exports  = function(db, env) {
     }
   }
 
-  utils.multerUpload = () => multer({dest: config.uploads.dossierUpload.dest}).any();
+  utils.multerUpload = () => multer(config.uploads.dossierUpload).any();
 
 
   utils.updateMethod                = updateMethod;

@@ -21,28 +21,32 @@ module.exports  = function(db) {
       body: {
         desc:'labroom',
         model:"brts31",
-        asset_number:1
+        asset_number:1,
+        file_quantity: _.random(1,3)
       }
     },
     {
       body: {
         desc: 'production',
         model:"brts32",
-        asset_number:2
+        asset_number:2,
+        file_quantity: _.random(1,5)
       }
     },
     {
       body: {
         desc: 'Helsinki',
         model:"brts33",
-        asset_number:3
+        asset_number:3,
+        file_quantity: _.random(2,4)
       }
     },
     {
       body: {
         desc: 'Stockholm',
         model:"brts35",
-        asset_number:6
+        asset_number:6,
+        file_quantity: 4
       }
     },
     {
@@ -85,7 +89,8 @@ module.exports  = function(db) {
         body: {
           desc: 'latitude ' + utils.getRandomInt(1,10000),
           last_cal: '2012/09/23',
-          next_cal: '2013/09/23'
+          next_cal: '2013/09/23',
+          file_quantity: _.random(1,3)
         }
       };
       util_method.createLocation(req);
@@ -105,8 +110,7 @@ module.exports  = function(db) {
     {
       desc: 'Reykjavik',
       model: 'brts34',
-      asset_number:13,
-      file_quantity: 4
+      asset_number:13
     },
     {
       desc: 'Oslo',
