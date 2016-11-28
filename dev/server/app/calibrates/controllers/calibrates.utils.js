@@ -3,7 +3,8 @@ var path    = require('path'),
   config    = require(path.resolve('./app-config')),
   appUtils  = require(config.utilsDir),
 errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers')),
-  multer    = require('multer');
+  multer    = require('multer'),
+  mkdirp    = require('mkdirp');
 
 /* utility method */
 module.exports  = function(db, env) {
@@ -449,27 +450,8 @@ module.exports  = function(db, env) {
     }
   }
 
-  function multerUploader(req, res, next){
-    console.log(req.body.file, req.files);
-    var upload = multer(config.uploads.dossierUpload).single('file');
+  utils.multerUpload = () => multer({dest: config.uploads.dossierUpload.dest}).any();
 
-    uploadMulterFile()
-      .then(()=>{res.json(req.file)})
-      .catch(err=>res.status(400).send(err));
-
-    function uploadMulterFile(){
-      return new Promise(function(resolve, reject){
-        upload(req, res, function(uploadError){
-          if (uploadError){
-            reject(errorHandler.getErrorMessage(uploadError));
-          } else {
-            console.log(req.body.file);
-            resolve();
-          }
-        })
-      });
-    }
-  }
 
   utils.updateMethod                = updateMethod;
   utils.upsertMethod                = upsertMethod;
@@ -478,7 +460,6 @@ module.exports  = function(db, env) {
   utils.getLastDossierSequential    = getLastDossierSequential;
   utils.getlastDossierEagerLoading  = getlastDossierEagerLoading;
   utils.fileUploader                = fileUploader;
-  utils.multerUploader              = multerUploader;
 
   return utils;
 };

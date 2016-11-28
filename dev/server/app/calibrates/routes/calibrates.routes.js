@@ -6,11 +6,7 @@ module.exports = function(app, endpoints){
 
   // var module_name = app.get('module_name');
   var module_name = 'calibrates';
-  var controller  = require('../controllers/' + module_name + '.controllers')(app),
-      multer      = require('multer'),
-      mkdirp      = require('mkdirp');
-
-  var upload      = multer({dest: './public/dist/uploads/'});
+  var controller  = require('../controllers/' + module_name + '.controllers')(app);
 
   var points = {
     module_name:                  module_name,
@@ -31,8 +27,7 @@ module.exports = function(app, endpoints){
     equipment_model_asset_number: '/equipment/:model/:asset_number',
     location:                     '/location/:asset_id',
     file:                         '/files/:file_id',
-    dossier_upload:               '/dossier_upload',
-    multer_upload:                '/multer_upload'
+    dossier_upload:               '/dossier_upload'
   };
   endpoints.push(points);
 
@@ -60,18 +55,14 @@ module.exports = function(app, endpoints){
   app.route(points.equipments_last_dossier)
     .get(controller.getLastDossier);
 
-/*  app.route(points.dossier_upload)
-    .get(controller.dossierUpload);*/
+  /*http://stackoverflow.com/questions/36202618/how-to-upload-file-using-multer-or-body-parser
+   https://ewiggin.gitbooks.io/expressjs-middleware/content/multer.html
+   http://www.johnduhamel.io/posts/2016-08-11-direct-s3-upload.html*/
 
-  app.post(points.dossier_upload, upload.any(),function(req, res, next){
-    /*http://stackoverflow.com/questions/36202618/how-to-upload-file-using-multer-or-body-parser
-    https://ewiggin.gitbooks.io/expressjs-middleware/content/multer.html
-    http://www.johnduhamel.io/posts/2016-08-11-direct-s3-upload.html*/
-
-    console.log(req.file, req.files, req.body);
+  app.post(points.dossier_upload, controller.multerUpload, function(req, res, next){
     res.json(req.files);
-
   });
+
   /*
 
    Additional RESTful end-points

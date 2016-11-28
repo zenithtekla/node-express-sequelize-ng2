@@ -92,11 +92,15 @@ module.exports = function(app){
     utils.upsertMethod(req, res, next);
   };
 
+  route.dossierUpload     = function (req, res, next) {
+    console.log(req.file, req.files, req.body);
+    return res.json(req.files);
+  };
+
   route.updateEquipment   = (req, res, next) => utils.updateMethod(req, res, next);
   route.createModel       = utils.createLocation;
   route.deleteEquipment   = route.deleteModel = utils.deleteMethod;
-  route.dossierUpload     = utils.fileUploader;
-  route.multerUpload      = utils.multerUploader;
+  route.multerUpload      = utils.multerUpload();
 
   return route;
 };

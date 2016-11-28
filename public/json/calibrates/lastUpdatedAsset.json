@@ -1,95 +1,18 @@
 {
-    "asset_id": 13,
-    "model": "brts11970",
-    "asset_number": "20440",
-    "last_cal": "2012-09-23T07:00:00.000Z",
-    "schedule": 15456,
-    "next_cal": "2013-09-23T07:00:00.000Z",
+    "asset_id": 21,
+    "model": "brts34",
+    "asset_number": "113",
+    "last_cal": "2012-08-22T07:00:00.000Z",
+    "schedule": 13144,
+    "next_cal": "2013-08-22T07:00:00.000Z",
     "ECMS_Dossiers": [
         {
-            "time_field": "2041-09-14T17:09:50.000Z",
-            "asset_number": "20440",
-            "createdAt": "2016-11-24T21:42:24.000Z",
-            "file_id": 55,
-            "filename": "placeholder82",
-            "updatedAt": "2016-11-24T21:42:24.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    104,
-                    111,
-                    108,
-                    100,
-                    101,
-                    114,
-                    56,
-                    50
-                ]
-            }
-        },
-        {
-            "time_field": "2041-08-09T19:59:07.000Z",
-            "asset_number": "20440",
-            "createdAt": "2016-11-24T21:42:24.000Z",
-            "file_id": 54,
-            "filename": "placeholder4",
-            "updatedAt": "2016-11-24T21:42:24.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    104,
-                    111,
-                    108,
-                    100,
-                    101,
-                    114,
-                    52
-                ]
-            }
-        },
-        {
-            "time_field": "2042-03-12T11:00:31.000Z",
-            "asset_number": "20440",
-            "createdAt": "2016-11-24T21:40:24.000Z",
-            "file_id": 53,
-            "filename": "placeholder35",
-            "updatedAt": "2016-11-24T21:40:24.000Z",
-            "file": {
-                "type": "Buffer",
-                "data": [
-                    112,
-                    108,
-                    97,
-                    99,
-                    101,
-                    104,
-                    111,
-                    108,
-                    100,
-                    101,
-                    114,
-                    51,
-                    53
-                ]
-            }
-        },
-        {
-            "time_field": "2042-11-07T20:25:28.000Z",
-            "asset_number": "20440",
-            "createdAt": "2016-11-24T20:54:31.000Z",
-            "file_id": 42,
-            "filename": "place_of_file7896",
-            "updatedAt": "2016-11-24T20:54:31.000Z",
+            "time_field": "2040-10-14T09:45:29.000Z",
+            "asset_number": "113",
+            "createdAt": "2016-11-28T18:14:08.000Z",
+            "file_id": 52,
+            "filename": "place_of_file8820",
+            "updatedAt": "2016-11-28T18:14:08.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
@@ -106,20 +29,20 @@
                     105,
                     108,
                     101,
-                    55,
                     56,
-                    57,
-                    54
+                    56,
+                    50,
+                    48
                 ]
             }
         },
         {
-            "time_field": "2041-10-22T21:10:44.000Z",
-            "asset_number": "20440",
-            "createdAt": "2016-11-24T20:54:31.000Z",
-            "file_id": 44,
-            "filename": "place_of_file1677",
-            "updatedAt": "2016-11-24T20:54:31.000Z",
+            "time_field": "2040-04-10T07:46:43.000Z",
+            "asset_number": "113",
+            "createdAt": "2016-11-28T18:14:08.000Z",
+            "file_id": 51,
+            "filename": "place_of_file1680",
+            "updatedAt": "2016-11-28T18:14:08.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
@@ -138,18 +61,18 @@
                     101,
                     49,
                     54,
-                    55,
-                    55
+                    56,
+                    48
                 ]
             }
         },
         {
-            "time_field": "2040-12-08T22:45:43.000Z",
-            "asset_number": "20440",
-            "createdAt": "2016-11-24T20:54:31.000Z",
-            "file_id": 43,
-            "filename": "place_of_file22302",
-            "updatedAt": "2016-11-24T20:54:31.000Z",
+            "time_field": "2039-10-15T10:27:19.000Z",
+            "asset_number": "113",
+            "createdAt": "2016-11-28T18:14:08.000Z",
+            "file_id": 53,
+            "filename": "place_of_file1121",
+            "updatedAt": "2016-11-28T18:14:08.000Z",
             "file": {
                 "type": "Buffer",
                 "data": [
@@ -166,17 +89,16 @@
                     105,
                     108,
                     101,
+                    49,
+                    49,
                     50,
-                    50,
-                    51,
-                    48,
-                    50
+                    49
                 ]
             }
         }
     ],
     "ECMS_Location": {
-        "getLocation": " - location: [latitude 9089]",
-        "desc": "latitude 9089"
+        "getLocation": " - location: [Brussels!!]",
+        "desc": "Brussels!!"
     }
 }
