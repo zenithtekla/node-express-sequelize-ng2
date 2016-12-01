@@ -63,7 +63,7 @@ var initGlobalConfig = function(){
       profileUpload: {
         dest: './dev/client/images/',
         limits: {
-          fileSize: 10000
+          fileSize: 100000
         }
       },
       dossierUpload: {
@@ -72,7 +72,7 @@ var initGlobalConfig = function(){
           return filename.replace(/\W+/g, '-').toLowerCase() + Date.now()
         },
         limits: {
-          fileSize: 10000,
+          fileSize: 100000,
           files: 10,
           fields: 5
         }

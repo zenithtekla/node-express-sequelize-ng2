@@ -244,7 +244,8 @@ module.exports  = function(db, env) {
       }
     }
 
-    if(!records.length) return res.json(record);
+    if(!records.length)
+      return (res) ? res.json(record) : null;
 
     if(records.length)
     ECMS_Dossier.bulkRecords({
