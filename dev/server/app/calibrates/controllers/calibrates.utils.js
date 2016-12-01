@@ -247,7 +247,6 @@ module.exports  = function(db, env) {
     if(!records.length)
       return (res) ? res.json(record) : null;
 
-    if(records.length)
     ECMS_Dossier.bulkRecords({
       records: records,
       onError:   (err)  => {
