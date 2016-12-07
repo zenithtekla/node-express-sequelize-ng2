@@ -122,19 +122,19 @@ module.exports  = function(db) {
       documents: [
         {
           file: 'Oslo_file110',
-          filename:'Oslo_file110'
+          filename:'Oslo_file110.txt'
         },
         {
           file: 'Oslo_file111',
-          filename:'Oslo_file111'
+          filename:'Oslo_file111.txt'
         },
         {
           file: 'Oslo_file112',
-          filename:'Oslo_file112'
+          filename:'Oslo_file112.txt'
         },
         {
           file: 'Oslo_file113',
-          filename:'Oslo_file113'
+          filename:'Oslo_file113.txt'
         }
       ]
     }
@@ -168,7 +168,7 @@ module.exports  = function(db) {
             document.asset_number = record.dataValues.asset_number;
             var file_attr         = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
             document.file         = document.file || file_attr;
-            document.filename     = document.filename || file_attr;
+            document.filename     = document.filename || file_attr + '.txt';
             document.time_field   = document.time_field || new Date(_.random(2200000000000,2300000000000));
             cluster.push(document);
           });
@@ -181,7 +181,7 @@ module.exports  = function(db) {
             cluster.push({
               asset_number: record.dataValues.asset_number,
               file: o.file || file_attr,
-              filename: o.filename || file_attr,
+              filename: o.filename || file_attr + '.txt',
               time_field: new Date(_.random(2200000000000,2300000000000))
             });
           }

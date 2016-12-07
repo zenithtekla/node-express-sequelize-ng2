@@ -17,12 +17,12 @@ module.exports  = function(db, env) {
     createLocation: create_location,
     findAllMethod: function (req, res, next, callback) {
       var equipment = association(req).equipment;
-      
+
       ECMS_Equipment.findAll(equipment).then(function(result){
         return callback(result);
       }).catch((err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}));
     },
-    findOneMethod: function (req, res, next, onSuccess, onError) { 
+    findOneMethod: function (req, res, next, onSuccess, onError) {
       var equipment = association(req).equipment;
 
       ECMS_Equipment.findOne(equipment).then(function(result){
@@ -203,7 +203,7 @@ module.exports  = function(db, env) {
   }
 
   function create_ECMS_dossier_entry(req, res, record){
-    var file = 'file_placeholder' + (_.random(1,200)*_.random(1,200)).toString();
+    var file_attr = 'file_placeholder' + (_.random(1,200)*_.random(1,200)).toString();
 
     if(!_.has(req,'documents')){
       req.documents = [{
@@ -215,8 +215,8 @@ module.exports  = function(db, env) {
     ECMS_Dossier.createRecord({
       newRecord: {
         asset_number: record.asset_number,
-        file: req.documents[0].file || file,
-        filename: req.documents[0].filename || file,
+        file: req.documents[0].file || file_attr,
+        filename: req.documents[0].filename || file_attr+'.txt',
         time_field: req.documents[0].time_field || new Date(_.random(2200000000000,2300000000000))
       },
       onError:   (err)  => {
@@ -240,7 +240,7 @@ module.exports  = function(db, env) {
         document.asset_number = record.asset_number;
         var file_attr         = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
         document.file         = document.file ? Buffer.from(document.file, 'base64') : file_attr;
-        document.filename     = document.filename || file_attr;
+        document.filename     = document.filename || file_attr+'.txt';
         document.time_field   = document.time_field || new Date(_.random(2200000000000,2300000000000));
         records.push(document);
       });
@@ -255,7 +255,7 @@ module.exports  = function(db, env) {
         records.push({
           asset_number: record.asset_number,
           file: file_attr,
-          filename: file_attr,
+          filename: file_attr+'.txt',
           time_field: new Date(_.random(2200000000000,2300000000000))
         });
       }
