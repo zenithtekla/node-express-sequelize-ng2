@@ -35,6 +35,7 @@ module.exports = function(app){
    */
 
   route.getEquipments      = function(req,res, next) {
+    req.options = [{ECMS_Dossier: { attributes: ['createdAt', 'updatedAt', 'time_field']}}];
     utils.findAllMethod(req, res, next, function(records){
       // res.json({env: env, moment: moment, calibrates: records});
       res.json(records);

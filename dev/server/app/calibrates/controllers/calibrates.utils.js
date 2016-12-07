@@ -16,20 +16,13 @@ module.exports  = function(db, env) {
   var utils = {
     createLocation: create_location,
     findAllMethod: function (req, res, next, callback) {
-      ECMS_Equipment.findAll({
-        where: req.params,
-        attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
-        include: [
-          { model: ECMS_Dossier, attributes: ['time_field', 'file_id', 'filename', 'createdAt', 'updatedAt', 'file']},
-          { model: ECMS_Location, attributes: ['desc']}
-        ],
-        order: [ [{model:ECMS_Dossier}, 'updatedAt', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
-      }).then(function(result){
+      var equipment = association(req).equipment;
+      
+      ECMS_Equipment.findAll(equipment).then(function(result){
         return callback(result);
-      }).catch(_errorHandler);
+      }).catch((err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}));
     },
-    findOneMethod: function (req, res, next, onSuccess, onError) {
-
+    findOneMethod: function (req, res, next, onSuccess, onError) { 
       var equipment = association(req).equipment;
 
       ECMS_Equipment.findOne(equipment).then(function(result){
@@ -66,7 +59,8 @@ module.exports  = function(db, env) {
 
 
   function association(req) {
-    var params = req.params
+    var params = _.get(req, 'params')
+      , options = _.get(req, 'options')
       , equipment = {
       attributes: ['asset_id', 'model', 'asset_number', 'last_cal', 'schedule', 'next_cal'],
       include: []
@@ -83,22 +77,45 @@ module.exports  = function(db, env) {
 
     }, filter = _.get(req, 'filter'); // attempt to have filter support for orderBy: [], limit: 1 ..
 
-    if (_.has(params, 'location_id')) {
-      cond.where = location.where = {id: params.location_id};
-      _.omit(params, 'location_id');
-    }
-    if (_.has(params, 'file_id')) {
-      cond.where = dossier.where = {file_id: params.file_id};
-      _.omit(params, 'file_id');
-    }
-    if (_.has(params, 'asset_id') || _.has(params, 'asset_number') || _.has(params, 'model')) {
-      cond.where = equipment.where = params;
-      equipment.order = [ [{model:ECMS_Dossier}, 'file_id', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
+    if(params) {
+      if (_.has(params, 'location_id')) {
+        cond.where = location.where = {id: params.location_id};
+        _.omit(params, 'location_id');
+      }
+      if (_.has(params, 'file_id')) {
+        cond.where = dossier.where = {file_id: params.file_id};
+        _.omit(params, 'file_id');
+      }
+      if (_.has(params, 'asset_id') || _.has(params, 'asset_number') || _.has(params, 'model')) {
+        cond.where = equipment.where = params;
+        equipment.order = [ [{model:ECMS_Dossier}, 'file_id', 'DESC'], [{model:ECMS_Dossier}, 'time_field', 'DESC'] ]
+      }
     }
 
-    equipment.include.push(dossier, location);
+    if(options){
+      if (_.isString(options) && options ==='simplified') {
+        // _.remove(equipment.include, {model: 'ECMS_Dossier'});
+        equipment.include = [location];
+        // equipment = _.omit(equipment, 'order');
+      }
 
-    appUtils.exportJSON({body: req.body, params: req.params, filter: req.filter, cond: cond}, config.publicDir + '/json/lastExpressRequest.json');
+      if(_.isArray(options)) {
+        _.forEach(options, function(option) {
+          if(_.has(option, 'ECMS_Dossier'))
+            if(_.has(option.ECMS_Dossier, 'attributes'))
+              dossier.attributes = option.ECMS_Dossier.attributes;
+
+          if(_.has(option, 'ECMS_Location'))
+            if(_.has(option.ECMS_Location, 'attributes'))
+              location.attributes = option.ECMS_Location.attributes;
+        });
+
+        equipment.include = [dossier, location]
+      }
+
+      req = _.omit(req, 'options');
+    } else equipment.include = [dossier, location];
+
     return {equipment: equipment, cond: cond};
   }
 
@@ -221,10 +238,10 @@ module.exports  = function(db, env) {
       if (req.documents.length)
       _.forEach(req.documents, function(document){
         document.asset_number = record.asset_number;
-        var file_attr = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
-        document.file = document.file || file_attr;
-        document.filename = document.filename || file_attr;
-        document.time_field = document.time_field || new Date(_.random(2200000000000,2300000000000));
+        var file_attr         = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
+        document.file         = document.file ? Buffer.from(document.file, 'base64') : file_attr;
+        document.filename     = document.filename || file_attr;
+        document.time_field   = document.time_field || new Date(_.random(2200000000000,2300000000000));
         records.push(document);
       });
     } else {
