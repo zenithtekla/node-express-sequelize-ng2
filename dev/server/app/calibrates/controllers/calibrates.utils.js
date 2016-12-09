@@ -95,6 +95,16 @@ module.exports  = function(db, env) {
     if(options){
       if (_.isString(options) && options ==='simplified') {
         // _.remove(equipment.include, {model: 'ECMS_Dossier'});
+        /*
+        * findIndex and splice
+        * let idx = _(equipment.include).findIndex({model: 'ECMS_Dossier'});
+        * _(equipment.include).splice(idx,1).value();
+        *
+        * one-liner:
+        * a/ _.filter(equipment.include, e=>e.model!=='ECMS_Dossier')
+        * b/ _(equipment.include).filter( e=>e.model!=='ECMS_Dossier').value()
+        * */
+        
         equipment.include = [location];
         // equipment = _.omit(equipment, 'order');
       }
@@ -226,7 +236,8 @@ module.exports  = function(db, env) {
       onSuccess: (rec)  => {
         if (env !=='seed' && res)
           return res.json(_.extend(record,rec.dataValues));
-        else return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
+        else return null;
+        // else return appUtils.appendFile(appUtils.JSONstringify(_.extend(record,rec.dataValues)), config.publicDir + '/json/calibrates/dataSeeds.log');
       }
     });
   }
@@ -322,7 +333,7 @@ module.exports  = function(db, env) {
 
       function __successHandler() {
         return utils.findOneMethod(req, res, next, function(result){
-          appUtils.exportJSON(result, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
+          // appUtils.exportJSON(result, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
           return res.json(result);
         });
       }

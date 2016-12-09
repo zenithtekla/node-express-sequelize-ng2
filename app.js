@@ -43,8 +43,8 @@ if (_.has(config, 'log.format')) {
   app.use(morgan(logger.getLogFormat(), logger.getMorganOptions()));
 }
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '20mb'}));
+app.use(bodyParser.urlencoded({ limit: '20mb', extended: true, parameterLimit:50000 }));
 // parse application/vnd.api+json as json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
@@ -58,7 +58,7 @@ _.forEach(routes, function(route,shortcut){
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Content-Disposition, Accept');
     res.setHeader('Access-Control-Allow-Credentials', '*');
     next();
 });

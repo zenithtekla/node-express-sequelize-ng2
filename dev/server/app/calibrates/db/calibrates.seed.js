@@ -146,7 +146,7 @@ module.exports  = function(db) {
 
   /* desc, model, asset_number REQUIRED
    file_quantity : number of files or 2 files
-   document: a set of files */
+   documents: a set of files */
   function seedMethod(o){
     ECMS_Location.create({
       desc: o.desc
