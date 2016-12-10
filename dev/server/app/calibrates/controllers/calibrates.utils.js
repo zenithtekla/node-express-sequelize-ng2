@@ -3,6 +3,7 @@ var path    = require('path'),
   config    = require(path.resolve('./app-config')),
   appUtils  = require(config.utilsDir),
 errorHandler= require(path.resolve(config.assetsDir, 'errors.handlers')),
+  moment    = require('moment'),
   multer    = require('multer'),
   mkdirp    = require('mkdirp');
 
@@ -16,16 +17,24 @@ module.exports  = function(db, env) {
   var utils = {
     createLocation: create_location,
     findAllMethod: function (req, res, next, callback) {
-      var equipment = association(req).equipment;
+      var equipments = association(req).equipment;
 
-      ECMS_Equipment.findAll(equipment).then(function(result){
-        return callback(result);
+      ECMS_Equipment.findAll(equipments).then(function(results){
+        return callback(results);
       }).catch((err) => res.status(422).send({message: errorHandler.getErrorMessage(err)}));
     },
     findOneMethod: function (req, res, next, onSuccess, onError) {
       var equipment = association(req).equipment;
 
       ECMS_Equipment.findOne(equipment).then(function(result){
+/*        _(result).chain().get('dataValues').get('ECMS_Dossiers').map('file').forEach(file=>{
+          file.data= appUtils.buffer2base64String(file.data);
+          var bundleHash = moment(new Date().getTime()).format('YYYY-MM-DD-HH-mm-ss');
+          appUtils.writeFile(file.data, config.publicDir + '/json/' + bundleHash, 'base64');
+        }).value();*/
+
+        // appUtils.exportJSON(result.dataValues, config.publicDir + '/json/lastUploadedFile.json');
+
         return onSuccess(_.has(result, 'dataValues') ? result.dataValues: result);
       }).catch(function (err) {
         if (onError)
@@ -104,7 +113,7 @@ module.exports  = function(db, env) {
         * a/ _.filter(equipment.include, e=>e.model!=='ECMS_Dossier')
         * b/ _(equipment.include).filter( e=>e.model!=='ECMS_Dossier').value()
         * */
-        
+
         equipment.include = [location];
         // equipment = _.omit(equipment, 'order');
       }
@@ -225,7 +234,7 @@ module.exports  = function(db, env) {
     ECMS_Dossier.createRecord({
       newRecord: {
         asset_number: record.asset_number,
-        file: req.documents[0].file || file_attr,
+        file: new Buffer(req.documents[0].file, 'base64') || file_attr,
         filename: req.documents[0].filename || file_attr+'.txt',
         time_field: req.documents[0].time_field || new Date(_.random(2200000000000,2300000000000))
       },
@@ -250,7 +259,7 @@ module.exports  = function(db, env) {
       _.forEach(req.documents, function(document){
         document.asset_number = record.asset_number;
         var file_attr         = 'place_of_file' + (_.random(1,200)*_.random(1,200)).toString();
-        document.file         = document.file ? Buffer.from(document.file, 'base64') : file_attr;
+        document.file         = document.file ? new Buffer(document.file, 'base64') : file_attr;
         document.filename     = document.filename || file_attr+'.txt';
         document.time_field   = document.time_field || new Date(_.random(2200000000000,2300000000000));
         records.push(document);
@@ -308,7 +317,7 @@ module.exports  = function(db, env) {
       req.body.asset_number = result.asset_number || req.params.asset_number;
 
       req.body.desc         = (_.has(req.body, 'ECMS_Location'))  ? req.body.ECMS_Location.desc         : req.body.desc;
-      req.body.file         = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].file      : req.body.file;
+      req.body.file         = (_.has(req.body, 'ECMS_Dossiers'))  ? new Buffer(req.body.ECMS_Dossiers[0].file, 'base64')     : req.body.file;
       req.body.filename     = (_.has(req.body, 'ECMS_Dossiers'))  ? req.body.ECMS_Dossiers[0].filename  : req.body.filename;
       req.body.schedule     = req.body.schedule || result.schedule;
 
@@ -333,7 +342,7 @@ module.exports  = function(db, env) {
 
       function __successHandler() {
         return utils.findOneMethod(req, res, next, function(result){
-          // appUtils.exportJSON(result, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');
+          /* appUtils.exportJSON(result, config.publicDir + '/json/calibrates/lastUpdatedAsset.json');*/
           return res.json(result);
         });
       }

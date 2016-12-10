@@ -43,8 +43,8 @@ if (_.has(config, 'log.format')) {
   app.use(morgan(logger.getLogFormat(), logger.getMorganOptions()));
 }
 
-app.use(bodyParser.json({limit: '20mb'}));
-app.use(bodyParser.urlencoded({ limit: '20mb', extended: true, parameterLimit:50000 }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit:200000 }));
 // parse application/vnd.api+json as json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 

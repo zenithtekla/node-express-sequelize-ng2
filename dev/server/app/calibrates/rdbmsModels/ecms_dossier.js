@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true
       },
-      file: DataTypes.BLOB(),
+      file: DataTypes.BLOB('long'),
       filename: DataTypes.STRING(100),
       time_field: DataTypes.DATE()
     },

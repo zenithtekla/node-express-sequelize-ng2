@@ -113,13 +113,14 @@ var utils = {
   },
   readFile: function (filePath, type, callback) {
     type = type || 'utf8';
-    fs.readFile(path, "utf8", function(error, data) {
+    fs.readFile(path, type, function(error, data) {
       if (err) console.log("ERROR reading file ", outputFile, ", message ", err.message);
       else if(callback) callback();
     });
   },
-  writeFile: function(data, outputFile){
-    fs.writeFile(outputFile, data, function (err) {
+  writeFile: function(data, outputFile, type){
+    type = type || 'utf8'; // 'ascii', 'utf8', 'base64'
+    fs.writeFile(outputFile, data, type, function (err) {
        if (err) console.log("ERROR writing to ", outputFile, ", message ", err.message);
     });
   },
@@ -138,6 +139,9 @@ var utils = {
    */
   getRandomInt: function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
+  buffer2base64String: function(bufferArray){
+    return String.fromCharCode(...new Uint8Array(bufferArray));
   }
 };
 
